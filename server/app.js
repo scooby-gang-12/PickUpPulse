@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 // Routes for Auth
-app.use('/auth', authRoutes)
+app.use('/api/auth', authRoutes)
 
 
 // Catch All Route
