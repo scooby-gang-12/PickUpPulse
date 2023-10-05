@@ -25,7 +25,7 @@ app.use('/auth', authRoutes)
 
 // Catch All Route
 app.use('*', (req,res) => {
-  return res.redirect('/');
+  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
 })
 
 // Global Error Handler
