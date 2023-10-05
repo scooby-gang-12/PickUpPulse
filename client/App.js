@@ -1,10 +1,11 @@
 import React from 'react';
+import Login from './pages/login';
 
 export default function App () {
 
   return (
     <div>
-      <h3>PickUpPulse</h3>
+      <Login/>
     </div>
   )
 }

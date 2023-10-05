@@ -15,13 +15,13 @@ app.use('/build', express.static(path.join(__dirname, '../build')));
 
 // Serve React App
 app.get('/', (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 
 // Catch All Route
 app.use('*', (req,res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 })
 
 // Global Error Handler
