@@ -1,46 +1,35 @@
 import React, {useRef, useEffect} from 'react'
+import { Loader } from "@googlemaps/js-api-loader"
 
 export default function CreateGameForm () {
   const dateRef = useRef(null)
   const autocompleteInputRef = useRef(null)
-  const addressRef = useRef(null)
+  // const addressRef = useRef(null)
   const latRef = useRef(null)
   const lngRef = useRef(null)
   let autocomplete;
 
-
   useEffect(()=>{
-    const script = document.createElement('script')
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs&libraries=places&callback=initMap'
-    script.async = true;
+    const loader = new Loader({
+      apiKey: "AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs",
+      version: "weekly",
+    });
 
-    document.body.appendChild(script)
-    window.initMap = () => {
-      if (window.google && window.google.maps && window.google.maps.places) {
-        autocomplete = new window.google.maps.places.Autocomplete(
-          autocompleteInputRef.current,
-          { types: ["address"] }
-        );
-  
-        autocomplete.addListener("place_changed", onPlaceChanged);
-      }
-    }
-    return () => {
-      document.body.removeChild(script)
-    }
+    
+    loader.importLibrary('places')
+    .then(()=>{
+      autocomplete = new google.maps.places.Autocomplete(
+        autocompleteInputRef.current,
+        { types: ["address"] }
+      );
+
+
+    })
+    
   },[])
 
 
-  const onPlaceChanged = () => {
-    const place = autocomplete.getPlace();
-    if (place.formatted_address) {
-      addressRef.current = place.formatted_address;
-    }
-    if (place.geometry) {
-      latRef.current = place.geometry.location.lat();
-      lngRef.current = place.geometry.location.lng();
-    }
-  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log('LAT', latRef.current)
@@ -66,6 +55,7 @@ export default function CreateGameForm () {
       <br />
       <button type='submit'>Click</button>
     </form>
+    <div id='map' style={{ width: "400px", height: "400px" }}></div>
     </>
   )
 }
