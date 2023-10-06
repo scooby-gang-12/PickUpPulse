@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import SignUp from '../components/signUp';
-import UserLogin from '../components/userLogIn';
+import UserLogin from '../components/userLogin';
 
 
  function Login({}) {

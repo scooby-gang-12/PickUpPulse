@@ -8,6 +8,7 @@ const GameSchema = new Schema({
   dateTime: Date,
   partySize: {type: Number, required: true},
   attending: [String],
+  
 });
 
 const Game = mongoose.model('game', GameSchema);
