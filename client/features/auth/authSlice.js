@@ -11,14 +11,15 @@ import { userAPI } from './userAPI.js'
 // )
 
 const initialState = { 
-  isLoggedIn: false
+  isLoggedIn: false,
+  user: null
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state) {
+    login(state, action) {
       state.isLoggedIn = true;
       console.log(state.isLoggedIn)
     },
