@@ -5,6 +5,7 @@ const path = require('path');
 const morgan = require('morgan');
 
 const app = express();
+const authRoutes = require('./routes/auth-routes');
 
 // Middleware
 app.use(morgan('tiny'))
@@ -17,6 +18,9 @@ app.use('/build', express.static(path.join(__dirname, '../build')));
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
+
+// Routes for Auth
+app.use('/api/auth', authRoutes)
 
 
 // Catch All Route
