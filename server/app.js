@@ -3,6 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const session = require('express-session');
+const passport = require('passport');
+
+
 
 const app = express();
 const authRoutes = require('./routes/auth-routes');
@@ -10,6 +14,21 @@ const authRoutes = require('./routes/auth-routes');
 // Middleware
 app.use(morgan('tiny'))
 app.use(express.json())
+
+app.use(
+  session({
+    secret: 'hello',
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+// Passport Initialization
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Configuration
+require('../server/passport/passport-config.js')(passport);
 
 // Server Static Build
 app.use('/build', express.static(path.join(__dirname, '../build')));
@@ -25,7 +44,7 @@ app.use('/api/auth', authRoutes)
 
 // Catch All Route
 app.use('*', (req,res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 })
 
 // Global Error Handler
