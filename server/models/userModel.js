@@ -7,25 +7,34 @@ const UserSchema = new Schema({
   username: {type: String, required: true, index: { unique: true} },
   password: {type: String, required: true},
   fullName: {type: String, required: true},
-  userLocation: {type: String, required: true},
-  favoriteSports: {type: [String], require: true}
+  favoriteSports: {type: [String], require: true},
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  }
 });
 
-UserSchema.pre('save', async function (next) { 
+UserSchema.pre('save', async function (next) {
   if(!this.isModified('password')) return next();
 try {
-
   this.password = await bcrypt.hash(this.password, 10)
   return next();
-
   }
 catch (err) {
-
   return next(err);
-
-} 
+}
 })
 
-const User = mongoose.model('user', UserSchema);
+
+UserSchema.index({ location: '2dsphere'});
+
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
