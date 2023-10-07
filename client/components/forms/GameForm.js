@@ -110,8 +110,8 @@ export default function GameForm () {
       dateTime: dateTimeRef.current.value,
       gameName: gameNameRef.current.value
     }
-    dispatch(addGame(formValues))
-    // dispatch(createGame(formValues))
+    // dispatch(addGame(formValues))
+    dispatch(createGame(formValues))
   }
   return (
     <>

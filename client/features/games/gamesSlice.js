@@ -4,9 +4,11 @@ import  gamesAPI  from './gamesAPI.js'
 export const createGame = createAsyncThunk(
   'games/createGame',
   async (formValues, thunkAPI) => {
-    // const response = await gamesAPI.createGame(formValues)
-    // console.log(formValues)
     console.log(formValues)
+    const response = await gamesAPI.createGame(formValues)
+    // console.log(formValues)
+    
+    // console.log(formValues)
     return
     // return response.data
   }
@@ -28,8 +30,9 @@ export const deleteGame = createAsyncThunk(
 export const getAllGames = createAsyncThunk(
   'games/getAllGames',
   async (_, thunkAPI) => {
-    console.log('geAllGames')
-    return
+    const response = await gamesAPI.getAllGames()
+    console.log(response.data)
+    return response.data
   }
 )
 
