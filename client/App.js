@@ -16,10 +16,10 @@ export default function App() {
     <>
       <BrowserRouter>
         <Routes>
-              <Route path='/' element={<Login />} />  
-              <Route  path='/' element={<Layout/>}>
-            {/* <Route path='/' element={<Layout />}> */}
-              {/* <Route index path='/' element={<Login />} /> */}
+              {/* <Route path='/' element={<Login />} />   */}
+              {/* <Route  path='/' element={<Layout/>}> */}
+            <Route path='/' element={<Layout />}>
+              <Route index path='/' element={<Login />} />
               {/* <Route index path='/' element={<Register />} /> */}
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/manage' element={<Manage/>} />
