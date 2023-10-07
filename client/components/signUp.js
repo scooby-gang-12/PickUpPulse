@@ -2,14 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 
 
-<<<<<<< HEAD
-  const signedup = () => {
-    
-  }
-
-=======
 export default function SignUp({toggle}) {
->>>>>>> JC/ReactRouterPages
   return (
     <LoginWrapper>
       <h1>Sign up</h1>
