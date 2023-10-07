@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const gamesAPI  = {
-  login: (credentials) => axios.post('/api/games', {username: credentials.username, password: credentials.password}),
+  createGame: (formValues) => axios.post('/api/games', formValues),
+  updateGame: (formValues) => axios.patch('/api/games', formValues),
+  deleteGame: (id) => axios.delete('/api/games',{id: id} ),
+  getAllGames: () => axios.get('/api/games')
 }
 
 

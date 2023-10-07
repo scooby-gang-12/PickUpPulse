@@ -2,37 +2,42 @@ import React, {useRef, useEffect, useState} from 'react'
 import { Loader } from "@googlemaps/js-api-loader"
 import { useDispatch } from 'react-redux'
 
-import { addGame } from '../../features/games/gamesSlice'
+import { addGame, editGame } from '../../features/games/gamesSlice'
 import { createGame } from '../../features/games/gamesSlice'
 // import subtleGrayscale from '../../utils/mapStyles/subtleGrayscale'
 
-export default function GameForm () {
+export default function EditGameForm ({game, handleClose}) {
+  const {sport, address, partySize, dateTime, id, gameName, location} = game
+  const [lng, lat] = location.coordinates
+
+  // DateTime
   const dateTimeRef = useRef(null)
+
+  // Address
   const autocompleteInputRef = useRef(null)
+  let autocomplete;
   const addressRef = useRef(null)
+  
+  // Sports
   const basketballRef = useRef(null);
   const golfRef = useRef(null);
+
+  // Handle Coordinated Defaulting
   const latRef = useRef(null)
   const lngRef = useRef(null)
+  latRef.current = lat;
+  lngRef.current = lng
+
+  // Party Size
   const partySizeRef = useRef(null);
+
+  // Game Name
   const gameNameRef = useRef(null);
-  const mapRef = useRef(null);
-  const googleMapRef = useRef(null)
+
 
   const dispatch = useDispatch()
 
-  const [map, setMap] = useState(null);
-
-  let autocomplete;
-
-  const initializeMap = (center) => {
-    googleMapRef.current = new window.google.maps.Map(mapRef.current, {
-      center,
-      zoom: 13,
-      // styles: subtleGrayscale
-    })
-    
-  }
+  
 
   useEffect(()=>{
     const loader = new Loader({
@@ -49,24 +54,11 @@ export default function GameForm () {
         autocompleteInputRef.current,
         { types: ["address"] }
       );
-      
+      // Default to current Address
+      autocompleteInputRef.current.value = address
+      addressRef.current = address
       autocomplete.addListener("place_changed", onPlaceChanged);
 
-      // Initialize Map  
-      // let defaultLocation = { lat: 37.7749, lng: -122.4194 };
-      // if (navigator.geolocation) {
-      //   navigator.geolocation.getCurrentPosition((position)=>{
-      //     const userLocation = {
-      //       lat: position.coords.latitude,
-      //       lng: position.coords.longitude
-      //     }
-      //     initializeMap(userLocation)
-      //   }, () => {
-      //     initializeMap(defaultLocation)
-      //   }) 
-      // } else {
-      //   initializeMap(defaultLocation)
-      // }
       
 
     })
@@ -80,26 +72,16 @@ export default function GameForm () {
         latRef.current = place.geometry.location.lat();
         lngRef.current = place.geometry.location.lng();
       }
-      // if (googleMapRef.current && place.geometry) {
-      //   googleMapRef.current.setCenter(place.geometry.location);
-      //   new window.google.maps.Marker({
-      //     map: googleMapRef.current,
-      //     position: place.geometry.location
-      //   });
-      // }
-
     };
   },[])
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit =  async (e) => {
     e.preventDefault()
-    if (addressRef.current === null) {
-      alert('must enter address')
-      return
-    }
     const formValues = {
+      id: id,
+      gameName: gameNameRef.current.value,
       sport: basketballRef.current.checked ? 'basketball' : 'golf',
       location: {
         type: 'Point',
@@ -107,23 +89,24 @@ export default function GameForm () {
       },
       address: addressRef.current,
       partySize: partySizeRef.current.value,
-      dateTime: dateTimeRef.current.value,
-      gameName: gameNameRef.current.value
+      dateTime: dateTimeRef.current.value
     }
-    dispatch(addGame(formValues))
-    // dispatch(createGame(formValues))
+    
+    dispatch(editGame(formValues))
+    handleClose()
   }
+  
   return (
     <>
-    <h1>Game Form</h1>
+    <h1>Edit Game Form</h1>
     <form onSubmit={handleSubmit}>
       <label htmlFor='gameName'>Game Name</label>
-      
       <input
         type='text'
         name='gameName'
         id='gameName'
         ref={gameNameRef}
+        defaultValue={gameName}
       />
       <br />
       <label htmlFor="basketball">Basketball</label>
@@ -132,7 +115,7 @@ export default function GameForm () {
         name="sport" 
         id="basketball" 
         ref={basketballRef} 
-        // defaultChecked
+        defaultChecked = {sport === 'basketball'}
       />
       <label htmlFor="golf">Golf</label>
       <input 
@@ -140,6 +123,7 @@ export default function GameForm () {
         name="sport" 
         id="golf" 
         ref={golfRef} 
+        defaultChecked = {sport === 'golf'}
       />
       <br />
       <label>Date/Time</label>
@@ -148,7 +132,7 @@ export default function GameForm () {
         ref={dateTimeRef} 
         name="dateTime" 
         id="dateTime" 
-        defaultValue="2023-10-06T15:00"
+        defaultValue={dateTime}
       />
       <br />
       <label>Party Size</label>
@@ -157,7 +141,7 @@ export default function GameForm () {
         ref={partySizeRef} 
         name="partySize" 
         id="partySize"
-        defaultValue={4}
+        defaultValue={partySize}
         />
       <br />
       <label>Address</label>
@@ -166,10 +150,11 @@ export default function GameForm () {
         ref={autocompleteInputRef} 
         name='address'
         id='address'
-        defaultValue="123 Main Street, El Segundo, CA, USA"
+        defaultValue={address}
       />
       <br />
-      <button type='submit'>Click</button>
+      <button type='submit'>Save</button>
+      <button type='button' onClick={handleClose}>Close</button>
     </form>
     {/* <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div> */}
     </>
