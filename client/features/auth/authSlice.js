@@ -1,32 +1,39 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { userAPI } from './userAPI.js'
-import { createSlice } from '@reduxjs/toolkit'
 
-const fetchUserById = createAsyncThunk(
-  'users/fetchByIdStatus',
-  async (credentials) => {
-    const response = await userAPI.fetchById(userId)
-    return response.data
-  }
-)
+export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) => {
+  console.log(credentials)
+  if (credentials.password === 'fail') throw new Error('Incorrect Login')
+  return credentials;
+});
+
 
 const initialState = { 
-  isLoggedIn: false
+  isLoggedIn: false,
+  userInfo: null,
+  error: null
 }
-
-const loginSlice = createSlice({
-  name: 'login',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     login(state) {
-      isLoggedIn = true;
+      state.isLoggedIn = true;
     },
     logout(state) {
-      isLoggedIn = false;
+    state.isLoggedIn = false;
     },
-  
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUser.fulfilled, (state,action)=>{
+        state.isLoggedIn = true
+        state.userInfo = action.payload
+      })
+      .addCase(loginUser.rejected, (state,action)=>{
+        state.error = action.error.message
+      })
+  }
 })
-
-export const { login, logout } = counterSlice.actions
-export default loginSlice.reducers
+export const { login, logout} = authSlice.actions
+export default authSlice.reducer
