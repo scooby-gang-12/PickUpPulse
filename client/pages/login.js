@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import SignUp from '../components/signUp';
+import SignUp from '../components/register';
 import UserLogin from '../components/userLogin';
 
 
@@ -13,6 +13,7 @@ import UserLogin from '../components/userLogin';
   return (
   <>
   {current === 'login' ?  <UserLogin toggle={toggle}/> : <SignUp toggle={toggle}/>}
+  
   </>
   );
 }

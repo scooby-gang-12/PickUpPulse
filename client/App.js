@@ -3,7 +3,7 @@ import Login from './pages/login';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // import Login from './pages/login';
-import Register from './pages/register';
+import Register from './components/register';
 import Dashboard from './pages/dashboard';
 import Manage from './pages/manage';
 import Profile from './pages/profile';
@@ -16,16 +16,14 @@ export default function App() {
     <>
       <BrowserRouter>
         <Routes>
-              {/* <Route path='/' element={<Login />} />   */}
-              {/* <Route  path='/' element={<Layout/>}> */}
-            <Route path='/' element={<Layout />}>
-              <Route index path='/' element={<Login />} />
-              {/* <Route index path='/' element={<Register />} /> */}
+            <Route  path='/' element={<Layout/>}>
+              <Route path='/register' element={<Register/>}/>
+              <Route path='/' element={<Login />} />  
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/manage' element={<Manage/>} />
               <Route path='/profile' element={<Profile />} />
             </Route>
-          </Routes>
+        </Routes>
       </BrowserRouter>
     </>
   )
