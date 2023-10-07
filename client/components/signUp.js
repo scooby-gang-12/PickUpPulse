@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 const SignUp = ({toggle}) => {
 
 
+  const signedup = () => {
+    
+  }
+
   return (
     <>
     <h1>Sign up</h1>

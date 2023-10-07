@@ -1,36 +1,42 @@
-import React from "react"
+import React, {useRef} from "react"
 import { useDispatch , useSelector} from 'react-redux';
-import { login } from "../features/auth/authSlice";
+import { login, loginUser } from "../features/auth/authSlice";
 import {useNavigate} from 'react-router-dom'
 
-const UserLogin = ({toggle}) => {
+const UserLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // useRef replaces the useState & onChange
+  
+  const usernameRef = useRef()
+  const passwordRef = useRef()
+  const {userInfo, loading, error} = useSelector((state)=>state.auth)
   const handlelogin = (e) => {
     e.preventDefault()
-    dispatch(login())
-    navigate('/dashboard')
+    dispatch(loginUser({
+      username: usernameRef.current.value,
+      password: passwordRef.current.value
+    }))
+      .then((action)=>{
+        if (!action.error) {
+          navigate('/dashboard')
+        }
+      })    
   }
-  
-
-
-  const {isLoggedIn} = (useSelector((state) => state.auth))
-  console.log(isLoggedIn)
-
-
 
 return (
   <>
 <h1>Login Here</h1>
 <form onSubmit={handlelogin}>
   <label htmlFor='username'><strong>Username</strong></label><br></br>
-  <input type='text' ></input><br></br>
+  <input ref={usernameRef} type='text'></input><br></br>
   <label htmlFor='password'><strong>Password</strong></label><br></br>
-  <input type='text'></input><br></br>
+  <input ref={passwordRef}type='text'></input><br></br>
   <button type='submit' >Sign in</button>
-  <button type="button" onClick={toggle}>sign up</button>
+  <button type="button">sign up</button>
 </form>
-
+  {error && <p>{error}</p>}
 </>
 )
 }
