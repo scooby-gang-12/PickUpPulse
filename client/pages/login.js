@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
-<<<<<<< HEAD
-=======
 import styled from 'styled-components';
-
->>>>>>> JC/ReactRouterPages
 import SignUp from '../components/signUp';
 import UserLogin from '../components/userLogin';
 

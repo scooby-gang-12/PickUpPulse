@@ -14,15 +14,12 @@ const UserLogin = () => {
   const {userInfo, loading, error} = useSelector((state)=>state.auth)
   const handlelogin = (e) => {
     e.preventDefault()
+    console.log('click')
     dispatch(loginUser({
       username: usernameRef.current.value,
       password: passwordRef.current.value
     }))
       .then((action)=>{
-<<<<<<< HEAD
-=======
-        console.log(action)
->>>>>>> JC/ReactRouterPages
         if (!action.error) {
           navigate('/dashboard')
         }
