@@ -2,15 +2,28 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const GameSchema = new Schema({
-  gameType: {type: String, required: true},
-  host: {type: String},
-  gameLocation: {type:String, required: true},
-  dateTime: Date,
+  gameName: {type: String, required: true},
+  sport: {type: String, required: true},
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
+  address: {type: String, required: true},
+  host: {type: Schema.Types.ObjectId, ref: 'User'},
   partySize: {type: Number, required: true},
-  attending: [String],
-  
+  dateTime: Date,
+  attending: [{type: Schema.Types.ObjectId, ref: 'User'}],
 });
 
-const Game = mongoose.model('game', GameSchema);
+GameSchema.index({ location: '2dsphere'});
+
+const Game = mongoose.model('Game', GameSchema);
 
 module.exports = Game;
