@@ -1,6 +1,12 @@
 const router = require('express').Router();
 const passport = require('passport');
-const userController = require('../controllers/userController');
+const userController = require('../controllers/userControllers');
 
+// Update User information
+router.patch('/', userController.updateUser, (req, res) => {
+    return res.status(200).json(res.locals.updatedUser);
+})
 
-router.patch('/')
+// router.get('/', userController.findUserGames)
+
+module.exports = router;

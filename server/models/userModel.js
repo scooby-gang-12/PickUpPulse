@@ -18,7 +18,9 @@ const UserSchema = new Schema({
       type: [Number],
       required: true
     }
-  }
+  },
+  attendingGames: [{type: Schema.Types.ObjectId, ref: 'Game'}],
+  hostedGames: [{type: Schema.Types.ObjectId, ref: 'Game'}],
 });
 
 UserSchema.pre('save', async function (next) {

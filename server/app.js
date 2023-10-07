@@ -11,6 +11,8 @@ const passport = require('passport');
 const app = express();
 const authRoutes = require('./routes/auth-routes');
 const gameRoutes = require('./routes/game-routes');
+const userRoutes = require('./routes/user-routes');
+const protectedRoute = require('./passport/passport-protected-route');
 
 // Middleware
 app.use(morgan('tiny'))
@@ -44,7 +46,10 @@ app.use('/api/auth', authRoutes)
 
 
 // Routes for Games
-app.use('/api/games', gameRoutes);
+app.use('/api/games', protectedRoute, gameRoutes);
+
+//Routes for Users
+app.use('/api/users', protectedRoute, userRoutes);
 
 // Catch All Route
 app.use('*', (req,res) => {
