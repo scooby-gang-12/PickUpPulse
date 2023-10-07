@@ -20,14 +20,17 @@ const UserSchema = new Schema({
   }
 });
 
-UserSchema.pre('save', function(next){
-  if (!this.isModified('password')) return next();
-  bcrypt.hash(this.password, process.env.SALT_FACTOR, (err, hash) => {
-    if (err) return next(err);
-    this.password = hash;
-    return next();
-  })
-});
+UserSchema.pre('save', async function (next) {
+  if(!this.isModified('password')) return next();
+try {
+  this.password = await bcrypt.hash(this.password, 10)
+  return next();
+  }
+catch (err) {
+  return next(err);
+}
+})
+
 
 UserSchema.index({ location: '2dsphere'});
 
