@@ -1,27 +1,36 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import styled from 'styled-components';
 
 
-const SignUp = ({toggle}) => {
-
-
+<<<<<<< HEAD
   const signedup = () => {
     
   }
 
+=======
+export default function SignUp({toggle}) {
+>>>>>>> JC/ReactRouterPages
   return (
-    <>
-    <h1>Sign up</h1>
-    <form>
-      <label htmlFor='username'><strong>Username</strong></label><br></br>
-      <input type='text'></input><br></br>
-      <label htmlFor='password'><strong>Password</strong></label><br></br>
-      <input type='text'></input><br></br>
-      <button type="submit" onClick={toggle}>Sign up</button>
-    </form><span><button>submit</button></span>
-    
-  </>
+    <LoginWrapper>
+      <h1>Sign up</h1>
+      <form>
+        <label for='username'><strong>Username</strong></label><br></br>
+        <input type='text'></input><br></br>
+        <label for='password'><strong>Password</strong></label><br></br>
+        <input type='text'></input><br></br>
+        <button type="submit" onClick={toggle}>Sign up</button>
+      </form>
+    </LoginWrapper>
   )
 }
 
-export default SignUp;
+const LoginWrapper = styled.div `
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+const FormWrapper = styled.form `
+  display: flex;
+  justify-content: center;
+`

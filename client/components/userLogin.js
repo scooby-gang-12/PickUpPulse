@@ -19,6 +19,10 @@ const UserLogin = () => {
       password: passwordRef.current.value
     }))
       .then((action)=>{
+<<<<<<< HEAD
+=======
+        console.log(action)
+>>>>>>> JC/ReactRouterPages
         if (!action.error) {
           navigate('/dashboard')
         }

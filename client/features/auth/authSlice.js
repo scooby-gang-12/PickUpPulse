@@ -6,7 +6,16 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) 
   return credentials;
 });
 
+export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) => {
+  console.log(credentials)
+  if (credentials.password === 'fail') throw new Error('Incorrect Login')
+  return credentials;
+});
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> JC/ReactRouterPages
 const initialState = { 
   isLoggedIn: false,
   userInfo: null,
@@ -30,7 +39,10 @@ const authSlice = createSlice({
         state.userInfo = action.payload
       })
       .addCase(loginUser.rejected, (state,action)=>{
+<<<<<<< HEAD
         state.isLoggedIn = false
+=======
+>>>>>>> JC/ReactRouterPages
         state.error = action.error.message
       })
   }
