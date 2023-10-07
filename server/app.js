@@ -3,13 +3,33 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const session = require('express-session');
+const passport = require('passport');
+
+
 
 const app = express();
 const authRoutes = require('./routes/auth-routes');
+const gameRoutes = require('./routes/game-routes');
 
 // Middleware
 app.use(morgan('tiny'))
 app.use(express.json())
+
+app.use(
+  session({
+    secret: 'hello',
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+// Passport Initialization
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Configuration
+require('../server/passport/passport-config.js')(passport);
 
 // Server Static Build
 app.use('/build', express.static(path.join(__dirname, '../build')));
@@ -22,6 +42,9 @@ app.get('/', (req, res) => {
 // Routes for Auth
 app.use('/api/auth', authRoutes)
 
+
+// Routes for Games
+app.use('/api/games', gameRoutes);
 
 // Catch All Route
 app.use('*', (req,res) => {
