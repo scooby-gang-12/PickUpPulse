@@ -19,7 +19,7 @@ export default function Layout() {
 const LayoutWrapper = styled.div `
     height: 100vh;
     width: 100%;
-    display: grid;
-    grid-template-rows: 10% 80% 10%;
-    grid-template-columns: auto;
+    /* display: grid; */
+    /* grid-template-rows: 10% 80% 10%; */
+    /* grid-template-columns: auto; */
 `
