@@ -4,15 +4,26 @@ const gameController = {};
 
 // Create Game Controller
 gameController.createGame = async (req, res, next) => {
-    const { gameType, location, partySize } = req.body;
+    const { gameName, sport, location, address, partySize, dateTime } = req.body;
 
-    await Game.create({ gameType: gameType, gameLocation: location, partySize: partySize })
+    await Game.create({
+        
+        gameName: gameName,
+        sport: sport,
+        location: location,
+        address: address,
+        partySize: partySize,
+        dateTime: dateTime,
+        attending: [req.user.id],
+        host: req.user.id
+    })
         .then((game) => {
             if(!game) return next({message: 'Issue creating Game'})
         })
         .catch((err) => next(err));
 
     res.locals.gameArr = await Game.find().catch((err) => next(err));
+
 
     return next();
 }
@@ -23,10 +34,10 @@ gameController.getAllGames = async (req, res, next) => {
     return next();
 }
 
-// Update the value of a specific game and return array of games
+// Update specific game and return array of games
 gameController.updateGame = async (req, res, next) => {
-    const { gameId, newLocation } = req.body;
-    await Game.findByIdAndUpdate(gameId, { gameLocation: newLocation })
+    const { gameId, gameName, location, address, sports, partySize } = req.body;
+    await Game.findByIdAndUpdate(gameId, { gameName: gameName, location: location, address: address, sports: sports, partySize: partySize })
         .catch((err) => next(err));
     
     res.locals.gameArr = await Game.find().catch((err) => next(err));

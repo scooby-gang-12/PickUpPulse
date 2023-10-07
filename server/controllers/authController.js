@@ -6,12 +6,12 @@ const authController = {};
 
 
 authController.createUser = async (req, res, next) => {
-    const { username, password, fullName, userLocation, favoriteSports } = req.body;
+    const { username, password, fullName, location, favoriteSports } = req.body;
 
-    if(!username || !password || !fullName || !userLocation || !favoriteSports) return next({message: 'Missing User Information'});
+    if(!username || !password || !fullName || !location || !favoriteSports) return next({message: 'Missing User Information'});
 
 
-    await User.create({ username: username, password: password, fullName: fullName, userLocation: userLocation, favoriteSports: favoriteSports })
+    await User.create({ username: username, password: password, fullName: fullName, location: location, favoriteSports: favoriteSports })
         .then((newUser) => {
             //figure out what we want to do with this information
             res.locals.user = newUser;
