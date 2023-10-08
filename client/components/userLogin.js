@@ -2,6 +2,9 @@ import React, {useRef} from "react"
 import { useDispatch , useSelector} from 'react-redux';
 import { login, loginUser } from "../features/auth/authSlice";
 import {useNavigate} from 'react-router-dom'
+import { StyledForm } from './styles/StyledForm.styled'
+import { Container } from "./styles/Container.styled";
+import { StyledButton } from "./styles/Button.styled";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -9,9 +12,13 @@ const UserLogin = () => {
 
   // useRef replaces the useState & onChange
   
-  const usernameRef = useRef()
-  const passwordRef = useRef()
+  const usernameRef = useRef();
+  const passwordRef = useRef();
   const {userInfo, loading, error} = useSelector((state)=>state.auth)
+
+  const handleNavigate = () => {
+    navigate('/register')
+  }
   const handlelogin = (e) => {
     e.preventDefault()
     console.log('click')
@@ -27,18 +34,19 @@ const UserLogin = () => {
   }
 
 return (
-  <div>
-    <h1>Login Here</h1>
-    <form onSubmit={handlelogin}>
-      <label htmlFor='username'><strong>Username</strong></label><br></br>
-      <input ref={usernameRef} type='text'></input><br></br>
-      <label htmlFor='password'><strong>Password</strong></label><br></br>
-      <input ref={passwordRef}type='text'></input><br></br>
-      <button type='submit' >Sign in</button>
-      <button type="button">sign up</button>
-    </form>
-      {error && <p>{error}</p>}
-  </div>
+  <Container>
+  {/* <h1>Login Here</h1> */}
+  <StyledForm onSubmit={handlelogin}>
+    <label htmlFor='username'><strong>Username</strong></label><br></br>
+    <input ref={usernameRef} type='text'></input><br></br>
+    <label htmlFor='password'><strong>Password</strong></label><br></br>
+    <input ref={passwordRef} type='password'></input><br></br>
+    <StyledButton type='submit' >Sign In</StyledButton>
+    <StyledButton type="button" onClick={handleNavigate}>Sign Up</StyledButton>
+  </StyledForm>
+
+    {error && <p>{error}</p>}
+</Container>
 )
 }
 

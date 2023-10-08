@@ -17,6 +17,14 @@ export default function Layout() {
 }
 
 const LayoutWrapper = styled.div `
-    height: 100%;
+    display: grid;
+    min-height: 100vh;
     width: 100%;
+    background-color: linen;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        'header'
+        'main'
+        'footer';
 `

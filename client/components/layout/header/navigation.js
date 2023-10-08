@@ -2,9 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout, loginUser } from "../../../features/auth/authSlice";
+// import Container from 'react-bootstrap/Container';
 
 
-export default function Navbar() {
+export default function NavigationBar() {
     const dispatch = useDispatch();
     const { isLoggedIn } = useSelector((state) => state.auth);
     const handleClick = () => {
