@@ -62,6 +62,7 @@ gameController.deleteGame = async (req, res, next) => {
     return next();
 }
 
+// Sign up for game and adds it to attending array, Checks to see if user is the host, if so adds it to 'Hosted Games'
 gameController.signupForGame = async (req, res, next) => {
     req.user.attendingGames.push(res.locals.game.gameId);
     if(req.user.id === res.locals.game.host) {
@@ -72,5 +73,45 @@ gameController.signupForGame = async (req, res, next) => {
     return next()
     
 }
+
+// Check to see if user trying to delete game is the Host of the Game
+gameController.hostCheck = async (req, res, next) => {
+    const { gameId } = req.params;
+    const { user } = req;
+
+    if(user.hostedGames.includes(gameId)) return next();
+
+    return next({message: 'Only host may delete game'})
+}
+
+
+// Remove Deleted Game from Hosted array and Attending array
+gameController.removeDeletedGame = async (req, res, next) => {
+    const { gameId } = req.params;
+    const { user } = req;
+
+    const newHostArr = [];
+    const newAttendArr = [];
+
+    user.hostedGames.forEach((e) => {
+        if(e != gameId) {
+            newHostArr.push(e);
+        }
+    })
+
+    user.attendingGames.forEach((e) => {
+        if(e != gameId) {
+            newAttendArr.push(e);
+        }
+    })
+
+    user.hostedGames = newHostArr;
+    user.attendingGames = newAttendArr;
+    
+    await user.save();
+    return next()
+}
+
+
 
 module.exports = gameController;
