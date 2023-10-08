@@ -297,5 +297,10 @@ for (const game of games) {
 }
 }
 
-createUsers(dummyUsers)
-createGames(dummyGames)
+
+const buildDB = async () => {
+  await createUsers(dummyUsers)
+  await createGames(dummyGames)
+}
+
+buildDB()
