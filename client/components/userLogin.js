@@ -27,18 +27,18 @@ const UserLogin = () => {
   }
 
 return (
-  <>
-{/* <h1>Login Here</h1> */}
-<form onSubmit={handlelogin}>
-  <label htmlFor='username'><strong>Username</strong></label><br></br>
-  <input ref={usernameRef} type='text'></input><br></br>
-  <label htmlFor='password'><strong>Password</strong></label><br></br>
-  <input ref={passwordRef}type='text'></input><br></br>
-  <button type='submit' >Sign in</button>
-  <button type="button">sign up</button>
-</form>
-  {error && <p>{error}</p>}
-</>
+  <div>
+    <h1>Login Here</h1>
+    <form onSubmit={handlelogin}>
+      <label htmlFor='username'><strong>Username</strong></label><br></br>
+      <input ref={usernameRef} type='text'></input><br></br>
+      <label htmlFor='password'><strong>Password</strong></label><br></br>
+      <input ref={passwordRef}type='text'></input><br></br>
+      <button type='submit' >Sign in</button>
+      <button type="button">sign up</button>
+    </form>
+      {error && <p>{error}</p>}
+  </div>
 )
 }
 
