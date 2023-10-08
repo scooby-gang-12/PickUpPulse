@@ -6,6 +6,7 @@ export const createGame = createAsyncThunk(
   async (formValues, thunkAPI) => {
     // const response = await gamesAPI.createGame(formValues)
     // console.log(formValues)
+    console.log(formValues)
     return
     // return response.data
   }
@@ -13,18 +14,21 @@ export const createGame = createAsyncThunk(
 export const updateGame = createAsyncThunk(
   'games/updateGame',
   async (formValues, thunkAPI) => {
+    console.log(formValues)
     return
   }
 )
 export const deleteGame = createAsyncThunk(
-  'games/createGame',
+  'games/deleteGame',
   async (id, thunkAPI) => {
+    console.log(id)
     return
   }
 )
 export const getAllGames = createAsyncThunk(
   'games/getAllGames',
   async (_, thunkAPI) => {
+    console.log('geAllGames')
     return
   }
 )
@@ -78,8 +82,32 @@ const gamesSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    
+    builder
+    .addCase(createGame.fulfilled, (state,action) => {
+      state.gamesArr = action.payload
+    })
+    .addCase(createGame.pending, (state,action) => {})
+    .addCase(createGame.rejected, (state,action) => {})
+    // UPDATE GAME
+    .addCase(updateGame.fulfilled, (state,action) => {
+      state.gamesArr = action.payload
+    })
+    .addCase(updateGame.pending, (state,action) => {})
+    .addCase(updateGame.rejected, (state,action) => {})
+    // DELETE GAME
+    .addCase(deleteGame.fulfilled, (state,action) => {
+      state.gamesArr = action.payload
+    })
+    .addCase(deleteGame.pending, (state,action) => {})
+    .addCase(deleteGame.rejected, (state,action) => {})
+    // GETALL GAMES 
+    .addCase(getAllGames.fulfilled, (state,action) => {
+      state.gamesArr = action.payload
+    })
+    .addCase(getAllGames.pending, (state,action) => {})
+    .addCase(getAllGames.rejected, (state,action) => {})
   }
+  
 })
 
 export const { addGame, editGame } = gamesSlice.actions
