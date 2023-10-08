@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import {registerUser} from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { StyledButton } from "./styles/Button.styled";
 
 
 export default function SignUp({toggle}) {
@@ -74,10 +75,10 @@ export default function SignUp({toggle}) {
         <input type="checkbox"  ref={golfRef} ></input>
         <label htmlFor='FavSports'>Golf</label><br></br>
         
-        <button type="submit">Sign up</button>
+        <StyledButton type="submit">Sign up</StyledButton>
         
         <div>
-          already a user?
+          Already a user?
           <span onClick={handleNavigate}> Log in here </span>
         </div>
       </form>

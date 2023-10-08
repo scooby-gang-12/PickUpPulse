@@ -1,9 +1,10 @@
 import React from "react";
+import { StyledFooter } from "../../styles/StyledFooter.styled";
 
 export default function Footer() {
     return (
-        <footer>
+        <StyledFooter>
             <p>Footer Info</p>
-        </footer>
+        </StyledFooter>
     )
 }
