@@ -8,7 +8,9 @@ export default function GamesList () {
   const {gamesArr} = useSelector((state)=>state.games)
   
   const handleEdit = (game) => {
+    setActiveEdit(null)
     setActiveEdit(game)
+    console.log(game)
   }
   const handleClose = () => {
     setActiveEdit(null)

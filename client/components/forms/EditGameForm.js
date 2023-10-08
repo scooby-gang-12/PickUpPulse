@@ -3,13 +3,14 @@ import { Loader } from "@googlemaps/js-api-loader"
 import { useDispatch } from 'react-redux'
 
 import { addGame, editGame } from '../../features/games/gamesSlice'
-import { createGame } from '../../features/games/gamesSlice'
+import { updateGame } from '../../features/games/gamesSlice'
 // import subtleGrayscale from '../../utils/mapStyles/subtleGrayscale'
+import formatDate from '../../utils/formatDateForInput'
 
 export default function EditGameForm ({game, handleClose}) {
-  const {sport, address, partySize, dateTime, id, gameName, location} = game
+  const {sport, address, partySize, _id: id, gameName, location} = game
   const [lng, lat] = location.coordinates
-
+  const dateTime = formatDate(game.dateTime)
   // DateTime
   const dateTimeRef = useRef(null)
 
@@ -80,7 +81,7 @@ export default function EditGameForm ({game, handleClose}) {
   const handleSubmit =  async (e) => {
     e.preventDefault()
     const formValues = {
-      id: id,
+      gameId: id,
       gameName: gameNameRef.current.value,
       sport: basketballRef.current.checked ? 'basketball' : 'golf',
       location: {
@@ -92,7 +93,7 @@ export default function EditGameForm ({game, handleClose}) {
       dateTime: dateTimeRef.current.value
     }
     
-    dispatch(editGame(formValues))
+    dispatch(updateGame(formValues))
     handleClose()
   }
   

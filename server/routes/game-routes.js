@@ -20,7 +20,8 @@ router.patch('/', gameController.updateGame, (req, res) => {
 });
 
 // Delete Game route
-router.delete('/', gameController.deleteGame, (req, res) => {
+// Bobby :/gameId
+router.delete('/:gameId', gameController.deleteGame, (req, res) => {
     return res.status(200).json(res.locals.gameArr);
 })
 

@@ -6,6 +6,7 @@ const gameController = {};
 // Create Game Controller
 gameController.createGame = async (req, res, next) => {
     const { gameName, sport, location, address, partySize, dateTime } = req.body;
+    console.log(req.user)
     const newGame = await Game.create({
         
         gameName: gameName,
@@ -52,8 +53,9 @@ gameController.updateGame = async (req, res, next) => {
 
 // Delete specific game and return array of games
 gameController.deleteGame = async (req, res, next) => {
-    const { gameId } = req.body;
-
+    // BOBBY Switch to params
+    const { gameId } = req.params;
+    
     await Game.findByIdAndDelete(gameId).catch((err) => next(err));
 
     res.locals.gameArr = await Game.find().catch((err) => next(err));

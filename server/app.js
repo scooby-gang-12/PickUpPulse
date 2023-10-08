@@ -17,6 +17,8 @@ const protectedRoute = require('./passport/passport-protected-route');
 // Middleware
 app.use(morgan('tiny'))
 app.use(express.json())
+// Bobby
+express.urlencoded({ extended: true })
 
 app.use(
   session({
@@ -46,7 +48,8 @@ app.use('/api/auth', authRoutes)
 
 
 // Routes for Games
-app.use('/api/games', protectedRoute, gameRoutes);
+// TEMP REMOVE PROTECTED -- BS
+app.use('/api/games', gameRoutes);
 
 //Routes for Users
 app.use('/api/users', protectedRoute, userRoutes);
