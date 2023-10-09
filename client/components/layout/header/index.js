@@ -6,7 +6,7 @@ export default function Header() {
     return (
         <StyledHeader>
             <NavigationBar />
-        </StyledHeader>
+         </StyledHeader>
     )
 }
 

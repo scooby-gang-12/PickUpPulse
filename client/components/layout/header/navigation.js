@@ -1,29 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { login, logout, loginUser } from "../../../features/auth/authSlice";
-// import Container from 'react-bootstrap/Container';
+import { Navbar, NavDropdown, Nav } from "react-bootstrap";
+import styled from "styled-components"; // Import styled-components
 
-
-export default function NavigationBar() {
-    const dispatch = useDispatch();
-    const { isLoggedIn } = useSelector((state) => state.auth);
-    const handleClick = () => {
-        dispatch(logout())
-    }
-
-    return (
-        <div>
-            <h1>PickUpPulse</h1>
-            {isLoggedIn && 
-                <nav>
-                    <Link to='/dashboard'>Dashboard</Link>
-                    <Link to='/manage'>Manage Games</Link>
-                    <Link to='/profile'>Profile</Link>
-                    <Link to='/' onClick={handleClick}>Logout</Link>
-                </nav>
-            }
-            
-        </div>
-    )
+function NavigationBar() {
+  return (
+    <div>
+      <StyledNavbar expand="lg">
+        <Navbar.Brand href="/dashboard"></Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav.Link href=''>Profile</Nav.Link>
+              <Nav.Link href=''></Nav.Link>
+            <NavDropdown title='Dropdown'>
+              <NavDropdown.Item href="">Item 1</NavDropdown.Item>
+              <NavDropdown.Item href="">Item 2</NavDropdown.Item>
+              <NavDropdown.Item href="">Item 3</NavDropdown.Item>
+              <NavDropdown.Item href="">Item 4</NavDropdown.Item>
+            </NavDropdown>
+        </Navbar.Collapse>
+      </StyledNavbar>
+    </div>
+  );
 }
+
+const StyledNavbar = styled(Navbar)`
+  background-color: ${({ theme }) => theme.colors.header};
+  
+  &&& .nav-link,
+  &&& .navdropdown.item {
+    color: ${({ theme }) => theme.colors.lightText};
+  }
+`;
+
+
+
+
+export default NavigationBar;

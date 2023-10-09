@@ -22,7 +22,7 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (credent
 //perform async request using auth api and return is user info 
 
 const initialState = { 
-  isLoggedIn: false,
+  isLoggedIn: true,
   userInfo: null,
   error: null
 }
