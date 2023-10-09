@@ -43,6 +43,9 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
+app.use('/images', express.static(path.join(__dirname, '../build/images')));
+
 // Routes for Auth
 app.use('/api/auth', authRoutes)
 
