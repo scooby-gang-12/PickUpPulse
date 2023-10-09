@@ -9,6 +9,10 @@ import Dashboard from './pages/dashboard';
 import Manage from './pages/manage';
 import Profile from './pages/profile';
 import Layout from './components/layout/index.js';
+import CreateGames from './pages/createGames';
+import AttendingGames from './pages/attendingGames';
+import EditGames from './pages/editGame';
+import HostedGames from './pages/hostedGames';
 
 // store colors and global theme items
 const theme = {
@@ -31,11 +35,15 @@ export default function App() {
     <ThemeProvider theme = {theme}>
       <BrowserRouter>
         <Routes>
-            <Route  path='/' element={<Layout/>}>
+            <Route path='/' element={<Layout/>}>
               <Route path='/register' element={<Register/>}/>
               <Route path='/' element={<Login />} />  
               <Route path='/dashboard' element={<Dashboard />} />
-              <Route path='/manage' element={<Manage/>} />
+              {/* <Route path='/manage' element={<Manage/>} /> */}
+                <Route path='/creategames' element={<CreateGames />} />
+                <Route path='/attendinggames' element={<AttendingGames />} />
+                <Route path='/hostedgames' element={<HostedGames />} />
+                <Route path='/hostedgames/edit' element={<EditGames />} />
               <Route path='/profile' element={<Profile />} />
             </Route>
         </Routes>

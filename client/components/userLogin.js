@@ -34,7 +34,7 @@ const UserLogin = () => {
   }
 
 return (
-  <Container>
+  <div>
   {/* <h1>Login Here</h1> */}
   <StyledForm onSubmit={handlelogin}>
     <label htmlFor='username'><strong>Username</strong></label><br></br>
@@ -46,7 +46,7 @@ return (
   </StyledForm>
 
     {error && <p>{error}</p>}
-</Container>
+</div>
 )
 }
 

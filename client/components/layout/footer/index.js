@@ -4,7 +4,7 @@ import { StyledFooter } from "../../styles/StyledFooter.styled";
 export default function Footer() {
     return (
         <StyledFooter>
-            <p>Footer Info</p>
+            <p>Copyright © 2023</p>
         </StyledFooter>
     )
 }
