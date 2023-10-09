@@ -14,7 +14,7 @@ export default function NavigationBar() {
 
     return (
         <div>
-            <h1>PickUpPulse</h1>
+            <h1>Pick Up Pulse</h1>
             {isLoggedIn && 
                 <nav>
                     <Link to='/dashboard'>Dashboard</Link>

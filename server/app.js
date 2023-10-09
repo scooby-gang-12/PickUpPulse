@@ -39,6 +39,9 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+// Route for background image for frontend login
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
+
 // Routes for Auth
 app.use('/api/auth', authRoutes)
 
