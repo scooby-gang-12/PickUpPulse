@@ -7,11 +7,9 @@ export default function Dashboard() {
     const {userInfo} = useSelector((state)=>state.auth)
     
     return (
-        <>
-        <h1>Dashboard</h1>
-        <p>Welcome {userInfo && userInfo.username}</p>
-        <p>password {userInfo && userInfo.password}</p>
-        
-        </>
+        <div>
+            <h1>Dashboard</h1>
+            <p>Welcome {userInfo && userInfo.username}</p>
+        </div>
     )
 }

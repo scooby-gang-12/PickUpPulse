@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import React, {useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
+=======
+// currently not in use
+
+import React from "react";
+>>>>>>> JC/StyledLogin
 import styled from 'styled-components';
 
 import GameForm from '../components/forms/GameForm'
