@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar, NavDropdown, Nav } from "react-bootstrap";
-import styled from "styled-components"; // Import styled-components
+import styled from "styled-components";
 
 function NavigationBar() {
   return (
