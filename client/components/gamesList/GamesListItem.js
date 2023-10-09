@@ -12,10 +12,10 @@ export default function GamesListItem ({game, handleEdit}) {
 
   }
   return (
-    <>
+    <div>
       <p >{gameName} : {address} : {sport} : {dateTime} : {lat} : {lng}</p>
       <button onClick={()=>handleEdit(game)}>Edit</button>
       <button onClick={()=>handleDelete(id)}>Delete</button>
-    </>
+    </div>
   )
 }

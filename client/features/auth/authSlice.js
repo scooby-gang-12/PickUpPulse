@@ -2,9 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import authAPI  from './authAPI.js'
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) => {
-  console.log(credentials)
   const response = await authAPI.login(credentials)
-  console.log(response)
   if (credentials.password === 'fail') throw new Error('Incorrect Login')
   return credentials;
 });

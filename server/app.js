@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
-app.use('/images', express.static(path.join(__dirname, '../build/images')));
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
 
 // Routes for Auth
 app.use('/api/auth', authRoutes)

@@ -1,14 +1,24 @@
 import React, {useRef, useEffect, useState} from 'react'
 import { Loader } from "@googlemaps/js-api-loader"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
 
-import { addGame, editGame } from '../../features/games/gamesSlice'
 import { updateGame } from '../../features/games/gamesSlice'
-// import subtleGrayscale from '../../utils/mapStyles/subtleGrayscale'
+
 import formatDate from '../../utils/formatDateForInput'
 
-export default function EditGameForm ({game, handleClose}) {
+import ConfirmationModal from '../forms/ConfirmationModal'
+
+export default function EditGameForm () {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const { gameId } = useParams();
+  const game = (useSelector((state)=>{
+    return state.games.gamesArr.find((g)=>g._id === gameId)
+  }))
+  
   const {sport, address, partySize, _id: id, gameName, location} = game
+
   const [lng, lat] = location.coordinates
   const dateTime = formatDate(game.dateTime)
   // DateTime
@@ -37,7 +47,7 @@ export default function EditGameForm ({game, handleClose}) {
 
 
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   
 
   useEffect(()=>{
@@ -80,6 +90,12 @@ export default function EditGameForm ({game, handleClose}) {
 
   const handleSubmit =  async (e) => {
     e.preventDefault()
+    
+    setShowConfirmation(true)
+
+  }
+
+  const handleConfirm = () => {
     const formValues = {
       gameId: id,
       gameName: gameNameRef.current.value,
@@ -94,11 +110,19 @@ export default function EditGameForm ({game, handleClose}) {
     }
     
     dispatch(updateGame(formValues))
-    handleClose()
+    navigate('/manage')
+  }
+
+  const handleCancel = () => {
+    console.log('cancel')
+    setShowConfirmation(false)
+  }
+  const handleClose = () => {
+    navigate('/manage')
   }
   
   return (
-    <>
+    <div>
     <h1>Edit Game Form</h1>
     <form onSubmit={handleSubmit}>
       <label htmlFor='gameName'>Game Name</label>
@@ -157,7 +181,9 @@ export default function EditGameForm ({game, handleClose}) {
       <button type='submit'>Save</button>
       <button type='button' onClick={handleClose}>Close</button>
     </form>
+    {showConfirmation && <ConfirmationModal confirm={handleConfirm} cancel={handleCancel} />}
+    
     {/* <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div> */}
-    </>
+    </div>
   )
 }
