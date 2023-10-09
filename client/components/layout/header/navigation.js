@@ -11,7 +11,7 @@ function NavigationBar() {
         <Navbar.Collapse id="responsive-navbar-nav">
               <Nav.Link href=''>Profile</Nav.Link>
               <Nav.Link href=''></Nav.Link>
-            <NavDropdown title='Dropdown'>
+            <NavDropdown title='Manage Games'>
               <NavDropdown.Item href="">Item 1</NavDropdown.Item>
               <NavDropdown.Item href="">Item 2</NavDropdown.Item>
               <NavDropdown.Item href="">Item 3</NavDropdown.Item>
@@ -25,7 +25,7 @@ function NavigationBar() {
 
 const StyledNavbar = styled(Navbar)`
   background-color: ${({ theme }) => theme.colors.header};
-  
+
   &&& .nav-link,
   &&& .navdropdown.item {
     color: ${({ theme }) => theme.colors.lightText};
