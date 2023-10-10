@@ -121,4 +121,27 @@ gameController.removeDeletedGame = async (req, res, next) => {
 
 
 
+
+userController.unattendGame = async (req, res, next) => {
+  const { gameId } = req.params;
+  const { user } = req;
+
+  try {
+    user.attendingGames = user.attendingGames.filter(game => game.id !== gameId);
+    console.log(user.attendingGames);
+    await user.save();
+
+    res.locals.stillAttending = {
+     message: "Game unattended", 
+     updatedAttendingGames: user.attendingGames
+    };
+    return next();
+  } catch (err) {
+    next(err);
+  }
+
+};
+
+
+
 module.exports = gameController;
