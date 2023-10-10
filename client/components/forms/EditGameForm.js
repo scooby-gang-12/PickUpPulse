@@ -118,7 +118,7 @@ export default function EditGameForm () {
     setShowConfirmation(false)
   }
   const handleClose = () => {
-    navigate('/manage')
+    navigate('/hostedGames')
   }
   
   return (

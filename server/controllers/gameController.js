@@ -79,7 +79,13 @@ gameController.signupForGame = async (req, res, next) => {
 gameController.hostCheck = async (req, res, next) => {
     const { gameId } = req.params;
     const { user } = req;
+    const game = await Game.findById(gameId)
 
+    // BOBBY
+    // HAD TO CHANGE THIS AFTER POPULATING IN THE PASSPORT MIDDLEWARE
+    console.log('Game Host',game.host)
+    console.log('User Id',user._id)
+    console.log(game.host.equals(user._id))
     if(user.hostedGames.includes(gameId)) return next();
 
     return next({message: 'Only host may delete game'})

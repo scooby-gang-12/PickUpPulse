@@ -11,7 +11,6 @@ function NavigationBar() {
   const handlelogout = () => {
     dispatch(logoutUser());
   }
-  console.log(isLoggedIn)
   return (
     <div>
       <StyledNavbar expand="lg">
