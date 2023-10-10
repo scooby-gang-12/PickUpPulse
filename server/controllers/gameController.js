@@ -115,7 +115,6 @@ gameController.removeHostGame = async (req, res, next) => {
 
 gameController.removeAttendeeGame = async (req, res, next) => {
     const { gameId } = req.params
-    console.log(req.user._id)
     await Game.findById(gameId)
         .then(async (foundGame) => {
             foundGame.attending.forEach(async (userId) =>  {
@@ -129,7 +128,7 @@ gameController.removeAttendeeGame = async (req, res, next) => {
                         }
                     })
                     res.locals.newArr = newGamesArr;
-                })
+                }).catch((err) => next(err))
 
             } else {
                await User.findById(userId)
@@ -142,9 +141,9 @@ gameController.removeAttendeeGame = async (req, res, next) => {
                     })
                     foundUser.attendingGames = newGamesArr;
                     await foundUser.save()
-                })
+                }).catch((err) => next(err))
             }
-        })
+        }).catch((err) => next(err))
     })
 
     return next();
@@ -171,6 +170,19 @@ gameController.unattendGame = async (req, res, next) => {
 
 };
 
+gameController.attendGame = async (req, res, next) => {
+    const { gameId } = req.params;
+    const { user } = req;
+ 
+    user.attendingGames.push(gameId);
+    await user.save();
 
+    await User.findById(user._id)
+        .then(async (foundUser) => {
+            res.locals.newAttendingGames = await foundUser.populate('attendingGames')
+            return next();
+        })
+        .catch((err) => next(err))
+}
 
 module.exports = gameController;

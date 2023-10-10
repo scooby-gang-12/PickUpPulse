@@ -32,4 +32,8 @@ router.patch('/unattendGame/:gameId', gameController.unattendGame, (req, res) =>
     return res.status(200).json(res.locals.stillAttending)
 })
 
+router.patch('/attendGame/:gameId', gameController.attendGame,(req, res) => {
+    return res.status(200).json(res.locals.newAttendingGames);
+})
+
 module.exports = router;
