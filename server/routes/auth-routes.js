@@ -19,6 +19,11 @@ router.post('/logout', authController.logout, (req, res) => {
     return res.redirect('/');
 })
 
+// Route to Get User
+router.get('/', (req, res) => {
+    return res.status(200).json(req.user);
+})
+
 
 
 module.exports = router;

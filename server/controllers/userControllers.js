@@ -16,10 +16,7 @@ userController.updateUser = async (req, res, next) => {
   return next()  
 }
 
-// userController.findUserGames = async (req, res, next) => {
-//   const {_id}
-//   findById( _id)
-// }
+
 
 
 module.exports = userController;

@@ -63,12 +63,10 @@ gameController.deleteGame = async (req, res, next) => {
 }
 
 // Sign up for game and adds it to attending array, Checks to see if user is the host, if so adds it to 'Hosted Games'
-gameController.signupForGame = async (req, res, next) => {
+gameController.addCreatedGame = async (req, res, next) => {
     // ADD Created Game
     req.user.attendingGames.push(res.locals.game.gameId);
-    if(req.user.id === res.locals.game.host) {
-        req.user.hostedGames.push(res.locals.game.gameId)
-    }
+    req.user.hostedGames.push(res.locals.game.gameId)
     await req.user.save();
 
     return next()
@@ -87,7 +85,7 @@ gameController.hostCheck = async (req, res, next) => {
 
 
 // Remove Deleted Game from Hosted array and Attending array
-gameController.removeDeletedGame = async (req, res, next) => {
+gameController.removeHostGame = async (req, res, next) => {
     const { gameId } = req.params;
     const { user } = req;
 
@@ -108,11 +106,31 @@ gameController.removeDeletedGame = async (req, res, next) => {
 
     user.hostedGames = newHostArr;
     user.attendingGames = newAttendArr;
-    
     await user.save();
+    
+    
     return next()
 }
 
+gameController.removeAttendeeGame = async (req, res, next) => {
+    const { gameId } = req.params
+    await Game.findById(gameId)
+        .then(async (foundGame) => {
+            foundGame.attending.forEach(async (userId) =>  {
+               await User.findById(userId)
+                .then(async (foundUser) => {
+                    console.log(foundUser.attendingGames)
+                    const newGamesArr = [];
+                    foundUser.attendingGames.forEach((game) => {
+                        if(game !== gameId) newGamesArr.push(game)
+                    })
+                    foundUser.attendingGames = newGamesArr;
+                    await foundUser.save()
+                })
+            })
+        })
 
+    return next();
+};
 
 module.exports = gameController;
