@@ -14,9 +14,6 @@ userController.updateUser = async (req, res, next) => {
 
   res.locals.updatedUser = await User.findById(_id);  
   return next()  
-}
-
-
-
+};
 
 module.exports = userController;

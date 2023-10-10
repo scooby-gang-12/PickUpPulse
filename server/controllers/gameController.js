@@ -1,6 +1,6 @@
 const Game = require('../models/gameModel');
 const User = require('../models/userModel');
-
+const userController = require('../controllers/userControllers')
 const gameController = {};
 
 // Create Game Controller
@@ -77,7 +77,13 @@ gameController.addCreatedGame = async (req, res, next) => {
 gameController.hostCheck = async (req, res, next) => {
     const { gameId } = req.params;
     const { user } = req;
+    const game = await Game.findById(gameId)
 
+    // BOBBY
+    // HAD TO CHANGE THIS AFTER POPULATING IN THE PASSPORT MIDDLEWARE
+    console.log('Game Host',game.host)
+    console.log('User Id',user._id)
+    console.log(game.host.equals(user._id))
     if(user.hostedGames.includes(gameId)) return next();
 
     return next({message: 'Only host may delete game'})
@@ -143,5 +149,28 @@ gameController.removeAttendeeGame = async (req, res, next) => {
 
     return next();
 };
+
+
+gameController.unattendGame = async (req, res, next) => {
+  const { gameId } = req.params;
+  const { user } = req;
+
+  try {
+    user.attendingGames = user.attendingGames.filter(game => game.id !== gameId);
+    console.log(user.attendingGames);
+    await user.save();
+
+    res.locals.stillAttending = {
+     message: "Game unattended", 
+     updatedAttendingGames: user.attendingGames
+    };
+    return next();
+  } catch (err) {
+    next(err);
+  }
+
+};
+
+
 
 module.exports = gameController;

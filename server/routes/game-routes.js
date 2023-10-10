@@ -26,6 +26,10 @@ router.delete('/:gameId', gameController.hostCheck, gameController.removeAttende
 })
 
 
-
+//Update remove attending game by user
+router.patch('/unattendGame/:gameId', gameController.unattendGame, (req, res) => {
+    // SEND BACK USER
+    return res.status(200).json(res.locals.stillAttending)
+})
 
 module.exports = router;

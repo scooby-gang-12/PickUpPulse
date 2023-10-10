@@ -27,10 +27,18 @@ export const getAllGames = createAsyncThunk(
   'games/getAllGames',
   async (_, thunkAPI) => {
     const response = await gamesAPI.getAllGames()
-
     return response.data
   }
 )
+export const getGamesNearMe = createAsyncThunk(
+  'games/getGamesNearMe',
+  async (locationQuery, thunkAPI) => {
+    const response = await gamesAPI.getGamesNearMe(locationQuery)
+    return
+  }
+  
+)
+
 
 const initialState = { 
   gamesArr: [
@@ -105,6 +113,10 @@ const gamesSlice = createSlice({
     })
     .addCase(getAllGames.pending, (state,action) => {})
     .addCase(getAllGames.rejected, (state,action) => {})
+    // Get Games near me
+    .addCase(getGamesNearMe.fulfilled, (state,action) => {})
+    .addCase(getGamesNearMe.pending, (state,action) => {})
+    .addCase(getGamesNearMe.rejected, (state,action) => {})
   }
   
 })
