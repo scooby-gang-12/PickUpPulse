@@ -21,7 +21,7 @@ router.patch('/', gameController.updateGame, (req, res) => {
 
 // Delete Game route
 // Bobby :/gameId
-router.delete('/:gameId', gameController.deleteGame, (req, res) => {
+router.delete('/:gameId', gameController.hostCheck, gameController.deleteGame, gameController.removeDeletedGame, (req, res) => {
     return res.status(200).json(res.locals.gameArr);
 })
 
