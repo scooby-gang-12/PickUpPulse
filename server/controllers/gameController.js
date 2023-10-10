@@ -98,14 +98,9 @@ gameController.removeHostGame = async (req, res, next) => {
         }
     })
 
-    user.attendingGames.forEach((e) => {
-        if(e != gameId) {
-            newAttendArr.push(e);
-        }
-    })
 
     user.hostedGames = newHostArr;
-    user.attendingGames = newAttendArr;
+    user.attendingGames = res.locals.newArr;
     await user.save();
     
     
@@ -114,21 +109,37 @@ gameController.removeHostGame = async (req, res, next) => {
 
 gameController.removeAttendeeGame = async (req, res, next) => {
     const { gameId } = req.params
+    console.log(req.user._id)
     await Game.findById(gameId)
         .then(async (foundGame) => {
             foundGame.attending.forEach(async (userId) =>  {
-               await User.findById(userId)
+                if(`${userId}` === `${req.user._id}`) {
+                    await User.findById(userId)
                 .then(async (foundUser) => {
-                    console.log(foundUser.attendingGames)
                     const newGamesArr = [];
                     foundUser.attendingGames.forEach((game) => {
-                        if(game !== gameId) newGamesArr.push(game)
+                        if(`${game._id}` !== `${gameId}`) {
+                            newGamesArr.push(game);
+                        }
+                    })
+                    res.locals.newArr = newGamesArr;
+                })
+
+            } else {
+               await User.findById(userId)
+                .then(async (foundUser) => {
+                    const newGamesArr = [];
+                    foundUser.attendingGames.forEach((game) => {
+                        if(`${game._id}` !== `${gameId}`) {
+                            newGamesArr.push(game);
+                        }
                     })
                     foundUser.attendingGames = newGamesArr;
                     await foundUser.save()
                 })
-            })
+            }
         })
+    })
 
     return next();
 };
