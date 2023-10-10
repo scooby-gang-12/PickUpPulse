@@ -5,7 +5,7 @@ import { StyledHeader } from '../../styles/StyledHeader.styled';
 export default function Header() {
     return (
         <StyledHeader>
-            <NavigationBar />
+            <NavigationBar/>
          </StyledHeader>
     )
 }

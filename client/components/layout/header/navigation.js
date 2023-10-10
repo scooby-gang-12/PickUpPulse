@@ -1,22 +1,34 @@
 import React from "react";
-import { Navbar, NavDropdown, Nav } from "react-bootstrap";
 import styled from "styled-components";
+import { Navbar, NavDropdown, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { logoutUser } from "../../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function NavigationBar() {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const dispatch = useDispatch();
+  const handlelogout = () => {
+    dispatch(logoutUser());
+  }
+  console.log(isLoggedIn)
   return (
     <div>
       <StyledNavbar expand="lg">
-        <Navbar.Brand href="/dashboard"></Navbar.Brand>
+        <Navbar.Brand as={Link} to="/dashboard"><h1>Pick Up Pulse</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav.Link href=''>Profile</Nav.Link>
-              <Nav.Link href=''></Nav.Link>
+          <Nav className="ml-auto">
+            <Nav.Link as={Link} to='/profile'>Profile</Nav.Link>
+            <Nav.Link as={Link} to=''></Nav.Link>
             <NavDropdown title='Manage Games'>
-              <NavDropdown.Item href="">Item 1</NavDropdown.Item>
-              <NavDropdown.Item href="">Item 2</NavDropdown.Item>
-              <NavDropdown.Item href="">Item 3</NavDropdown.Item>
-              <NavDropdown.Item href="">Item 4</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to='/attendinggames'>Attending Games</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/hostedgames">Hosted Games</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/creategames">Create Games</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/hostedgames/edit">Edit Games</NavDropdown.Item>
             </NavDropdown>
+            {isLoggedIn && (<Nav.Link as={Link} to="/" onClick={handlelogout}>Logout</Nav.Link>)}
+          </Nav>
         </Navbar.Collapse>
       </StyledNavbar>
     </div>
@@ -26,13 +38,17 @@ function NavigationBar() {
 const StyledNavbar = styled(Navbar)`
   background-color: ${({ theme }) => theme.colors.header};
 
+  &&& .navbar-brand,
   &&& .nav-link,
-  &&& .navdropdown.item {
+  &&& .navdropdown {
     color: ${({ theme }) => theme.colors.lightText};
   }
 `;
 
-
-
-
 export default NavigationBar;
+
+
+
+
+
+
