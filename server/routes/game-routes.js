@@ -5,7 +5,7 @@ const gameController = require('../controllers/gameController');
 //Verify if we need to add passport authenticate for each route
 
 // Create Game route
-router.post('/', gameController.createGame, (req, res) => {
+router.post('/', gameController.createGame, gameController.signupForGame, (req, res) => {
     return res.status(200).json(res.locals.gameArr)
 });
 
@@ -20,7 +20,8 @@ router.patch('/', gameController.updateGame, (req, res) => {
 });
 
 // Delete Game route
-router.delete('/', gameController.deleteGame, (req, res) => {
+// Bobby :/gameId
+router.delete('/:gameId', gameController.hostCheck, gameController.deleteGame, gameController.removeDeletedGame, (req, res) => {
     return res.status(200).json(res.locals.gameArr);
 })
 
