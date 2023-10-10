@@ -1,6 +1,6 @@
 const Game = require('../models/gameModel');
 const User = require('../models/userModel');
-
+const userController = require('../controllers/userControllers')
 const gameController = {};
 
 // Create Game Controller
@@ -122,7 +122,7 @@ gameController.removeDeletedGame = async (req, res, next) => {
 
 
 
-userController.unattendGame = async (req, res, next) => {
+gameController.unattendGame = async (req, res, next) => {
   const { gameId } = req.params;
   const { user } = req;
 
