@@ -14,12 +14,6 @@ userController.updateUser = async (req, res, next) => {
 
   res.locals.updatedUser = await User.findById(_id);  
   return next()  
-}
-
-// userController.findUserGames = async (req, res, next) => {
-//   const {_id}
-//   findById( _id)
-// }
-
+};
 
 module.exports = userController;
