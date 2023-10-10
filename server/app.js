@@ -43,7 +43,11 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+<<<<<<< HEAD
 app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
+=======
+// Route for background image for frontend login
+>>>>>>> jk/NavBar
 app.use('/images', express.static(path.join(__dirname, '../public/images')));
 
 // Routes for Auth

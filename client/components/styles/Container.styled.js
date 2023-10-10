@@ -5,8 +5,8 @@ export const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // background-image: url('../../public/image/loginBackground.jpg');
-    // background-repeat: repeat-x, repeat-y;
-    // background-size: contain;
+    background-image: url('/images/loginBackground.jpg');
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover;
     
 `

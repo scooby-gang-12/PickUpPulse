@@ -8,13 +8,15 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) 
 });
 
 export const registerUser = createAsyncThunk('auth/registerUser', async (credentials) => {
-  
     const response = await authAPI.register(credentials);
     return credentials;
  
-  })
-  
+  });
 
+  export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
+    await authAPI.logout();
+    return null; 
+  });
 
 
 //perform async request using auth api and return is user info 
@@ -28,11 +30,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state) {
-      state.isLoggedIn = true;
-    },
     logout(state) {
     state.isLoggedIn = false;
+    state.userInfo = null;
+    state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -43,6 +44,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state,action)=>{
         state.error = action.error.message
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isLoggedIn = false;
+        state.userInfo = null;
       })
   }
 })

@@ -17,9 +17,14 @@ export default function Dashboard() {
     return (
         <div>
             <h1>Dashboard</h1>
+            <StyledP>Testing cabin font</StyledP>
             <p>Welcome {userInfo && userInfo.username}</p>
             <Map gamesArr={gamesArr} />
 
         </div>
     )
 }
+
+const StyledP = styled.p`
+    font-family: var(--secondary-font);
+`

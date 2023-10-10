@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import {registerUser} from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { StyledButton } from "./styles/Button.styled";
+import { StyledForm } from "./styles/StyledForm.styled";
+import { Container } from "./styles/Container.styled";
+import { StyledInput } from "./styles/StyledInput.styled";
 
 
 export default function SignUp({toggle}) {
@@ -60,16 +63,16 @@ export default function SignUp({toggle}) {
 
 
   return (
-    <LoginWrapper>
+    <Container>
       {/* <h1>Sign up</h1> */}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="fullName"><strong>Full Name</strong></label><br></br>
-        <input ref={fullNameRef} type='text'></input><br></br>
-        <label htmlFor='username'><strong>Username</strong></label><br></br>
-        <input ref={usernameRef} type='text'></input><br></br>
-        <label htmlFor='password'><strong>Password</strong></label><br></br>
-        <input ref={passwordRef} type='password'></input><br></br>
-        <label htmlFor="chooseSports"><strong>Choose Interested Sports:</strong></label><br></br>
+      <StyledForm onSubmit={handleSubmit}>
+        {/* <label htmlFor="fullName"><strong>Full Name</strong></label><br></br> */}
+        <StyledInput ref={fullNameRef} type='text' placeholder='Full Name'></StyledInput><br></br>
+        {/* <label htmlFor='username'><strong>Username</strong></label><br></br> */}
+        <StyledInput ref={usernameRef} type='text' placeholder='Username'></StyledInput><br></br>
+        {/* <label htmlFor='password'><strong>Password</strong></label><br></br> */}
+        <StyledInput ref={passwordRef} type='password' placeholder='Password'></StyledInput><br></br>
+        <label htmlFor="chooseSports"><strong>Select Sports of Interest:</strong></label><br></br>
         <input type="checkbox" ref={basketballRef}></input>
         <label htmlFor='FavSports'>Basketball</label><br></br>
         <input type="checkbox"  ref={golfRef} ></input>
@@ -81,18 +84,7 @@ export default function SignUp({toggle}) {
           Already a user?
           <span onClick={handleNavigate}> Log in here </span>
         </div>
-      </form>
-    </LoginWrapper>
+      </ StyledForm>
+    </Container>
   )
 }
-
-const LoginWrapper = styled.div `
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: center;
-`
-
-const FormWrapper = styled.form `
-  // display: flex;
-  // justify-content: center;
-`
