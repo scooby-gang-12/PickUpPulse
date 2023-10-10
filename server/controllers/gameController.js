@@ -64,6 +64,7 @@ gameController.deleteGame = async (req, res, next) => {
 
 // Sign up for game and adds it to attending array, Checks to see if user is the host, if so adds it to 'Hosted Games'
 gameController.signupForGame = async (req, res, next) => {
+    // ADD Created Game
     req.user.attendingGames.push(res.locals.game.gameId);
     if(req.user.id === res.locals.game.host) {
         req.user.hostedGames.push(res.locals.game.gameId)

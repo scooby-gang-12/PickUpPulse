@@ -4,7 +4,7 @@ import authAPI  from './authAPI.js'
 export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) => {
   const response = await authAPI.login(credentials)
   if (credentials.password === 'fail') throw new Error('Incorrect Login')
-  return credentials;
+  return response.data;
 });
 
 export const registerUser = createAsyncThunk('auth/registerUser', async (credentials) => {
