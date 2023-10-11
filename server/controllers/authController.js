@@ -48,5 +48,10 @@ authController.logout = (req, res, next) => {
     });
   };
 
+// BOBBY TEMP NEED
+authController.getUser = (req,res,next)=> {
+  res.status(200).json(req.user)
+}
+
 
 module.exports = authController;

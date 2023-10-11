@@ -1,6 +1,6 @@
 const Game = require('../models/gameModel');
 const User = require('../models/userModel');
-
+const userController = require('../controllers/userControllers')
 const gameController = {};
 
 // Create Game Controller
@@ -63,12 +63,10 @@ gameController.deleteGame = async (req, res, next) => {
 }
 
 // Sign up for game and adds it to attending array, Checks to see if user is the host, if so adds it to 'Hosted Games'
-gameController.signupForGame = async (req, res, next) => {
+gameController.addCreatedGame = async (req, res, next) => {
     // ADD Created Game
     req.user.attendingGames.push(res.locals.game.gameId);
-    if(req.user.id === res.locals.game.host) {
-        req.user.hostedGames.push(res.locals.game.gameId)
-    }
+    req.user.hostedGames.push(res.locals.game.gameId)
     await req.user.save();
 
     return next()
@@ -79,15 +77,25 @@ gameController.signupForGame = async (req, res, next) => {
 gameController.hostCheck = async (req, res, next) => {
     const { gameId } = req.params;
     const { user } = req;
+    const game = await Game.findById(gameId)
 
-    if(user.hostedGames.includes(gameId)) return next();
+    // BOBBY
+    // HAD TO CHANGE THIS AFTER POPULATING IN THE PASSPORT MIDDLEWARE
+    console.log('Game Host',game.host)
+    console.log('User Id',user._id)
+    console.log(game.host.equals(user._id))
+
+    if (game.host.equals(user._id)) {
+        return next()
+    }
+    // if(user.hostedGames.includes(gameId)) return next();
 
     return next({message: 'Only host may delete game'})
 }
 
 
 // Remove Deleted Game from Hosted array and Attending array
-gameController.removeDeletedGame = async (req, res, next) => {
+gameController.removeHostGame = async (req, res, next) => {
     const { gameId } = req.params;
     const { user } = req;
 
@@ -100,19 +108,85 @@ gameController.removeDeletedGame = async (req, res, next) => {
         }
     })
 
-    user.attendingGames.forEach((e) => {
-        if(e != gameId) {
-            newAttendArr.push(e);
-        }
-    })
 
     user.hostedGames = newHostArr;
-    user.attendingGames = newAttendArr;
-    
+    user.attendingGames = res.locals.newArr;
     await user.save();
+    
+    
     return next()
 }
 
+gameController.removeAttendeeGame = async (req, res, next) => {
+    const { gameId } = req.params
+    await Game.findById(gameId)
+        .then(async (foundGame) => {
+            foundGame.attending.forEach(async (userId) =>  {
+                if(`${userId}` === `${req.user._id}`) {
+                    await User.findById(userId)
+                .then(async (foundUser) => {
+                    const newGamesArr = [];
+                    foundUser.attendingGames.forEach((game) => {
+                        if(`${game._id}` !== `${gameId}`) {
+                            newGamesArr.push(game);
+                        }
+                    })
+                    res.locals.newArr = newGamesArr;
+                }).catch((err) => next(err))
 
+            } else {
+               await User.findById(userId)
+                .then(async (foundUser) => {
+                    const newGamesArr = [];
+                    foundUser.attendingGames.forEach((game) => {
+                        if(`${game._id}` !== `${gameId}`) {
+                            newGamesArr.push(game);
+                        }
+                    })
+                    foundUser.attendingGames = newGamesArr;
+                    await foundUser.save()
+                }).catch((err) => next(err))
+            }
+        }).catch((err) => next(err))
+    })
+
+    return next();
+};
+
+
+gameController.unattendGame = async (req, res, next) => {
+  const { gameId } = req.params;
+  const { user } = req;
+
+  try {
+    user.attendingGames = user.attendingGames.filter(game => game.id !== gameId);
+    console.log(user.attendingGames);
+    await user.save();
+
+    res.locals.stillAttending = {
+     message: "Game unattended", 
+     updatedAttendingGames: user.attendingGames
+    };
+    return next();
+  } catch (err) {
+    next(err);
+  }
+
+};
+
+gameController.attendGame = async (req, res, next) => {
+    const { gameId } = req.params;
+    const { user } = req;
+ 
+    user.attendingGames.push(gameId);
+    await user.save();
+
+    await User.findById(user._id)
+        .then(async (foundUser) => {
+            res.locals.newAttendingGames = await foundUser.populate('attendingGames')
+            return next();
+        })
+        .catch((err) => next(err))
+}
 
 module.exports = gameController;
