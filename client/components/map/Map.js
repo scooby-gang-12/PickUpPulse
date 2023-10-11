@@ -97,11 +97,10 @@ export default function Map ({gamesArr}) {
 }, [gamesArr]);
 
   return (
-  <>
-    <h1>Map</h1>
+  <div>
     <button>Golf</button>
     <button>Basketball</button>
     <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div>
-  </>
+    </div>
   )
 }
