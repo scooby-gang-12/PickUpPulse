@@ -8,4 +8,6 @@ export const StyledInput = styled.input`
     border-radius: 10px;
     border: 0;
     border-bottom: 1px solid black;
+
+    
 `

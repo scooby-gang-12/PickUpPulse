@@ -15,5 +15,4 @@ export const StyledButton = styled.button`
         opacity: 0.8;
         transform: scale(0.98)
     }
-
 `

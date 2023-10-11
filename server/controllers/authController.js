@@ -7,7 +7,6 @@ const authController = {};
 
 authController.createUser = async (req, res, next) => {
     const { username, password, fullName, location, favoriteSports } = req.body;
-    console.log(req.body)
     if(!username || !password || !fullName || !location || !favoriteSports) return next({message: 'Missing User Information'});
 
 

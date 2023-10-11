@@ -5,8 +5,7 @@ const authController = require('../controllers/authController')
 // Route to Login
 router.post('/login', passport.authenticate('local', {failureMessage: 'User not authenticated'}), (req, res) => {
     //figure out what to send back
-    console.log(req.user);
-    return res.sendStatus(200)
+    return res.status(200).json(req.user);
 })
 
 // Route to Register
