@@ -200,11 +200,11 @@ gameController.doubleAttendCheck = async (req, res, next) => {
 
 gameController.findWithin = async (req, res, next) => {
     const { lat, lng, radius } = req.query;
-
+    
     res.locals.filteredGames = await Game.find({
         location: {
             $geoWithin: {
-                $centersphere: [[lng, lat], radius / 3963.2]
+                $centerSphere: [[Number(lng), Number(lat)], Number(radius) / 3963.2]
             }
         }
     })
