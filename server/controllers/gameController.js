@@ -198,4 +198,18 @@ gameController.doubleAttendCheck = async (req, res, next) => {
     // return next({message: 'Already attending this game'})
 }
 
+gameController.findWithin = async (req, res, next) => {
+    const { lat, lng, radius } = req.query;
+
+    res.locals.filteredGames = await Game.find({
+        location: {
+            $geoWithin: {
+                $centersphere: [[lng, lat], radius / 3963.2]
+            }
+        }
+    })
+
+    next();
+}
+
 module.exports = gameController;

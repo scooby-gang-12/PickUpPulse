@@ -36,4 +36,8 @@ router.patch('/attendGame/:gameId', gameController.doubleAttendCheck, gameContro
     return res.status(200).json(res.locals.newAttendingGames);
 })
 
+router.get('/nearMe', gameController.findWithin,(req, res) => {
+    return res.status(200).json(res.locals.filteredGames)
+})
+
 module.exports = router;
