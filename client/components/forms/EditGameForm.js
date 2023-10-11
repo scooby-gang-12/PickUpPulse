@@ -109,16 +109,8 @@ export default function EditGameForm () {
       dateTime: dateTimeRef.current.value
     }
     
-    dispatch(updateGame(formValues))
-    navigate('/manage')
-  }
-
-  const handleCancel = () => {
-    console.log('cancel')
-    setShowConfirmation(false)
-  }
-  const handleClose = () => {
-    navigate('/manage')
+    dispatch(editGame(formValues))
+    handleClose()
   }
   
   return (

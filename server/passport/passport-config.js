@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt')
 
 module.exports = function() {
 passport.use(new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username })
+  // BOBBY ADDED TO POPULATE GAMES
+    User.findOne({ username: username }).populate('hostedGames').populate('attendingGames')
         .then((foundUser) => {
             if (!foundUser) return (done({message: 'User not found'}))
 
@@ -24,7 +25,8 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findById(id);
+      // BOBBY ADDED TO POPULATE GAMES
+      const user = await User.findById(id).populate('hostedGames').populate('attendingGames');
       done(null, user);
     } catch (err) {
       done(err);

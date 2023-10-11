@@ -14,7 +14,6 @@ export default function GamesList () {
   const handleEdit = (game) => {
     // setActiveEdit(null)
     // setActiveEdit(game)
-    console.log(game)
     navigate(`/hostedgames/edit/${game._id}`)
   }
   const handleClose = () => {

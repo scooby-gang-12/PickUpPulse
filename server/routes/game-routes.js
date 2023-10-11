@@ -5,7 +5,7 @@ const gameController = require('../controllers/gameController');
 //Verify if we need to add passport authenticate for each route
 
 // Create Game route
-router.post('/', gameController.createGame, gameController.signupForGame, (req, res) => {
+router.post('/', gameController.createGame, gameController.addCreatedGame, (req, res) => {
     return res.status(200).json(res.locals.gameArr)
 });
 
@@ -19,11 +19,21 @@ router.patch('/', gameController.updateGame, (req, res) => {
     return res.status(200).json(res.locals.gameArr);
 });
 
-// Delete Game route
+// Delete Game route (From host)
 // Bobby :/gameId
-router.delete('/:gameId', gameController.hostCheck, gameController.deleteGame, gameController.removeDeletedGame, (req, res) => {
+router.delete('/:gameId', gameController.hostCheck, gameController.removeAttendeeGame, gameController.removeHostGame, gameController.deleteGame,(req, res) => {
     return res.status(200).json(res.locals.gameArr);
 })
 
+
+//Update remove attending game by user
+router.patch('/unattendGame/:gameId', gameController.unattendGame, (req, res) => {
+    // SEND BACK USER
+    return res.status(200).json(res.locals.stillAttending)
+})
+
+router.patch('/attendGame/:gameId', gameController.attendGame,(req, res) => {
+    return res.status(200).json(res.locals.newAttendingGames);
+})
 
 module.exports = router;
