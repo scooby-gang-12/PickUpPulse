@@ -19,8 +19,10 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (credent
   export const attendGame = createAsyncThunk(
     'games/attendGame',
     async(id,thunkAPI) => {
-      console.log(id)
+      
+
       const response = await authAPI.attendGame(id)
+      console.log(response.data)
       return response.data
     }
   )

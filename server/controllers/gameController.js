@@ -84,7 +84,11 @@ gameController.hostCheck = async (req, res, next) => {
     console.log('Game Host',game.host)
     console.log('User Id',user._id)
     console.log(game.host.equals(user._id))
-    if(user.hostedGames.includes(gameId)) return next();
+
+    if (game.host.equals(user._id)) {
+        return next()
+    }
+    // if(user.hostedGames.includes(gameId)) return next();
 
     return next({message: 'Only host may delete game'})
 }
