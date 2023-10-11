@@ -13,15 +13,10 @@ export default function HostedGame ({game}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDelete = () => {
-    dispatch(deleteGame(game._id))
-      .then(() => {
-        dispatch(getUser());
-      })
-      .catch(error => {
-        console.error("There was an error deleting the game:", error);
-        // Handle the error appropriately, maybe display a message to the user.
-      });
-}
+    dispatch(deleteGame(game._id)).then(()=>{
+      dispatch(getUser())
+    })
+  }
   const handleEdit = (game) => {
     navigate(`/hostedgames/edit/${game._id}`)
   }

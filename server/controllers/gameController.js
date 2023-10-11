@@ -81,10 +81,6 @@ gameController.hostCheck = async (req, res, next) => {
 
     // BOBBY
     // HAD TO CHANGE THIS AFTER POPULATING IN THE PASSPORT MIDDLEWARE
-    console.log('Game Host',game.host)
-    console.log('User Id',user._id)
-    console.log(game.host.equals(user._id))
-
     if (game.host.equals(user._id)) {
         return next()
     }
@@ -147,7 +143,8 @@ gameController.removeAttendeeGame = async (req, res, next) => {
                     await foundUser.save()
                 }).catch((err) => next(err))
             }
-        }).catch((err) => next(err))
+        })
+        // }).catch((err) => next(err))
     })
 
     return next();
