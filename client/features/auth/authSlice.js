@@ -10,13 +10,40 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) 
 export const registerUser = createAsyncThunk('auth/registerUser', async (credentials) => {
     const response = await authAPI.register(credentials);
     return credentials;
- 
   });
 
   export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
     await authAPI.logout();
     return null; 
   });
+  export const attendGame = createAsyncThunk(
+    'games/attendGame',
+    async(id,thunkAPI) => {
+      
+
+      const response = await authAPI.attendGame(id)
+      console.log(response.data)
+      return response.data
+    }
+  )
+  
+  export const unattendGame = createAsyncThunk(
+    'games/unattendGame',
+    async(id,thunkAPI) => {
+      const response = await authAPI.unattendGame(id)
+      
+      return response.data.updatedAttendingGames
+    }
+  )
+
+  export const getUser = createAsyncThunk(
+    'auth/getUser',
+    async(_,thunkAPI) => {
+      const response = await authAPI.getUser()
+      
+      return response.data
+    }
+  )
 
 
 //perform async request using auth api and return is user info 
@@ -48,6 +75,15 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.isLoggedIn = false;
         state.userInfo = null;
+      })
+      .addCase(attendGame.fulfilled, (state,action)=>{
+        state.userInfo = action.payload
+      })
+      .addCase(unattendGame.fulfilled, (state,action)=>{
+        state.userInfo.attendingGames = action.payload
+      })
+      .addCase(getUser.fulfilled, (state,action)=>{
+        state.userInfo = action.payload
       })
   }
 })

@@ -1,10 +1,11 @@
 import React, {useEffect, useState ,useRef} from 'react'
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from "@googlemaps/js-api-loader"
-import {getAllGames} from '../../features/games/gamesSlice'
+import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
+import { useNavigate } from 'react-router-dom';
 export default function Map ({gamesArr}) {
   const [isLoading, setIsLoading] = useState(true)
     const locations = gamesArr.map((game)=>{
@@ -45,11 +46,17 @@ export default function Map ({gamesArr}) {
       }
     });
   };
-    
+  
 
-
+  let allMarkers = [];
 
   const updateMarkers = (markers) => {
+
+    for (let i = 0; i < allMarkers.length; i++) {
+      allMarkers[i].setMap(null);
+  }
+    allMarkers = [];
+
     if (window.google && window.google.maps && window.google.maps.Marker) {
       for (const marker of markers) {
         const googleMarker = new window.google.maps.Marker({
@@ -60,8 +67,11 @@ export default function Map ({gamesArr}) {
             scaledSize: new window.google.maps.Size(25, 25)
           }
         })
+
+        allMarkers.push(googleMarker);
+
         const infoContent = `<p>${marker.gameName}</p>`
-        
+
         const infoWindow = new window.google.maps.InfoWindow({
           content: infoContent
         });
@@ -96,12 +106,49 @@ export default function Map ({gamesArr}) {
     }
 }, [gamesArr]);
 
+  
+  const activeFilter = useRef(null)
+  activeFilter.current = 'all'
+
+
+  const filterGames = () => {
+    const filtered = gamesArr.filter(game=> {
+      // console.log(activeFilter.current)
+      if (activeFilter.current === 'all') return game
+      else if (activeFilter.current === game.sport) return game
+    })
+    
+    const locations = filtered.map((game)=>{
+      return {lat: game.location.coordinates[1], lng: game.location.coordinates[0], gameName: game.gameName, sport: game.sport}
+      })
+      
+    updateMarkers(locations)
+  }
+
+  const handleToggle = (selectedFilter) => {
+    activeFilter.current=selectedFilter
+    filterGames()
+  }
+  const getNearbyGames = async (radius) => {
+    const location = await getCurrentLocation()
+    
+    const locationQuery = {
+      lat: location.lat,
+      lng: location.lng,
+      radius
+    }
+    dispatch(getGamesNearMe(locationQuery))
+    
+  }
+
   return (
-  <>
+  <div>
     <h1>Map</h1>
-    <button>Golf</button>
-    <button>Basketball</button>
+    <button onClick={()=>handleToggle('basketball')}>Basketball</button>
+    <button onClick={()=>handleToggle('golf')}>Golf</button>
+    <button onClick={()=>dispatch(getAllGames())}>Get Games</button>
+    <button onClick={()=>getNearbyGames(5)}>Get Games Near Me</button>
     <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div>
-  </>
+  </div>
   )
 }

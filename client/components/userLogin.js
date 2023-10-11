@@ -20,6 +20,7 @@ const UserLogin = () => {
   const handleNavigate = () => {
     navigate('/register')
   }
+  
   const handlelogin = (e) => {
     e.preventDefault()
     console.log('click')

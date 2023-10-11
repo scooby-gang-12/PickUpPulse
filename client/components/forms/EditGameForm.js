@@ -110,7 +110,7 @@ export default function EditGameForm () {
     }
     
     dispatch(updateGame(formValues))
-    navigate('/manage')
+    navigate('/hostedGames')
   }
 
   const handleCancel = () => {
@@ -118,7 +118,7 @@ export default function EditGameForm () {
     setShowConfirmation(false)
   }
   const handleClose = () => {
-    navigate('/manage')
+    navigate('/hostedGames')
   }
   
   return (
