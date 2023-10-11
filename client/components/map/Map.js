@@ -1,6 +1,7 @@
 import React, {useEffect, useState ,useRef} from 'react'
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from "@googlemaps/js-api-loader"
+import { useNavigate } from "react-router-dom";
 import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
 
 import golfImg from '../../assets/golf.png'
@@ -13,7 +14,9 @@ export default function Map ({gamesArr}) {
 
   const mapRef = useRef(null);
   const googleMapRef = useRef(null)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const initializeMap = async (center) => {
     if (window.google) {
       googleMapRef.current = new window.google.maps.Map(mapRef.current, {
@@ -68,8 +71,12 @@ export default function Map ({gamesArr}) {
         })
 
         allMarkers.push(googleMarker);
-
-        const infoContent = `<p>${marker.gameName}</p>`
+        // const infoContent = `<p>${marker.gameName}</p>`
+        const infoContent = document.createElement('p')
+        infoContent.textContent = 'hello'
+        infoContent.addEventListener('click',()=>{
+          navigate('/profile')
+        })
         const infoWindow = new window.google.maps.InfoWindow({
           content: infoContent
         });
