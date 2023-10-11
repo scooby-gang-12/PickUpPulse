@@ -186,4 +186,13 @@ gameController.attendGame = async (req, res, next) => {
         .catch((err) => next(err))
 }
 
+gameController.doubleAttendCheck = async (req, res, next) => {
+    const { user } = req;
+    const { gameId } = req.params;
+
+    if(!user.attendingGames.includes(gameId)) return next();
+
+    return next({message: 'Already attending this game'})
+}
+
 module.exports = gameController;
