@@ -7,7 +7,6 @@ const authController = {};
 
 authController.createUser = async (req, res, next) => {
     const { username, password, fullName, location, favoriteSports } = req.body;
-    console.log(req.body)
     if(!username || !password || !fullName || !location || !favoriteSports) return next({message: 'Missing User Information'});
 
 
@@ -48,6 +47,11 @@ authController.logout = (req, res, next) => {
       return next()
     });
   };
+
+// BOBBY TEMP NEED
+authController.getUser = (req,res,next)=> {
+  res.status(200).json(req.user)
+}
 
 
 module.exports = authController;

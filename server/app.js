@@ -11,10 +11,14 @@ const passport = require('passport');
 const app = express();
 const authRoutes = require('./routes/auth-routes');
 const gameRoutes = require('./routes/game-routes');
+const userRoutes = require('./routes/user-routes');
+const protectedRoute = require('./passport/passport-protected-route');
 
 // Middleware
 app.use(morgan('tiny'))
 app.use(express.json())
+// Bobby
+express.urlencoded({ extended: true })
 
 app.use(
   session({
@@ -39,12 +43,22 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
+
+// Route for background image for frontend login
+
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
+
 // Routes for Auth
 app.use('/api/auth', authRoutes)
 
 
 // Routes for Games
+// TEMP REMOVE PROTECTED -- BS
 app.use('/api/games', gameRoutes);
+
+//Routes for Users
+app.use('/api/users', protectedRoute, userRoutes);
 
 // Catch All Route
 app.use('*', (req,res) => {
