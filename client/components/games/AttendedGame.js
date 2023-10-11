@@ -18,7 +18,8 @@ export default function GeneralGame ({game}) {
   }
 
   const handleUnattend = () => {
-    console.log('Unattend', game._id)
+    dispatch(unattendGame(game._id))
+    // console.log('Unattend', game._id)
   }
   return (
     <div>

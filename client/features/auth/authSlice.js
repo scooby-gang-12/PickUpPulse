@@ -31,7 +31,8 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (credent
     'games/unattendGame',
     async(id,thunkAPI) => {
       const response = await authAPI.unattendGame(id)
-      return response.data
+      
+      return response.data.updatedAttendingGames
     }
   )
 
@@ -39,6 +40,7 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (credent
     'auth/getUser',
     async(_,thunkAPI) => {
       const response = await authAPI.getUser()
+      
       return response.data
     }
   )
@@ -78,7 +80,7 @@ const authSlice = createSlice({
         state.userInfo = action.payload
       })
       .addCase(unattendGame.fulfilled, (state,action)=>{
-        state.userInfo = action.payload
+        state.userInfo.attendingGames = action.payload
       })
       .addCase(getUser.fulfilled, (state,action)=>{
         state.userInfo = action.payload
