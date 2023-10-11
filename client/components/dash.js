@@ -16,7 +16,9 @@ const AllGames = () => {
   return (
     <div>
       <h1>All Games</h1>
-      {gamesArr && gamesArr.map((game) => <div>{game.gameName}</div>)}
+      <div style={{justifyContent: 'center', textAlign: 'center', overflowY: 'auto', width: '300px', maxHeight: '300px'}}>
+      {gamesArr && gamesArr.map((game, index) => <div key={index}>{game.gameName}</div>)}
+      </div>
     </div>
   )
 }
@@ -26,7 +28,7 @@ const AttendingGames = () => {
   return (
     <div>
       <h1>Attending Games</h1>
-      {userInfo && userInfo.attendingGames.map((game) =><div>{game}</div>)}
+      {userInfo && userInfo.attendingGames.map((game) =><div>{game.gameName}</div>)}
     </div>
   )
 }
