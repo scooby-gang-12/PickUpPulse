@@ -22,7 +22,8 @@ export default function Map () {
       lat: game.location.coordinates[1],
       lng: game.location.coordinates[0],
       gameName: game.gameName,
-      sport: game.sport
+      sport: game.sport,
+      id: game._id
     }));
   };
   

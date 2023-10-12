@@ -16,6 +16,7 @@ import EditGames from './pages/editGame';
 import HostedGames from './pages/hostedGames';
 import EditGameForm from './components/forms/EditGameForm';
 import  GameInfo from './pages/gameinfo';
+import DetailedGameInfo from './components/DetailedGameInfo';
 
 // store colors and global theme items
 const theme = {
@@ -50,6 +51,7 @@ export default function App() {
                 <Route path='/hostedgames' element={<HostedGames />} />
                 <Route path='/hostedgames/edit/:gameId' element={<EditGameForm />} />
               <Route path='/profile' element={<Profile />} />
+              <Route path='/gameInfo/123' element={<DetailedGameInfo />} />
             </Route>
         </Routes>
       </BrowserRouter>
