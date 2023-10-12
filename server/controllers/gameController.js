@@ -81,10 +81,6 @@ gameController.hostCheck = async (req, res, next) => {
 
     // BOBBY
     // HAD TO CHANGE THIS AFTER POPULATING IN THE PASSPORT MIDDLEWARE
-    console.log('Game Host',game.host)
-    console.log('User Id',user._id)
-    console.log(game.host.equals(user._id))
-
     if (game.host.equals(user._id)) {
         return next()
     }
@@ -147,7 +143,8 @@ gameController.removeAttendeeGame = async (req, res, next) => {
                     await foundUser.save()
                 }).catch((err) => next(err))
             }
-        }).catch((err) => next(err))
+        })
+        // }).catch((err) => next(err))
     })
 
     return next();
@@ -187,6 +184,32 @@ gameController.attendGame = async (req, res, next) => {
             return next();
         })
         .catch((err) => next(err))
+}
+
+gameController.doubleAttendCheck = async (req, res, next) => {
+    const { user } = req;
+    const { gameId } = req.params;
+    for (const game of user.attendingGames) {
+        if(game._id.equals(gameId)) return next({message: 'Already attending this game'})    
+    }
+    return next();  
+    
+    // if(!user.attendingGames.includes(gameId)) return next();
+    // return next({message: 'Already attending this game'})
+}
+
+gameController.findWithin = async (req, res, next) => {
+    const { lat, lng, radius } = req.query;
+    
+    res.locals.filteredGames = await Game.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [[Number(lng), Number(lat)], Number(radius) / 3963.2]
+            }
+        }
+    })
+
+    next();
 }
 
 module.exports = gameController;
