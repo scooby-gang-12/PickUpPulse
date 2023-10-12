@@ -22,7 +22,8 @@ export default function Map () {
       lat: game.location.coordinates[1],
       lng: game.location.coordinates[0],
       gameName: game.gameName,
-      sport: game.sport
+      sport: game.sport,
+      id: game._id,
     }));
   };
   
@@ -486,7 +487,7 @@ export default function Map () {
         const infoContent = document.createElement('p')
         infoContent.textContent = marker.sport
         infoContent.addEventListener('click',()=>{
-          navigate('/gameinfo/{manage._id}')
+          navigate(`/gameinfo/${marker.id}`)
         })
         const infoWindow = new window.google.maps.InfoWindow({
           content: infoContent

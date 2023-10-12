@@ -147,8 +147,8 @@ export default function GameForm () {
         id="basketball" 
         ref={basketballRef} 
         // defaultChecked
-      /></div>
-      <div><label htmlFor="golf">Golf</label>
+      />
+      <label htmlFor="golf">Golf</label>
       <StyledInput 
         type="radio" 
         name="sport" 

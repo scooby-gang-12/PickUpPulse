@@ -20,7 +20,7 @@ export default function DetailedGameInfo() {
   return (
     <StyledGameInfo>
       <div>
-        <p>{gameName}</p>
+        <h1>{gameName}</h1>
         <p>{sport}</p>
         <p>{address}</p>
         <p>{partySize}</p>
