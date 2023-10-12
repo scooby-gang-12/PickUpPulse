@@ -22,10 +22,10 @@ function NavigationBar() {
             <Nav.Link as={Link} to='/profile'>Profile</Nav.Link>
             <Nav.Link as={Link} to=''></Nav.Link>
             <NavDropdown title='Manage Games'>
-              <NavDropdown.Item as={Link} to='/attendinggames'>Attending Games</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/hostedgames">Hosted Games</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/creategames">Create Games</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/hostedgames/edit">Edit Games</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/creategames">Create</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/hostedgames">Hosted</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to='/attendinggames'>Attending</NavDropdown.Item>
+              {/* <NavDropdown.Item as={Link} to="/hostedgames/edit">Edit Games</NavDropdown.Item> */}
             </NavDropdown>
             <Nav.Link as={Link} to="/" onClick={handlelogout}>Logout</Nav.Link>
           </Nav>)}
