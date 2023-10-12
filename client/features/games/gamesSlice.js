@@ -34,7 +34,7 @@ export const getGamesNearMe = createAsyncThunk(
   'games/getGamesNearMe',
   async (locationQuery, thunkAPI) => {
     const response = await gamesAPI.getGamesNearMe(locationQuery)
-    return
+    return response.data
   }
   
 )
@@ -107,14 +107,16 @@ const gamesSlice = createSlice({
     })
     .addCase(deleteGame.pending, (state,action) => {})
     .addCase(deleteGame.rejected, (state,action) => {})
-    // GETALL GAMES 
+    // GET ALL GAMES 
     .addCase(getAllGames.fulfilled, (state,action) => {
       state.gamesArr = action.payload
     })
     .addCase(getAllGames.pending, (state,action) => {})
     .addCase(getAllGames.rejected, (state,action) => {})
-    // Get Games near me
-    .addCase(getGamesNearMe.fulfilled, (state,action) => {})
+    // GET GAMES NEAR ME
+    .addCase(getGamesNearMe.fulfilled, (state,action) => {
+      state.gamesArr = action.payload
+    })
     .addCase(getGamesNearMe.pending, (state,action) => {})
     .addCase(getGamesNearMe.rejected, (state,action) => {})
   }

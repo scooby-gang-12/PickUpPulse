@@ -9,6 +9,7 @@ import { StyledInput } from '../styles/StyledInput.styled'
 
 import { addGame } from '../../features/games/gamesSlice'
 import { createGame } from '../../features/games/gamesSlice'
+import {getUser} from '../../features/auth/authSlice'
 // import subtleGrayscale from '../../utils/mapStyles/subtleGrayscale'
 
 export default function GameForm () {
@@ -117,12 +118,13 @@ export default function GameForm () {
       gameName: gameNameRef.current.value
     }
     // dispatch(addGame(formValues))
-    dispatch(createGame(formValues))
-    .then((action) => {
-      if (!action.error) {
-        navigate('/dashboard')
-      }
+    dispatch(createGame(formValues)).then(() => {
+      dispatch(getUser());
     })
+    .catch(error => {
+      console.error("There was an error deleting the game:", error);
+      // Handle the error appropriately, maybe display a message to the user.
+    });
   }
   return (
     <div>

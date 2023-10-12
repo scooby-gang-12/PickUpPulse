@@ -32,7 +32,7 @@ const UserLogin = () => {
         if (!action.error) {
           navigate('/dashboard')
         }
-      })    
+      })
   }
 
 return (
