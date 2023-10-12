@@ -1,6 +1,11 @@
 import React, {useRef, useEffect, useState} from 'react'
 import { Loader } from "@googlemaps/js-api-loader"
 import { useDispatch } from 'react-redux'
+import { useNavigate } from "react-router-dom";
+
+import { StyledGameForm } from '../styles/StyledGameForm.styled'
+import { StyledButton } from "../styles/Button.styled"
+import { StyledInput } from '../styles/StyledInput.styled'
 
 import { addGame } from '../../features/games/gamesSlice'
 import { createGame } from '../../features/games/gamesSlice'
@@ -21,6 +26,7 @@ export default function GameForm () {
   const googleMapRef = useRef(null)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const [map, setMap] = useState(null);
 
@@ -121,20 +127,21 @@ export default function GameForm () {
     });
   }
   return (
-    <>
-    <h1>Game Form</h1>
-    <form onSubmit={handleSubmit}>
+    <div>
+    {/* <h1>Game Form</h1> */}
+    <StyledGameForm onSubmit={handleSubmit}>
+      <h1>Create A Game</h1>
       <label htmlFor='gameName'>Game Name</label>
       
-      <input
+      <StyledInput
         type='text'
         name='gameName'
         id='gameName'
         ref={gameNameRef}
       />
       <br />
-      <label htmlFor="basketball">Basketball</label>
-      <input 
+      <div><label htmlFor="basketball">Basketball</label>
+      <StyledInput 
         type="radio" 
         name="sport" 
         id="basketball" 
@@ -142,15 +149,15 @@ export default function GameForm () {
         // defaultChecked
       />
       <label htmlFor="golf">Golf</label>
-      <input 
+      <StyledInput 
         type="radio" 
         name="sport" 
         id="golf" 
         ref={golfRef} 
-      />
+      /></div>
       <br />
       <label>Date/Time</label>
-      <input 
+      <StyledInput
         type="datetime-local" 
         ref={dateTimeRef} 
         name="dateTime" 
@@ -159,7 +166,7 @@ export default function GameForm () {
       />
       <br />
       <label>Party Size</label>
-      <input 
+      <StyledInput 
         type="number" 
         ref={partySizeRef} 
         name="partySize" 
@@ -168,7 +175,7 @@ export default function GameForm () {
         />
       <br />
       <label>Address</label>
-      <input 
+      <StyledInput
         type="text" 
         ref={autocompleteInputRef} 
         name='address'
@@ -176,9 +183,9 @@ export default function GameForm () {
         defaultValue="123 Main Street, El Segundo, CA, USA"
       />
       <br />
-      <button type='submit'>Click</button>
-    </form>
+      <StyledButton type='submit'>Create</StyledButton>
+    </StyledGameForm>
     {/* <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div> */}
-    </>
+    </div>
   )
 }

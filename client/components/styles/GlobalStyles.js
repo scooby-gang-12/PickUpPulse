@@ -1,6 +1,9 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
     @font-face {
         font-family: 'Rough Battle';
         src: url('/fonts/Rough Battle.ttf') format('truetype');
@@ -18,5 +21,6 @@ export const GlobalStyles = createGlobalStyle`
     :root{
         --primary-font: 'Rough Battle';
         --secondary-font: 'Cabin Regular';
+        --tertiary-font: 'Roboto';
     }
 `
