@@ -22,10 +22,10 @@ import DetailedGameInfo from './components/DetailedGameInfo';
 const theme = {
   colors: {
     formBackground: '#cccccc',
-    header: '#14213d',
-    footer: '#14213d',
+    header: 'rgb(240, 240, 240)',
+    footer: '#ffffff',
     button: '#14213d',
-    lightText: '#ffffff',
+    lightText: '#000000',
     loginForm: '#e5e5e5'
 
     // #000000, #14213d, fca311, e5e5e5, ffffff
