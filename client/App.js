@@ -21,10 +21,10 @@ import  GameInfo from './pages/gameinfo';
 const theme = {
   colors: {
     formBackground: '#cccccc',
-    header: 'rgb(240, 240, 240)',
+    header: '#ffffff',
     footer: '#ffffff',
     button: '#14213d',
-    lightText: '#000000',
+    lightText: '#ffffff',
     loginForm: '#e5e5e5'
 
     // #000000, #14213d, fca311, e5e5e5, ffffff

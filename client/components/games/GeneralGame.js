@@ -1,6 +1,8 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { StyledButton } from '../styles/Dashboard.styled';
+
 
 import {attendGame, unattendGame} from '../../features/auth/authSlice'
 
@@ -24,13 +26,17 @@ export default function GeneralGame ({game}) {
   }
   return (
     <div>
-      <h5>General Game</h5>
+      {/* <h5>General Game</h5> */}
       {flag && <p>You are attending</p>}
-      <p>{game.gameName}</p>
+      <Link to={`/gameinfo/${game._id}`} style={{color: 'black'}}>{game.gameName}</Link>
       <p>{game.address}</p>
-      <p>{days[date.getDay()]} @ {`${hour}:${minute}`} </p>
-      <button onClick={handleAttend}>Attend</button>
+      <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`} </strong></p>
+      <StyledButton onClick={handleAttend}>
+        <span>Attend</span>
+      </StyledButton>
+      {/* <button onClick={handleAttend}>Attend</button> */}
       {/* <button onClick={handleUnattend}>Unattend</button> */}
+
     </div>
     )
 }

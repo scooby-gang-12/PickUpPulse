@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import {attendGame, unattendGame} from '../../features/auth/authSlice'
 
-export default function GeneralGame ({game}) {
+export default function AttendedGame ({game}) {
   const date = new Date(game.dateTime)
   const days = ['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   const hour = date.getHours();
