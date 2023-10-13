@@ -593,11 +593,24 @@ const StyledMap = styled.div`
 `
 const StyledMapFilter = styled.button`
     background-color: rgb(95,173,238);
-    margin: 10px 2px;
+    margin: 12px 2px;
     border-radius: 10px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+        transform: scale(0.98)
+    }
 `
 
 const StyledSearchBtn = styled.button`
     background-color: #FFAEAF;
     border-radius: 10px;
+    cursor: pointer;
+    margin: 2px;
+
+    &:hover {
+        opacity: 0.8;
+        transform: scale(0.98)
+    }
 `
