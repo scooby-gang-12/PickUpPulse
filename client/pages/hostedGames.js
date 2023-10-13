@@ -7,8 +7,8 @@ import HostedGame from '../components/games/HostedGame'
 export default function HostedGames() {
     const {userInfo} = useSelector(state=>state.auth)
     return (
-        <div>
-            <h1>Hosted Games</h1>
+        <div style= {{display: 'grid', justifyItems: 'center'}}>
+            <h1 style={{display: 'grid', justifyContent: 'center', fontFamily: 'var(--primary-font)'}}>Hosted Games</h1>
             {userInfo && userInfo.hostedGames.map((game)=><HostedGame game={game} />)}
         </div>
     )
