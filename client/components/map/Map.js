@@ -1,8 +1,10 @@
-import React, {useEffect, useState ,useRef} from 'react'
+import React, {useEffect, useState ,useRef} from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from "@googlemaps/js-api-loader"
 import { useNavigate } from "react-router-dom";
 import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
+
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
@@ -548,29 +550,55 @@ export default function Map () {
   
 
   return (
-  <div>
+  <Styled>
     <h1>Map</h1>
-    <div>
-      <button onClick={()=>toggle('basketball')}>Basketball</button>
-      <button onClick={()=>toggle('golf')}>Golf</button>
-      <button onClick={()=>toggle('all')}>All</button>
-    </div>
-    
-    {/* <button onClick={()=>clearMarkers()}>Delete GAMES FROM MAP</button> */}
-    <div>
-      <button onClick={()=>dispatch(getAllGames())}>Get Games</button>
-    </div>
-    {/* Get nearby can take a mileage distance */}
-    <input 
+    <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></StyledMap>
+    <input
         type="range"
         min="0"
         max="100"
         value={range}
         onChange={(e)=>setRange(e.target.value)}
         />
-    <button onClick={()=>getNearbyGames(range)}>Get Games Near Me {range}</button>
+    <StyledSearchBtn onClick={()=>getNearbyGames(range)}>Search Radius: {range} miles</StyledSearchBtn>
+    <div>
+      <StyledSearchBtn onClick={()=>dispatch(getAllGames())}>Get Games</StyledSearchBtn>
+    </div>
 
-    <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div>
-  </div>
+    <div>
+      <StyledMapFilter onClick={()=>toggle('basketball')}>Basketball</StyledMapFilter>
+      <StyledMapFilter onClick={()=>toggle('golf')}>Golf</StyledMapFilter>
+      <StyledMapFilter onClick={()=>toggle('all')}>All</StyledMapFilter>
+    </div>
+    
+    
+    {/* <button onClick={()=>clearMarkers()}>Delete GAMES FROM MAP</button> */}
+    
+    {/* Get nearby can take a mileage distance */}
+    
+  </Styled>
   )
 }
+
+
+const Styled = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+` 
+
+const StyledMap = styled.div`
+    border-radius: 20px;
+    margin: 10px 0;
+`
+const StyledMapFilter = styled.button`
+    background-color: rgb(95,173,238);
+    margin: 10px 2px;
+    border-radius: 10px;
+`
+
+const StyledSearchBtn = styled.button`
+    background-color: #FFAEAF;
+    border-radius: 10px;
+`

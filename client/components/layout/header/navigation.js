@@ -40,7 +40,7 @@ const StyledNavbar = styled(Navbar)`
   &&& .navbar-brand,
   &&& .nav-link,
   &&& .navdropdown {
-    color: ${({ theme }) => theme.colors.lightText};
+    color: ${({ theme }) => theme.colors.darkText};
   }
 `;
 
