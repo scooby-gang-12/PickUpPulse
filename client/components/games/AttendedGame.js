@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import {attendGame, unattendGame} from '../../features/auth/authSlice'
-import { StyledButton } from '../styles/Dashboard.styled';
+import { StyledButton, InverseStyledButton } from '../styles/Dashboard.styled';
 
 export default function AttendedGame ({game}) {
   const date = new Date(game.dateTime)
@@ -21,15 +21,15 @@ export default function AttendedGame ({game}) {
     // console.log('Unattend', game._id)
   }
   return (
-    <div style={{border: '1px solid black'}}>
+    <div style={{border: '1px solid black', borderRadius: '10px', marginBottom: '2px'}}>
       {/* <h5>Attending Game</h5> */}
       <p style={{color: 'rgb(95,173,238)'}}>{game.gameName}</p>
-      <p style={{color: '#FFAEAF'}}>{game.address}</p>
+      <p style={{color: '#FF6463'}}>{game.address}</p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`}</strong> </p>
       {/* <button onClick={handleAttend}>Attend</button> */}
-      <StyledButton onClick={handleUnattend}>
+      <InverseStyledButton onClick={handleUnattend}>
         <span>Unattend</span>
-      </StyledButton>
+        </InverseStyledButton>
     </div>
     )
 }

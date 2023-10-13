@@ -27,16 +27,18 @@ export default function GeneralGame ({game}) {
 
   console.log(game)
   return (
-    <div style={{border: '1px solid black'}}>
+    <div style={{border: '1px solid black', borderRadius: '10px', marginBottom:'2px'}}>
       {/* <h5>General Game</h5> */}
-      {flag && <div>✔️</div>}
+      {flag && <div color='#54ACF5'>✔️</div>}
       <Link to={`/gameinfo/${game._id}`} style={{color: 'rgb(95,173,238)'}}>{game.gameName}</Link>
-      <p style={{color: '#FFAEAF'}}>{game.address}</p>
+      <p style={{color: '#FF6463'}}>{game.address}</p>
       <p>Sport: {game.sport}</p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`} </strong></p>
+      {!flag &&
       <StyledButton onClick={handleAttend}>
         <span>Attend</span>
       </StyledButton>
+        }
       {/* <button onClick={handleAttend}>Attend</button> */}
       {/* <button onClick={handleUnattend}>Unattend</button> */}
 

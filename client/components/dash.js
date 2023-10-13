@@ -21,7 +21,6 @@ const AllGames = () => {
   return (
     <StyledAllGames>
       <h1>All Games</h1>
-      
       <StyledRenderedGames>
       {gamesArr && gamesArr.map((game, index) => <GeneralGame game={game}/>)}
       </StyledRenderedGames>
@@ -59,7 +58,6 @@ export default  function Dash() {
         <MapOnDash/>
         <AttendingGames/>
       {/* </StyledLeftSide> */}
-      
     </StyledDashboard>
     
   )
