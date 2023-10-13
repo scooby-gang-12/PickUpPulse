@@ -24,12 +24,15 @@ export default function GeneralGame ({game}) {
   const handleUnattend = () => {
     console.log('Unattend', game._id)
   }
+
+  console.log(game)
   return (
     <div style={{border: '1px solid black'}}>
       {/* <h5>General Game</h5> */}
-      {flag && <p>You are attending</p>}
+      {flag && <div>✔️</div>}
       <Link to={`/gameinfo/${game._id}`} style={{color: 'rgb(95,173,238)'}}>{game.gameName}</Link>
       <p style={{color: '#FFAEAF'}}>{game.address}</p>
+      <p>Sport: {game.sport}</p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`} </strong></p>
       <StyledButton onClick={handleAttend}>
         <span>Attend</span>

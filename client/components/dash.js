@@ -32,13 +32,12 @@ const AllGames = () => {
 const AttendingGames = () => {
   const {userInfo} = useSelector((state) => state.auth)
   return (
-    <div>
+    <StyledAllGames>
       <h1>Attending Games</h1>
+      <StyledRenderedGames>
       {userInfo && userInfo.attendingGames.map((game) => <AttendedGame game={game} key={game._id}/>)}
-       
-      
-     
-    </div>
+      </StyledRenderedGames>
+      </StyledAllGames>
   )
 }
 
