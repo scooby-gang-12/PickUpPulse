@@ -511,7 +511,6 @@ export default function Map () {
 
 
   useEffect (() => {
-    console.log('get Map')
     const loader = new Loader({
       apiKey: "AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs",
       version: "weekly",
