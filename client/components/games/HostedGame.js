@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import {deleteGame} from '../../features/games/gamesSlice'
 import {getUser} from '../../features/auth/authSlice'
+import { GameName, HostedGameContainer } from '../styles/HostedGame.styled'
 
 export default function HostedGame ({game}) {
   const date = new Date(game.dateTime)
@@ -23,12 +24,12 @@ export default function HostedGame ({game}) {
 
   
   return (
-    <div>
-      <p>{game.gameName}</p>
+    <HostedGameContainer>
+      <GameName>{game.gameName}</GameName>
       <p>{game.address}</p>
       <p>{days[date.getDay()]} @ {`${hour}:${minute}`} </p>
       <button onClick={()=>handleEdit(game)}>Edit</button>
       <button onClick={()=>handleDelete()}>Delete</button>
-    </div>
+    </HostedGameContainer>
   )
 }

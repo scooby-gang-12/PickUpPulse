@@ -120,6 +120,7 @@ export default function GameForm () {
     // dispatch(addGame(formValues))
     dispatch(createGame(formValues)).then(() => {
       dispatch(getUser());
+      navigate('/dashboard')
     })
     .catch(error => {
       console.error("There was an error deleting the game:", error);
@@ -146,6 +147,7 @@ export default function GameForm () {
         name="sport" 
         id="basketball" 
         ref={basketballRef} 
+        required
         // defaultChecked
       />
       <label htmlFor="golf">Golf</label>
