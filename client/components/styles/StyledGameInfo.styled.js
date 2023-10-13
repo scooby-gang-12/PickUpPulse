@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 
 export const StyledGameInfo = styled.div`
 
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
     flex-direction: column;
