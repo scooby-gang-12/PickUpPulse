@@ -25,11 +25,11 @@ export default function GeneralGame ({game}) {
     console.log('Unattend', game._id)
   }
   return (
-    <div>
+    <div style={{border: '1px solid black'}}>
       {/* <h5>General Game</h5> */}
       {flag && <p>You are attending</p>}
-      <Link to={`/gameinfo/${game._id}`} style={{color: 'black'}}>{game.gameName}</Link>
-      <p>{game.address}</p>
+      <Link to={`/gameinfo/${game._id}`} style={{color: 'rgb(95,173,238)'}}>{game.gameName}</Link>
+      <p style={{color: '#FFAEAF'}}>{game.address}</p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`} </strong></p>
       <StyledButton onClick={handleAttend}>
         <span>Attend</span>
