@@ -6,6 +6,7 @@ import HostedGame from '../components/games/HostedGame'
 
 export default function HostedGames() {
     const {userInfo} = useSelector(state=>state.auth)
+    console.log(userInfo)
     return (
         <div style= {{display: 'grid', justifyItems: 'center'}}>
             <h1 style={{display: 'grid', justifyContent: 'center', fontFamily: 'var(--primary-font)'}}>Hosted Games</h1>

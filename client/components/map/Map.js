@@ -1,16 +1,34 @@
 import React, {useEffect, useState ,useRef} from 'react'
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from "@googlemaps/js-api-loader"
+import { useNavigate } from "react-router-dom";
 import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
-export default function Map ({gamesArr}) {
-  const [isLoading, setIsLoading] = useState(true)
-    const locations = gamesArr.map((game)=>{
-    return {lat: game.location.coordinates[1], lng: game.location.coordinates[0], gameName: game.gameName, sport: game.sport}
-    })
+export default function Map () {
+  const {gamesArr} = useSelector((state)=>state.games)
 
+  const mapLocations = () => {
+    let filteredGames = gamesArr;
+  
+    if (activeFilter === 'basketball') {
+      filteredGames = gamesArr.filter(game => game.sport === 'basketball');
+    } else if (activeFilter === 'golf') {
+      filteredGames = gamesArr.filter(game => game.sport === 'golf');
+    } // 'all' will use the original gamesArr
+  
+    return filteredGames.map(game => ({
+      lat: game.location.coordinates[1],
+      lng: game.location.coordinates[0],
+      gameName: game.gameName,
+      sport: game.sport,
+      id: game._id
+    }));
+  };
+  
+  const navigate = useNavigate();
+  const allMarkers = useRef([]);
   const mapRef = useRef(null);
   const googleMapRef = useRef(null)
   const dispatch = useDispatch()
@@ -19,6 +37,407 @@ export default function Map ({gamesArr}) {
       googleMapRef.current = new window.google.maps.Map(mapRef.current, {
         center,
         zoom: 13,
+        styles: [
+          {
+              "featureType": "administrative",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  },
+                  {
+                      "hue": "#008eff"
+                  },
+                  {
+                      "invert_lightness": true
+                  },
+                  {
+                      "lightness": "-64"
+                  }
+              ]
+          },
+          {
+              "featureType": "administrative.country",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "administrative.country",
+              "elementType": "geometry.fill",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  },
+                  {
+                      "lightness": "-70"
+                  }
+              ]
+          },
+          {
+              "featureType": "landscape",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  },
+                  {
+                      "hue": "#ff0000"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  },
+                  {
+                      "hue": "#008bff"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi",
+              "elementType": "labels.text",
+              "stylers": [
+                  {
+                      "visibility": "simplified"
+                  },
+                  {
+                      "lightness": "30"
+                  },
+                  {
+                      "gamma": "1.00"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.attraction",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.business",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.government",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.medical",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "simplified"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.park",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.place_of_worship",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.school",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "poi.sports_complex",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "road",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "saturation": -100
+                  },
+                  {
+                      "lightness": 45
+                  },
+                  {
+                      "visibility": "simplified"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.highway",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  },
+                  {
+                      "hue": "#ff0000"
+                  },
+                  {
+                      "lightness": "-10"
+                  },
+                  {
+                      "saturation": "100"
+                  },
+                  {
+                      "gamma": "1"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.highway",
+              "elementType": "labels",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  },
+                  {
+                      "hue": "#008eff"
+                  },
+                  {
+                      "saturation": "0"
+                  },
+                  {
+                      "lightness": "0"
+                  },
+                  {
+                      "gamma": "1"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.highway",
+              "elementType": "labels.icon",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.highway.controlled_access",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.highway.controlled_access",
+              "elementType": "labels.icon",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.arterial",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.arterial",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                  {
+                      "visibility": "simplified"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.arterial",
+              "elementType": "labels.icon",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.local",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.local",
+              "elementType": "geometry.fill",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.local",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.local",
+              "elementType": "labels",
+              "stylers": [
+                  {
+                      "visibility": "simplified"
+                  },
+                  {
+                      "lightness": "-15"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.local",
+              "elementType": "labels.icon",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit",
+              "elementType": "geometry.fill",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit",
+              "elementType": "labels.icon",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit.line",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "simplified"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit.station",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit.station.airport",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit.station.bus",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "transit.station.rail",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  }
+              ]
+          },
+          {
+              "featureType": "water",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "on"
+                  },
+                  {
+                      "hue": "#008eff"
+                  },
+                  {
+                      "saturation": "-69"
+                  },
+                  {
+                      "lightness": "-27"
+                  }
+              ]
+          }
+      ]
       });
     }
     
@@ -45,17 +464,14 @@ export default function Map ({gamesArr}) {
       }
     });
   };
-    
+  
 
-  let allMarkers = [];
-
-  const updateMarkers = (markers) => {
-
-    for (let i = 0; i < allMarkers.length; i++) {
-      allMarkers[i].setMap(null);
+  const updateMarkers = (markers = mapLocations()) => {
+    clearMarkers()
+    createMarkers(markers)
   }
-    allMarkers = [];
 
+  const createMarkers = (markers) => {
     if (window.google && window.google.maps && window.google.maps.Marker) {
       for (const marker of markers) {
         const googleMarker = new window.google.maps.Marker({
@@ -67,9 +483,12 @@ export default function Map ({gamesArr}) {
           }
         })
 
-        allMarkers.push(googleMarker);
-
-        const infoContent = `<p>${marker.gameName}</p>`
+        allMarkers.current.push(googleMarker);
+        const infoContent = document.createElement('p')
+        infoContent.textContent = marker.sport
+        infoContent.addEventListener('click',()=>{
+          navigate(`/gameinfo/${marker.id}`)
+        })
         const infoWindow = new window.google.maps.InfoWindow({
           content: infoContent
         });
@@ -79,11 +498,20 @@ export default function Map ({gamesArr}) {
         });
       }
     }
-    
+  }
+
+  const clearMarkers = () => {
+    for (const marker of allMarkers.current) {
+      marker.setMap(null);
+    }
+    allMarkers.current = [];
+
   }
 
 
+
   useEffect (() => {
+    console.log('get Map')
     const loader = new Loader({
       apiKey: "AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs",
       version: "weekly",
@@ -91,61 +519,57 @@ export default function Map ({gamesArr}) {
     loader.importLibrary('places').then( async ()=>{
       const location = await getCurrentLocation()
       initializeMap(location)
-    }).then(async ()=> {
       dispatch(getAllGames())
-      updateMarkers(locations)
-      setIsLoading(false)
     })
   },[])
 
-  useEffect(() => {
-    if (gamesArr.length > 0) { 
-        updateMarkers(locations);
-    }
-}, [gamesArr]);
-
-  
-  const activeFilter = useRef(null)
-  activeFilter.current = 'all'
-
-
-  const filterGames = () => {
-    const filtered = gamesArr.filter(game=> {
-      // console.log(activeFilter.current)
-      if (activeFilter.current === 'all') return game
-      else if (activeFilter.current === game.sport) return game
-    })
-    
-    const locations = filtered.map((game)=>{
-      return {lat: game.location.coordinates[1], lng: game.location.coordinates[0], gameName: game.gameName, sport: game.sport}
-      })
-      
-    updateMarkers(locations)
-  }
-
-  const handleToggle = (selectedFilter) => {
-    activeFilter.current=selectedFilter
-    filterGames()
-  }
-  const getNearbyGames = async (radius) => {
+  const getNearbyGames = async (radius = 5) => {
     const location = await getCurrentLocation()
-    
     const locationQuery = {
       lat: location.lat,
       lng: location.lng,
       radius
     }
     dispatch(getGamesNearMe(locationQuery))
-    
   }
+
+  const [activeFilter,setActiveFilter] = useState('all');
+  const [range, setRange] = useState(5)
+  const toggle = (selFilter)=>{
+    setActiveFilter(selFilter)
+  }
+  
+  useEffect(() => {
+    if (gamesArr.length > 0) { 
+        updateMarkers();
+    }
+}, [gamesArr,activeFilter]);
+
+  
 
   return (
   <div>
     <h1>Map</h1>
-    <button onClick={()=>handleToggle('basketball')}>Basketball</button>
-    <button onClick={()=>handleToggle('golf')}>Golf</button>
-    <button onClick={()=>dispatch(getAllGames())}>Get Games</button>
-    <button onClick={()=>getNearbyGames(5)}>Get Games Near Me</button>
+    <div>
+      <button onClick={()=>toggle('basketball')}>Basketball</button>
+      <button onClick={()=>toggle('golf')}>Golf</button>
+      <button onClick={()=>toggle('all')}>All</button>
+    </div>
+    
+    {/* <button onClick={()=>clearMarkers()}>Delete GAMES FROM MAP</button> */}
+    <div>
+      <button onClick={()=>dispatch(getAllGames())}>Get Games</button>
+    </div>
+    {/* Get nearby can take a mileage distance */}
+    <input 
+        type="range"
+        min="0"
+        max="100"
+        value={range}
+        onChange={(e)=>setRange(e.target.value)}
+        />
+    <button onClick={()=>getNearbyGames(range)}>Get Games Near Me {range}</button>
+
     <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div>
   </div>
   )

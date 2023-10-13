@@ -20,6 +20,7 @@ const UserLogin = () => {
   const handleNavigate = () => {
     navigate('/register')
   }
+  
   const handlelogin = (e) => {
     e.preventDefault()
     console.log('click')
@@ -31,7 +32,7 @@ const UserLogin = () => {
         if (!action.error) {
           navigate('/dashboard')
         }
-      })    
+      })
   }
 
 return (

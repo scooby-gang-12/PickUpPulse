@@ -15,15 +15,17 @@ import AttendingGames from './pages/attendingGames';
 import EditGames from './pages/editGame';
 import HostedGames from './pages/hostedGames';
 import EditGameForm from './components/forms/EditGameForm';
+import  GameInfo from './pages/gameinfo';
+import DetailedGameInfo from './components/DetailedGameInfo';
 
 // store colors and global theme items
 const theme = {
   colors: {
     formBackground: '#cccccc',
-    header: '#14213d',
-    footer: '#14213d',
+    header: 'rgb(240, 240, 240)',
+    footer: '#ffffff',
     button: '#14213d',
-    lightText: '#ffffff',
+    lightText: '#000000',
     loginForm: '#e5e5e5'
 
     // #000000, #14213d, fca311, e5e5e5, ffffff
@@ -45,9 +47,11 @@ export default function App() {
               <Route path='/manage' element={<Manage/>} />
                 <Route path='/creategames' element={<CreateGames />} />
                 <Route path='/attendinggames' element={<AttendingGames />} />
+                <Route path="/gameinfo/:gameId" element={<GameInfo/>} />
                 <Route path='/hostedgames' element={<HostedGames />} />
                 <Route path='/hostedgames/edit/:gameId' element={<EditGameForm />} />
               <Route path='/profile' element={<Profile />} />
+              <Route path='/gameInfo/123' element={<DetailedGameInfo />} />
             </Route>
         </Routes>
       </BrowserRouter>
