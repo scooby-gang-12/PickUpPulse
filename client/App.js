@@ -25,6 +25,7 @@ const theme = {
     header: '#ffffff',
     footer: '#ffffff',
     button: '#14213d',
+    darkText: '#000000',
     lightText: '#ffffff',
     loginForm: '#e5e5e5'
 
