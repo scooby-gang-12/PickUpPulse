@@ -8,12 +8,14 @@ import {StyledDashboard, StyledLeftSide, StyledAllGames, StyledRenderedGames} fr
 
 const AllGames = () => {
   const {userInfo} = useSelector((state) => state.auth);
+  const {gamesArr} = useSelector((state)=>state.games)
   const dispatch = useDispatch();
   useEffect(()=> {
-    dispatch(getAllGames())
+    if (gamesArr.length === 0) {
+      dispatch(getAllGames())
+    } 
   }, [])
-  const {gamesArr} = useSelector((state)=> state.games)
-  console.log(gamesArr)
+  
   return (
     <StyledAllGames>
       <h1>All Games</h1>
