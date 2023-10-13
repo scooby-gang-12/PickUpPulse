@@ -3,11 +3,7 @@ import { styled } from "styled-components";
 
 export const StyledDashboard = styled.div`
 display: grid;
-<<<<<<< HEAD
 grid-template-columns: repeat(3, 1fr);
-=======
-grid-template-columns: repeat(2, 50%);
->>>>>>> JA/HostedGamesStyled
 grid-column-gap: 10px;
 justify-items: center;
 text-align: center;

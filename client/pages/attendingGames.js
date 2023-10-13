@@ -36,11 +36,11 @@ const GameCard = styled.div`
     display: grid;
 
     justify-content: center;
-    border: solid;
-    border-width: 2px;
+    // border: solid;
+    // border-width: 2px;
     padding: 5px;
     margin: 2px;
-    border-radius: 10px
+    // border-radius: 10px
 `
 
 const Body = styled.div`
