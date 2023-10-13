@@ -1,10 +1,9 @@
 import React from 'react';
-
 import { useDispatch } from 'react-redux';
-
 import {attendGame, unattendGame} from '../../features/auth/authSlice'
+import { StyledButton, InverseStyledButton } from '../styles/Dashboard.styled';
 
-export default function GeneralGame ({game}) {
+export default function AttendedGame ({game}) {
   const date = new Date(game.dateTime)
   const days = ['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   const hour = date.getHours();
@@ -22,13 +21,15 @@ export default function GeneralGame ({game}) {
     // console.log('Unattend', game._id)
   }
   return (
-    <div>
-      <h5>Attending Game</h5>
-      <p>{game.gameName}</p>
-      <p>{game.address}</p>
-      <p>{days[date.getDay()]} @ {`${hour}:${minute}`} </p>
+    <div style={{border: '1px solid black', borderRadius: '10px', marginBottom: '2px'}}>
+      {/* <h5>Attending Game</h5> */}
+      <p style={{color: 'rgb(95,173,238)'}}>{game.gameName}</p>
+      <p style={{color: '#FF6463'}}>{game.address}</p>
+      <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`}</strong> </p>
       {/* <button onClick={handleAttend}>Attend</button> */}
-      <button onClick={handleUnattend}>Unattend</button>
+      <InverseStyledButton onClick={handleUnattend}>
+        <span>Unattend</span>
+        </InverseStyledButton>
     </div>
     )
 }

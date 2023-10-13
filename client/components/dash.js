@@ -1,6 +1,8 @@
 import React, {useEffect} from "react";
 import { useDispatch,useSelector } from "react-redux";
 import {getAllGames} from '../features/games/gamesSlice'
+import GeneralGame from "./games/GeneralGame"
+import AttendedGame from "./games/AttendedGame";
 import Map from '../components/map/Map'
 import { Link } from "react-router-dom";
 import {StyledDashboard, StyledLeftSide, StyledAllGames, StyledRenderedGames} from "./styles/Dashboard.styled";
@@ -8,17 +10,19 @@ import {StyledDashboard, StyledLeftSide, StyledAllGames, StyledRenderedGames} fr
 
 const AllGames = () => {
   const {userInfo} = useSelector((state) => state.auth);
+  const {gamesArr} = useSelector((state)=>state.games)
   const dispatch = useDispatch();
   useEffect(()=> {
-    dispatch(getAllGames())
+    if (gamesArr.length === 0) {
+      dispatch(getAllGames())
+    } 
   }, [])
-  const {gamesArr} = useSelector((state)=> state.games)
-  console.log(gamesArr)
+  
   return (
     <StyledAllGames>
       <h1>All Games</h1>
       <StyledRenderedGames>
-      {gamesArr && gamesArr.map((game, index) =>  <ul key={game._id} style={{justifyContent: 'center', textAlign: 'center', margin: 0, padding: 0 }}><Link to={`/gameinfo/${game._id}`}>{game.gameName}</Link></ul>)}
+      {gamesArr && gamesArr.map((game, index) => <GeneralGame game={game}/>)}
       </StyledRenderedGames>
     </StyledAllGames>
   )
@@ -27,10 +31,12 @@ const AllGames = () => {
 const AttendingGames = () => {
   const {userInfo} = useSelector((state) => state.auth)
   return (
-    <div>
+    <StyledAllGames>
       <h1>Attending Games</h1>
-      {userInfo && userInfo.attendingGames.map((game) =><ul key={game._id} style={{justifyContent: 'center', textAlign: 'center', margin: 0, padding: 0 }}><Link to={`/gameinfo/${game._id}`}>{game.gameName}</Link></ul>)}
-    </div>
+      <StyledRenderedGames>
+      {userInfo && userInfo.attendingGames.map((game) => <AttendedGame game={game} key={game._id}/>)}
+      </StyledRenderedGames>
+      </StyledAllGames>
   )
 }
 
@@ -47,11 +53,11 @@ const MapOnDash = () => {
 export default  function Dash() {
   return (
     <StyledDashboard>
-      <StyledLeftSide>
+      {/* <StyledLeftSide> */}
         <AllGames/>
+        <MapOnDash/>
         <AttendingGames/>
-      </StyledLeftSide>
-      <MapOnDash/>
+      {/* </StyledLeftSide> */}
     </StyledDashboard>
     
   )
