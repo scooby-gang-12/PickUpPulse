@@ -45,9 +45,9 @@ return (
       <StyledInput ref={passwordRef} type='password' placeholder='Password'></StyledInput><br></br>
       <StyledButton type='submit' >Sign In</StyledButton>
       <StyledButton type="button" onClick={handleNavigate}>Sign Up</StyledButton>
+      {error && <p>Username or password not found</p>}
     </StyledForm>
 
-      {error && <p>{error}</p>}
   </div>
 )
 }
