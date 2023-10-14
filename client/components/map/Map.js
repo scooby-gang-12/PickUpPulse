@@ -487,7 +487,7 @@ export default function Map () {
 
         allMarkers.current.push(googleMarker);
         const infoContent = document.createElement('p')
-        infoContent.textContent = marker.sport
+        infoContent.textContent = marker.gameName;
         infoContent.addEventListener('click',()=>{
           navigate(`/gameinfo/${marker.id}`)
         })

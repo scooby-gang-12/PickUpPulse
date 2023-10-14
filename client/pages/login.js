@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SignUp from '../components/register';
 import UserLogin from '../components/userLogin';
 import { Container } from '../components/styles/Container.styled';
+import VideoBG from "../components/LoginBG";
 
  function Login({}) {
   const [current, setCurrent] = useState('login')
@@ -12,10 +13,13 @@ import { Container } from '../components/styles/Container.styled';
   }
   return (
   <Container>
+  <VideoBG />
   {current === 'login' ?  <UserLogin toggle={toggle}/> : <SignUp toggle={toggle}/>}
   
   </Container>
   );
 }
+
+
 
 export default Login;

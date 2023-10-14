@@ -27,7 +27,7 @@ const Container = styled.div`
     text-align: center;
     overflow-y: scroll;
     width: 900px;
-    max-height: 600px;
+    max-height: 800px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 `
@@ -44,12 +44,15 @@ const GameCard = styled.div`
 `
 
 const Body = styled.div`
-    display: grid;
-    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+    justify-content: flex-start;
 `
 
 const Header = styled.h1`
-    max-height: 15px;
+    /* max-height: 15px; */
     display: flex;
     justify-content: center;
+    margin-top: 1rem;
 `
