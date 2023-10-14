@@ -9,6 +9,11 @@ import formatDate from '../../utils/formatDateForInput'
 
 import ConfirmationModal from '../forms/ConfirmationModal'
 
+import { StyledGameForm } from '../styles/StyledGameForm.styled'
+import { StyledButton } from "../styles/Button.styled"
+import { StyledInput } from '../styles/StyledInput.styled'
+
+
 export default function EditGameForm () {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -123,10 +128,10 @@ export default function EditGameForm () {
   
   return (
     <div>
-    <h1>Edit Game Form</h1>
-    <form onSubmit={handleSubmit}>
+    <h1 style={{textAlign: 'center'}}>Edit Game Form</h1>
+    <StyledGameForm onSubmit={handleSubmit}>
       <label htmlFor='gameName'>Game Name</label>
-      <input
+      <StyledInput
         type='text'
         name='gameName'
         id='gameName'
@@ -135,7 +140,7 @@ export default function EditGameForm () {
       />
       <br />
       <label htmlFor="basketball">Basketball</label>
-      <input 
+      <StyledInput 
         type="radio" 
         name="sport" 
         id="basketball" 
@@ -143,7 +148,7 @@ export default function EditGameForm () {
         defaultChecked = {sport === 'basketball'}
       />
       <label htmlFor="golf">Golf</label>
-      <input 
+      <StyledInput 
         type="radio" 
         name="sport" 
         id="golf" 
@@ -152,7 +157,7 @@ export default function EditGameForm () {
       />
       <br />
       <label>Date/Time</label>
-      <input 
+      <StyledInput 
         type="datetime-local" 
         ref={dateTimeRef} 
         name="dateTime" 
@@ -161,7 +166,7 @@ export default function EditGameForm () {
       />
       <br />
       <label>Party Size</label>
-      <input 
+      <StyledInput 
         type="number" 
         ref={partySizeRef} 
         name="partySize" 
@@ -170,7 +175,7 @@ export default function EditGameForm () {
         />
       <br />
       <label>Address</label>
-      <input 
+      <StyledInput 
         type="text" 
         ref={autocompleteInputRef} 
         name='address'
@@ -178,9 +183,9 @@ export default function EditGameForm () {
         defaultValue={address}
       />
       <br />
-      <button type='submit'>Save</button>
-      <button type='button' onClick={handleClose}>Close</button>
-    </form>
+      <StyledButton type='submit'>Save</StyledButton>
+      <StyledButton type='button' onClick={handleClose}>Close</StyledButton>
+    </StyledGameForm>
     {showConfirmation && <ConfirmationModal confirm={handleConfirm} cancel={handleCancel} />}
     
     {/* <div id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></div> */}
