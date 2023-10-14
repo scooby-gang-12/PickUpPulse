@@ -45,11 +45,13 @@ const GameCard = styled.div`
 
 const Body = styled.div`
     display: grid;
+    /* flex-direction: column; */
     justify-content: center;
 `
 
 const Header = styled.h1`
-    max-height: 15px;
+    /* max-height: 15px; */
     display: flex;
     justify-content: center;
+    margin-top: 1rem;
 `
