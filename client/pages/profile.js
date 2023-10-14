@@ -9,15 +9,15 @@ export default function Profile() {
     return (
         <Container>
             <h1>Welcome</h1>
-            <h3>Bobby</h3>
+            <h3>{userInfo.fullName}</h3>
             <GamesDisplay>
                 <DisplayItem>
                     <h3>Attending</h3>
-                    <NumDisplay>5</NumDisplay>
+                    <NumDisplay>{userInfo.attendingGames.length}</NumDisplay>
                 </DisplayItem>
                 <DisplayItem>
                     <h3>Hosted</h3>
-                    <NumDisplay>5</NumDisplay>
+                    <NumDisplay>{userInfo.hostedGames.length}</NumDisplay>
                 </DisplayItem>
             </GamesDisplay>
         </Container>
