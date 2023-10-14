@@ -487,7 +487,7 @@ export default function Map () {
 
         allMarkers.current.push(googleMarker);
         const infoContent = document.createElement('p')
-        infoContent.textContent = marker.sport
+        infoContent.textContent = marker.gameName;
         infoContent.addEventListener('click',()=>{
           navigate(`/gameinfo/${marker.id}`)
         })
@@ -513,7 +513,6 @@ export default function Map () {
 
 
   useEffect (() => {
-    console.log('get Map')
     const loader = new Loader({
       apiKey: "AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs",
       version: "weekly",
@@ -551,8 +550,8 @@ export default function Map () {
 
   return (
   <Styled>
-    <h1>Map</h1>
-    <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px" }}></StyledMap>
+    <div></div>
+    <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px", marginTop: '56px' }}></StyledMap>
     <input
         type="range"
         min="0"

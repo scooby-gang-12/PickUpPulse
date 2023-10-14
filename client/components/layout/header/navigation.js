@@ -17,6 +17,7 @@ function NavigationBar() {
         <Navbar.Brand as={Link} to="/dashboard"><h1>Pick Up Pulse</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
+          {isLoggedIn && (
           <Nav className="ml-auto">
             <Nav.Link as={Link} to='/profile'>Profile</Nav.Link>
             <Nav.Link as={Link} to=''></Nav.Link>
@@ -26,10 +27,11 @@ function NavigationBar() {
               <NavDropdown.Item as={Link} to='/attendinggames'>Attending</NavDropdown.Item>
               {/* <NavDropdown.Item as={Link} to="/hostedgames/edit">Edit Games</NavDropdown.Item> */}
             </NavDropdown>
-            {isLoggedIn && (<Nav.Link as={Link} to="/" onClick={handlelogout}>Logout</Nav.Link>)}
-          </Nav>
+            <Nav.Link as={Link} to="/" onClick={handlelogout}>Logout</Nav.Link>
+          </Nav>)}
         </Navbar.Collapse>
       </StyledNavbar>
+      <Divider/>
     </div>
   );
 }
@@ -42,6 +44,12 @@ const StyledNavbar = styled(Navbar)`
   &&& .navdropdown {
     color: ${({ theme }) => theme.colors.darkText};
   }
+`;
+
+const Divider = styled.hr`
+  border: 1px solid #999;
+  margin: 0;
+  padding: 0;
 `;
 
 export default NavigationBar;

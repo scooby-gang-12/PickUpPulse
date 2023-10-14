@@ -22,7 +22,7 @@ import DetailedGameInfo from './components/DetailedGameInfo';
 const theme = {
   colors: {
     formBackground: '#cccccc',
-    header: 'rgb(240, 240, 240)',
+    header: '#ffffff',
     footer: '#ffffff',
     button: '#14213d',
     darkText: '#000000',
