@@ -7,6 +7,7 @@ import { StyledButton } from "./styles/Button.styled";
 import { StyledForm } from "./styles/StyledForm.styled";
 import { Container } from "./styles/Container.styled";
 import { StyledInput } from "./styles/StyledInput.styled";
+import VideoBG from "./LoginBG";
 
 
 export default function SignUp({toggle}) {
@@ -64,6 +65,7 @@ export default function SignUp({toggle}) {
 
   return (
     <Container>
+      <VideoBG />
       {/* <h1>Sign up</h1> */}
       <StyledForm onSubmit={handleSubmit}>
         {/* <label htmlFor="fullName"><strong>Full Name</strong></label><br></br> */}
@@ -88,3 +90,4 @@ export default function SignUp({toggle}) {
     </Container>
   )
 }
+
