@@ -3,9 +3,11 @@ import { useDispatch , useSelector} from 'react-redux';
 import { login, loginUser } from "../features/auth/authSlice";
 import {useNavigate} from 'react-router-dom'
 import { StyledForm } from './styles/StyledForm.styled'
-import { Container } from "./styles/Container.styled";
+import styled from "styled-components";
+
 import { StyledButton } from "./styles/Button.styled";
 import { StyledInput } from "./styles/StyledInput.styled";
+
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -36,8 +38,8 @@ const UserLogin = () => {
   }
 
 return (
-  <div>
-    {/* <h1>Login Here</h1> */}
+  <Container>
+    
     <StyledForm onSubmit={handlelogin}>
       {/* <label htmlFor='username'><strong>Username</strong></label><br></br> */}
       <StyledInput ref={usernameRef} type='text' placeholder='Username'></StyledInput><br></br>
@@ -48,8 +50,12 @@ return (
       {error && <p>Username or password not found</p>}
     </StyledForm>
 
-  </div>
+  </Container>
 )
 }
+
+const Container = styled.div`
+  position: relative;
+`
 
 export default UserLogin;
