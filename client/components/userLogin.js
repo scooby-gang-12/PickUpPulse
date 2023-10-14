@@ -38,7 +38,7 @@ const UserLogin = () => {
   }
 
 return (
-  <Container>
+  <div>
     
     <StyledForm onSubmit={handlelogin}>
       {/* <label htmlFor='username'><strong>Username</strong></label><br></br> */}
@@ -50,12 +50,9 @@ return (
       {error && <p>Username or password not found</p>}
     </StyledForm>
 
-  </Container>
+  </div>
 )
 }
 
-const Container = styled.div`
-  position: relative;
-`
 
 export default UserLogin;
