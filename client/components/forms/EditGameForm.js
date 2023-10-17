@@ -2,6 +2,7 @@ import React, {useRef, useEffect, useState} from 'react'
 import { Loader } from "@googlemaps/js-api-loader"
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
+import {getUser} from '../../features/auth/authSlice'
 
 import { updateGame } from '../../features/games/gamesSlice'
 
@@ -115,7 +116,11 @@ export default function EditGameForm () {
     }
     
     dispatch(updateGame(formValues))
-    navigate('/dashboard')
+    .then(() => {
+      dispatch(getUser())
+      .then(() => navigate('/dashboard'))
+    })
+    
   }
 
   const handleCancel = () => {

@@ -44,7 +44,7 @@ gameController.getAllGames = async (req, res, next) => {
 // Update specific game and return array of games
 gameController.updateGame = async (req, res, next) => {
     const { gameId, gameName, location, address, sports, partySize } = req.body;
-    await Game.findByIdAndUpdate(gameId, { gameName: gameName, location: location, address: address, sports: sports, partySize: partySize })
+    await Game.findByIdAndUpdate(gameId, { gameName: gameName, location: {type: 'Point', coordinates: location.coordinates}, address: address, sports: sports, partySize: partySize })
         .catch((err) => next(err));
     
     res.locals.gameArr = await Game.find().catch((err) => next(err));
@@ -98,15 +98,20 @@ gameController.removeHostGame = async (req, res, next) => {
     const newHostArr = [];
     const newAttendArr = [];
 
-    user.hostedGames.forEach((e) => {
-        if(e != gameId) {
-            newHostArr.push(e);
+    user.hostedGames.forEach((game) => {
+        if(!game._id.equals(gameId)) {
+            newHostArr.push(game);
         }
     })
 
+    user.attendingGames.forEach((game) => {
+        if(!game._id.equals(gameId)) {
+            newAttendArr.push(game);
+        }
+    })
 
     user.hostedGames = newHostArr;
-    user.attendingGames = res.locals.newArr;
+    user.attendingGames = newAttendArr;
     await user.save();
     
     
@@ -127,7 +132,6 @@ gameController.removeAttendeeGame = async (req, res, next) => {
                             newGamesArr.push(game);
                         }
                     })
-                    res.locals.newArr = newGamesArr;
                 }).catch((err) => next(err))
 
             } else {

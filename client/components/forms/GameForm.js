@@ -119,8 +119,9 @@ export default function GameForm () {
     }
     // dispatch(addGame(formValues))
     dispatch(createGame(formValues)).then(() => {
-      dispatch(getUser());
-      navigate('/dashboard')
+      dispatch(getUser())
+      .then(() => navigate('/dashboard'))
+      
     })
     .catch(error => {
       console.error("There was an error deleting the game:", error);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import {attendGame, unattendGame} from '../../features/auth/authSlice'
 import { StyledButton, InverseStyledButton } from '../styles/Dashboard.styled';
 
@@ -10,8 +10,17 @@ export default function AttendedGame ({game}) {
   const minute = date.getMinutes() === 0 ? '00' : date.getMinutes();
 
   const dispatch = useDispatch();
+  const {userInfo} = useSelector(state=>state.auth)
 
   const handleAttend =() => {
+    console.log('Attend', game._id)
+    dispatch(attendGame(game._id))
+  }
+
+  const flag = userInfo?.hostedGames.some((hostedGame)=>hostedGame._id === game._id)
+  console.log(flag)
+  console.log('Game Name', game.gameName)
+  const handleHost =() => {
     console.log('Attend', game._id)
     dispatch(attendGame(game._id))
   }
@@ -27,9 +36,9 @@ export default function AttendedGame ({game}) {
       <p style={{color: '#FF6463'}}>{game.address}</p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`}</strong> </p>
       {/* <button onClick={handleAttend}>Attend</button> */}
-      <InverseStyledButton onClick={handleUnattend}>
+      {!flag ? <InverseStyledButton onClick={handleUnattend}>
         <span>Unattend</span>
-        </InverseStyledButton>
+        </InverseStyledButton> : <div>You be hosting this game 🤦🏽‍♂️</div>}
     </div>
     )
 }

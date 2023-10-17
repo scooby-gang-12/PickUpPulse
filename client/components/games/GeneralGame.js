@@ -27,7 +27,7 @@ export default function GeneralGame ({game}) {
     console.log('Unattend', game._id)
   }
 
-  console.log(game)
+  // console.log(game)
   return (
     <div style={{border: '1px solid black', borderRadius: '10px', marginBottom:'2px'}}>
       {/* <h5>General Game</h5> */}

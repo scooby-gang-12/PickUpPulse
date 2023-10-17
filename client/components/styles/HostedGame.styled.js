@@ -6,12 +6,13 @@ export const GameCard = styled.div`
   margin: 10px;
   padding: 20px;
   width: 75%;
-  height: auto;
+  height: 250px;
   box-shadow: 0 0 0 5px #5fadee;
   outline: dashed 5px #ff6463;
   border-radius: 30px;
   justify-items: center;
   text-align: center;
+
 
   &.basketball {
     background-image: url(${image1});
