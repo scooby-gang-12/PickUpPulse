@@ -5,7 +5,8 @@ module.exports = {
   entry: './client/index.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, './build')
+    path: path.resolve(__dirname, './build'),
+    publicPath: process.env.NODE_ENV === 'production' ? '/build/' : '/',
   },
   plugins: [
     new HtmlWebpackPlugin({title: "Pick Up Pulse", template: './public/index.html'})
@@ -45,6 +46,10 @@ module.exports = {
             outputPath: 'images/'
           }
         }
+      },
+      {
+        test: /\.mp4$/,
+        use: 'file-loader?name=videos/[name].[ext]',
       },
     ]
   },

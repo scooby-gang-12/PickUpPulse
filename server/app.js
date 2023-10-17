@@ -3,13 +3,37 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const session = require('express-session');
+const passport = require('passport');
+
+
 
 const app = express();
 const authRoutes = require('./routes/auth-routes');
+const gameRoutes = require('./routes/game-routes');
+const userRoutes = require('./routes/user-routes');
+const protectedRoute = require('./passport/passport-protected-route');
 
 // Middleware
 app.use(morgan('tiny'))
 app.use(express.json())
+// Bobby
+express.urlencoded({ extended: true })
+
+app.use(
+  session({
+    secret: 'hello',
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+// Passport Initialization
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Configuration
+require('../server/passport/passport-config.js')(passport);
 
 // Server Static Build
 app.use('/build', express.static(path.join(__dirname, '../build')));
@@ -19,13 +43,26 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
+
+// Route for background image for frontend login
+
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
+
 // Routes for Auth
 app.use('/api/auth', authRoutes)
 
 
+// Routes for Games
+// TEMP REMOVE PROTECTED -- BS
+app.use('/api/games', gameRoutes);
+
+//Routes for Users
+app.use('/api/users', protectedRoute, userRoutes);
+
 // Catch All Route
 app.use('*', (req,res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 })
 
 // Global Error Handler

@@ -1,10 +1,14 @@
 import React from 'react';
-import Navbar from './navigation';
+import NavigationBar from './navigation';
+import { StyledHeader } from '../../styles/StyledHeader.styled';
 
 export default function Header() {
     return (
-        <div>
-            <Navbar />
-        </div>
+        <StyledHeader>
+            <NavigationBar/>
+         </StyledHeader>
     )
 }
+
+
+

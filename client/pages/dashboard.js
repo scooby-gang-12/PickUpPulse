@@ -1,7 +1,10 @@
-import React from "react";
+import React from "react"
+import  Dash  from "../components/dash"
+
 
 export default function Dashboard() {
     return (
-        <h1>Dashboard</h1>
+        <Dash/>
     )
+    
 }
