@@ -1,5 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+
+const dotenv = require('dotenv');
+const env = dotenv.config().parsed;
+const envKeys = Object.keys(env).reduce((acc, cv) => {
+    acc[`process.env.${cv}`] = JSON.stringify(env[cv]);
+    return acc;
+}, {});
 
 module.exports = {
   entry: './client/index.js',
@@ -9,7 +17,8 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production' ? '/build/' : '/',
   },
   plugins: [
-    new HtmlWebpackPlugin({title: "Pick Up Pulse", template: './public/index.html'})
+    new HtmlWebpackPlugin({title: "Pick Up Pulse", template: './public/index.html'}),
+    new webpack.DefinePlugin(envKeys)
   ],
   module: {
     rules: [

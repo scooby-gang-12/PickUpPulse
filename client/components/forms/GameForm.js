@@ -43,7 +43,7 @@ export default function GameForm () {
 
   useEffect(()=>{
     const loader = new Loader({
-      apiKey: "AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs",
+      apiKey: process.env.GMAPS_API_KEY,
       version: "weekly",
     });
 
