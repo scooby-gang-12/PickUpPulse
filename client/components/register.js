@@ -40,6 +40,8 @@ export default function SignUp({toggle}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const lat = locationRef.current ? locationRef.current.lat : 37.7749
+    const lng = locationRef.current ? locationRef.current.lng : -122.4194
     const formValue = {
       fullName: fullNameRef.current.value,
       username: usernameRef.current.value,
@@ -47,7 +49,7 @@ export default function SignUp({toggle}) {
       favoriteSports: [],
       location: {
         type: "Point",
-        coordinates: [locationRef.current.lng, locationRef.current.lat]
+        coordinates: [lng, lat]
     },
     }
     if (golfRef.current.checked) {formValue.favoriteSports.push('golf')}
