@@ -541,7 +541,7 @@ export default function Map () {
   }
   
   useEffect(() => {
-    if (gamesArr.length > 0) { 
+    if (gamesArr.length >= 0) { 
         updateMarkers();
     }
 }, [gamesArr,activeFilter]);
