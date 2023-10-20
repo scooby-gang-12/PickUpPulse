@@ -5,6 +5,10 @@ import { Loader } from "@googlemaps/js-api-loader"
 import { useNavigate } from "react-router-dom";
 import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
 
+import { StyledForm } from '../styles/StyledForm.styled';
+import { StyledButton } from '../styles/Button.styled';
+import { StyledInput } from '../styles/StyledInput.styled';
+
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
@@ -544,13 +548,48 @@ export default function Map () {
     if (gamesArr.length > 0) { 
         updateMarkers();
     }
-}, [gamesArr,activeFilter]);
+  }, [gamesArr,activeFilter]);
 
-  
+  const autocompleteInputRef = useRef();
+  const addressRef = useRef();
+  let autocomplete;
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: process.env.GMAPS_API_KEY,
+      version: "weekly"
+    });
+    loader.importLibrary('places')
+      .then(() => {
+        autocomplete = new google.maps.places.Autocomplete(
+          autocompleteInputRef.current,
+          { types: ["address"] }
+        );
+        autocomplete.addListener('place_changed', onPlaceChanged);
+      });
+    const onPlaceChanged = () => {
+      const place = autocomplete.getPlace();
+      if (place.formatted_address) {
+        addressRef.current = place.formatted_address;
+      }
+      if (place.geometry) {
+        latRef.current = place.geometry.location.lat();
+        lngRef.current = place.geometry.location.lng();
+      }
+    }
+  }, []);
 
   return (
   <Styled>
-    <div></div>
+    <StyledForm>
+        <label htmlFor='locName'>Where do you want to play?</label>
+        <StyledInput 
+            type='text'
+            name='locName'
+            id='locName'
+            ref={autocompleteInputRef}
+        />
+        <StyledButton type='submit'>Set Location</StyledButton>
+    </StyledForm>
     <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px", marginTop: '56px' }}></StyledMap>
     <input
         type="range"
