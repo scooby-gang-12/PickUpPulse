@@ -128,7 +128,7 @@ export default function EditGameForm () {
     setShowConfirmation(false)
   }
   const handleClose = () => {
-    navigate('/dasboard')
+    navigate('/dashboard')
   }
   
   return (
