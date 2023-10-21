@@ -85,8 +85,8 @@ export default function SignUp({toggle}) {
         <StyledButton type="submit">Sign up</StyledButton>
         
         <div>
-          Already a user?
-          <span onClick={handleNavigate}> Log in here </span>
+          Already a user? Log in  
+          <span onClick={handleNavigate}> <a href="#"> here</a></span>
         </div>
       </ StyledForm>
     </Container>
