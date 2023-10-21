@@ -448,9 +448,9 @@ export default function Map () {
     }
     
   }
-
+  const [manualLoc, manuallySetLoc] = useState({ lat: 37.7749, lng: -122.4194 });
   const getCurrentLocation = async () => {
-    const defaultLocation = { lat: 37.7749, lng: -122.4194 };
+    // const defaultLocation = { lat: 37.7749, lng: -122.4194 };
     return new Promise((resolve) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -462,11 +462,11 @@ export default function Map () {
           },
           (error) => {
             console.error('Error retrieving location:', error);
-            resolve(defaultLocation);
+            resolve(manualLoc);
           }
         );
       } else {
-        resolve(defaultLocation);
+        resolve(manualLoc);
       }
     });
   };
@@ -526,7 +526,7 @@ export default function Map () {
       initializeMap(location)
       dispatch(getAllGames())
     })
-  },[])
+  },[manualLoc])
 
   const getNearbyGames = async (radius = 5) => {
     const location = await getCurrentLocation()
@@ -552,6 +552,8 @@ export default function Map () {
 
   const autocompleteInputRef = useRef();
   const addressRef = useRef();
+  const latRef = useRef();
+  const lngRef = useRef();
   let autocomplete;
   useEffect(() => {
     const loader = new Loader({
@@ -578,9 +580,18 @@ export default function Map () {
     }
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!addressRef.current) return alert('Please enter an address');
+    manuallySetLoc({
+      lat: latRef.current,
+      lng: lngRef.current
+    });
+  }
+
   return (
   <Styled>
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit}>
         <label htmlFor='locName'>Where do you want to play?</label>
         <StyledInput 
             type='text'
