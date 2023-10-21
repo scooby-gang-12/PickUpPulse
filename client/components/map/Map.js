@@ -551,7 +551,7 @@ export default function Map () {
   }, [gamesArr,activeFilter]);
 
   const autocompleteInputRef = useRef();
-  const addressRef = useRef();
+  const addressRef = useRef('10 Van Ness Ave, San Francisco, CA 94103');
   const latRef = useRef();
   const lngRef = useRef();
   let autocomplete;
@@ -602,6 +602,7 @@ export default function Map () {
         />
         <StyledButton type='submit'>Set Location</StyledButton>
     </StyledForm>
+    <label htmlFor='map' style={{height: '1em', marginBottom: '-1.5em', paddingTop: '1em'}}>{addressRef.current}</label>
     <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px", marginTop: '56px' }}></StyledMap>
     <input
         type="range"
