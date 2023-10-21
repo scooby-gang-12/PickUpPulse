@@ -587,11 +587,12 @@ export default function Map () {
       lat: latRef.current,
       lng: lngRef.current
     });
+    document.getElementById('manLocForm').reset();
   }
 
   return (
   <Styled>
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm id='manLocForm' onSubmit={handleSubmit}>
         <label htmlFor='locName'>Where do you want to play?</label>
         <StyledInput 
             type='text'
