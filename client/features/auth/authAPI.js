@@ -6,7 +6,8 @@ const authAPI  = {
   logout: () => axios.post('/api/auth/logout'),
   attendGame: (id) => axios.patch(`/api/games/attendGame/${id}`),
   unattendGame: (id) => axios.patch(`/api/games/unattendGame/${id}`),
-  getUser: () => axios.get('/api/auth/user')
+  getUser: () => axios.get('/api/auth/user'),
+  // updateUser: () => axios.patch('/api/auth/user/updateUser') //Do I need to add this here?
 }
 
 

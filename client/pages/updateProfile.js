@@ -1,17 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from 'styled-components';
 
-import {useSelector} from 'react-redux'
+// import {useSelector} from 'react-redux'
 
-import updateProfile from "./updateProfile";
+export default function updateProfile({location, bio, favSport, onSubmit, onClose}) {
+    const  [userData, setUserData] = useState({
 
+    })
+    // const {userInfo} = useSelector(state=>state.auth)
+    // console.log(userInfo)
 
-export default function Profile() {
-    const {userInfo} = useSelector(state=>state.auth)
-    console.log(userInfo)
+// define button functionality here
+    const handleInputChange = (e) => {
+        const {userLocation, userBio, favSport} = e.target;
+        setUserData ({
+            ...userData
+        })
+    }
 
-//define button functionality here
-    function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         const form = e.target;
@@ -24,17 +31,9 @@ export default function Profile() {
     }
 
 
-
     return (
-        <Container>
-            <h1>Welcome</h1>
-            <h3>{userInfo.fullName}</h3>
-            <PageDisplay>
-            <UserInfoDisplay>
-                <h3>User Profile</h3>
-                    {/* <UserBio>{userInfo.bio}</UserBio> */}
-                    <UserProfile>
-                        <form method="patch" onSubmit={handleSubmit}>
+      
+                        <form method="PATCH" onSubmit={handleSubmit}>
                             <label>
                                 Location: <input name="userLocation" defaultValue="Enter your location" />
                             </label>
@@ -46,29 +45,18 @@ export default function Profile() {
                                 defaultValue="Enter bio here."
                                 rows={10}
                                 cols={40}
+                                onChange={handleInputChange}
                                 />
                             </label>
                             <br/>
                             <label>
-                                Favorite Sports: <input name="favoriteSports" defaultValue="Favorite sports?" />
+                                Favorite Sports: <input name="favoriteSports" defaultValue="Favorite sports?" 
+                                onChange={handleInputChange}
+                                />
                             </label>
                             <hr />
                             <button type="submit">Save changes</button>
                         </form>
-                    </UserProfile>
-            </UserInfoDisplay>
-            <GamesDisplay>
-                <DisplayItem>
-                    <h3>Attending</h3>
-                    <NumDisplay>{userInfo.attendingGames.length}</NumDisplay>
-                </DisplayItem>
-                <DisplayItem>
-                    <h3>Hosted</h3>
-                    <NumDisplay>{userInfo.hostedGames.length}</NumDisplay>
-                </DisplayItem>
-            </GamesDisplay>
-            </PageDisplay>
-        </Container>
     )
 }
 
@@ -111,39 +99,9 @@ const UserProfile = styled.div`
     justify-content: start;
     border: 3px;
     gap: 2rem;
-    font-size: .80rem;
+    font-size: 1rem;
     font-family: var(--tertiary-font);
     margin-top: -2rem;
     padding: 0;
 `
 
-
-const GamesDisplay = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    gap: 2rem;
-    h3 {
-        font-size: 4rem;
-        justify-content: center;
-    }
-` 
-const NumDisplay = styled.div`
-    display:flex;
-    align-items: center;
-    justify-content: right;
-    font-size: 10rem;
-    font-family: var(--tertiary-font);
-    margin-top: -2rem;
-    padding: 0;
-`
-
-const DisplayItem = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 3px solid black;
-    padding: .5rem;
-    width: 400px;
-`
