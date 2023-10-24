@@ -151,8 +151,7 @@ export default function GameForm () {
     <StyledGameForm onSubmit={handleSubmit}>
       <h1>Create A Game</h1>
       <label htmlFor='gameName'>Game Name</label>
-      <label htmlFor='gameName'>HAM WATER</label>
-
+      
       <StyledInput
         type='text'
         name='gameName'
