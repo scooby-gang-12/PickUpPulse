@@ -36,7 +36,7 @@ export default function GeneralGame ({game}) {
       <p style={{color: '#FF6463'}}>{game.address}</p>
       <p>
       Sport:
-      {game.sport === 'basketball' ? <img src={BBALLIMG} height='24px' width='24px'></img>: <img src={GOLFIMG} height='20px' width='20px'></img>}
+      {game.sport}
     </p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`} </strong></p>
       {!flag &&
