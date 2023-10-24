@@ -5,6 +5,10 @@ import { Loader } from "@googlemaps/js-api-loader"
 import { useNavigate } from "react-router-dom";
 import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
 
+import { StyledForm } from '../styles/StyledForm.styled';
+import { StyledButton } from '../styles/Button.styled';
+import { StyledInput } from '../styles/StyledInput.styled';
+
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
@@ -444,9 +448,9 @@ export default function Map () {
     }
     
   }
-
+  const [manualLoc, manuallySetLoc] = useState({ lat: 37.7749, lng: -122.4194 });
   const getCurrentLocation = async () => {
-    const defaultLocation = { lat: 37.7749, lng: -122.4194 };
+    // const defaultLocation = { lat: 37.7749, lng: -122.4194 };
     return new Promise((resolve) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -458,11 +462,11 @@ export default function Map () {
           },
           (error) => {
             console.error('Error retrieving location:', error);
-            resolve(defaultLocation);
+            resolve(manualLoc);
           }
         );
       } else {
-        resolve(defaultLocation);
+        resolve(manualLoc);
       }
     });
   };
@@ -522,7 +526,7 @@ export default function Map () {
       initializeMap(location)
       dispatch(getAllGames())
     })
-  },[])
+  },[manualLoc])
 
   const getNearbyGames = async (radius = 5) => {
     const location = await getCurrentLocation()
@@ -544,13 +548,61 @@ export default function Map () {
     if (gamesArr.length >= 0) { 
         updateMarkers();
     }
-}, [gamesArr,activeFilter]);
+  }, [gamesArr,activeFilter]);
 
-  
+  const autocompleteInputRef = useRef();
+  const addressRef = useRef('10 Van Ness Ave, San Francisco, CA 94103');
+  const latRef = useRef();
+  const lngRef = useRef();
+  let autocomplete;
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: process.env.GMAPS_API_KEY,
+      version: "weekly"
+    });
+    loader.importLibrary('places')
+      .then(() => {
+        autocomplete = new google.maps.places.Autocomplete(
+          autocompleteInputRef.current,
+          { types: ["address"] }
+        );
+        autocomplete.addListener('place_changed', onPlaceChanged);
+      });
+    const onPlaceChanged = () => {
+      const place = autocomplete.getPlace();
+      if (place.formatted_address) {
+        addressRef.current = place.formatted_address;
+      }
+      if (place.geometry) {
+        latRef.current = place.geometry.location.lat();
+        lngRef.current = place.geometry.location.lng();
+      }
+    }
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!addressRef.current) return alert('Please enter an address');
+    manuallySetLoc({
+      lat: latRef.current,
+      lng: lngRef.current
+    });
+    document.getElementById('manLocForm').reset();
+  }
 
   return (
   <Styled>
-    <div></div>
+    <StyledForm id='manLocForm' onSubmit={handleSubmit}>
+        <label htmlFor='locName'>Where do you want to play?</label>
+        <StyledInput 
+            type='text'
+            name='locName'
+            id='locName'
+            ref={autocompleteInputRef}
+        />
+        <StyledButton type='submit'>Set Location</StyledButton>
+    </StyledForm>
+    <label htmlFor='map' style={{height: '1em', marginBottom: '-1.5em', paddingTop: '1em'}}>{addressRef.current}</label>
     <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px", marginTop: '56px' }}></StyledMap>
     <input
         type="range"
