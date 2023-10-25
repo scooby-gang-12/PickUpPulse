@@ -550,6 +550,7 @@ export default function Map () {
 
   }
 
+  //getNearbyGames' dispatch returns a modified gamesArr of games within the search radius
   const getNearbyGames = async (radius = 5) => {
     const location = await getCurrentLocation()
     const locationQuery = {
