@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {useSelector} from 'react-redux'
 
-import updateProfile from "./updateProfile";
+import UpdateProfile from "./updateProfile";
 
 
 export default function Profile() {
@@ -28,33 +28,12 @@ export default function Profile() {
     return (
         <Container>
             <h1>Welcome</h1>
-            <h3>{userInfo.fullName}</h3>
+            {/* <h3>{userInfo.fullName}</h3> */}
             <PageDisplay>
             <UserInfoDisplay>
-                <h3>User Profile</h3>
-                    {/* <UserBio>{userInfo.bio}</UserBio> */}
+                <h3>{userInfo.fullName}'s Profile`</h3>
                     <UserProfile>
-                        <form method="patch" onSubmit={handleSubmit}>
-                            <label>
-                                Location: <input name="userLocation" defaultValue="Enter your location" />
-                            </label>
-                            <br/>
-                            <label>
-                                Bio:
-                                <textarea
-                                name="bioContent"
-                                defaultValue="Enter bio here."
-                                rows={10}
-                                cols={40}
-                                />
-                            </label>
-                            <br/>
-                            <label>
-                                Favorite Sports: <input name="favoriteSports" defaultValue="Favorite sports?" />
-                            </label>
-                            <hr />
-                            <button type="submit">Save changes</button>
-                        </form>
+                        <UpdateProfile/>
                     </UserProfile>
             </UserInfoDisplay>
             <GamesDisplay>
