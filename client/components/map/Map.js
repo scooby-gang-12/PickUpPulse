@@ -12,32 +12,22 @@ import { StyledInput } from '../styles/StyledInput.styled';
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
+import gameIcon from '../../assets/gameIcon.png'
+
 export default function Map () {
+
+//gamesArr is the master state that will be manipulated through filtering. This gets fetched once Map component is rendered
   const {gamesArr} = useSelector((state)=>state.games)
 
-  const mapLocations = () => {
-    let filteredGames = gamesArr;
-  
-    if (activeFilter === 'basketball') {
-      filteredGames = gamesArr.filter(game => game.sport === 'basketball');
-    } else if (activeFilter === 'golf') {
-      filteredGames = gamesArr.filter(game => game.sport === 'golf');
-    } // 'all' will use the original gamesArr
-  
-    return filteredGames.map(game => ({
-      lat: game.location.coordinates[1],
-      lng: game.location.coordinates[0],
-      gameName: game.gameName,
-      sport: game.sport,
-      id: game._id
-    }));
-  };
+  const uniqueSports = [...new Set(gamesArr.map((game) => game.sport))];
   
   const navigate = useNavigate();
   const allMarkers = useRef([]);
   const mapRef = useRef(null);
   const googleMapRef = useRef(null)
   const dispatch = useDispatch()
+  
+  
   const initializeMap = async (center) => {
     if (window.google) {
       googleMapRef.current = new window.google.maps.Map(mapRef.current, {
@@ -472,22 +462,55 @@ export default function Map () {
   };
   
 
-  const updateMarkers = (markers = mapLocations()) => {
-    clearMarkers()
-    createMarkers(markers)
-  }
+    const updateMarkers = (selectedSport) => {
+        let filteredGames;
+    
+        if (selectedSport === 'all'){
+            let allArr = gamesArr.map(game => ({
+                lat: game.location.coordinates[1],
+                lng: game.location.coordinates[0],
+                gameName: game.gameName,
+                sport: game.sport,
+                id: game._id
+            }))
 
-  const createMarkers = (markers) => {
-    if (window.google && window.google.maps && window.google.maps.Marker) {
-      for (const marker of markers) {
-        const googleMarker = new window.google.maps.Marker({
-          map: googleMapRef.current,
-          position: marker,
-          icon : {
-            url: marker.sport === 'basketball' ? bBallImg : golfImg,
-            scaledSize: new window.google.maps.Size(25, 25)
-          }
-        })
+            clearMarkers();
+            createMarkers(allArr)
+        } else {
+            filteredGames = gamesArr.filter(game => game.sport === selectedSport);
+
+            let filteredArr = filteredGames.map(game => ({
+                lat: game.location.coordinates[1],
+                lng: game.location.coordinates[0],
+                gameName: game.gameName,
+                sport: game.sport,
+                id: game._id
+            }))
+
+      clearMarkers();
+      createMarkers(filteredArr);
+
+        }    
+    }
+
+    const clearMarkers = () => {
+        for (const marker of allMarkers.current) {
+            marker.setMap(null);
+        }
+        allMarkers.current = [];
+        }
+
+    const createMarkers = (markers) => {
+        if (window.google && window.google.maps && window.google.maps.Marker) {
+        for (const marker of markers) {
+            const googleMarker = new window.google.maps.Marker({
+            map: googleMapRef.current,
+            position: marker,
+            icon : {
+                url: gameIcon,
+                scaledSize: new window.google.maps.Size(30, 30)
+            }
+            })
 
         allMarkers.current.push(googleMarker);
         const infoContent = document.createElement('p')
@@ -506,15 +529,6 @@ export default function Map () {
     }
   }
 
-  const clearMarkers = () => {
-    for (const marker of allMarkers.current) {
-      marker.setMap(null);
-    }
-    allMarkers.current = [];
-
-  }
-
-
 
   useEffect (() => {
     const loader = new Loader({
@@ -528,6 +542,14 @@ export default function Map () {
     })
   },[manualLoc])
 
+  const resetGamesArr = async () => {
+
+    dispatch(getAllGames());
+    setActiveFilter('all')
+    updateMarkers(activeFilter);
+
+  }
+
   const getNearbyGames = async (radius = 5) => {
     const location = await getCurrentLocation()
     const locationQuery = {
@@ -535,26 +557,30 @@ export default function Map () {
       lng: location.lng,
       radius
     }
+    setActiveFilter('all');
     dispatch(getGamesNearMe(locationQuery))
   }
 
   const [activeFilter,setActiveFilter] = useState('all');
   const [range, setRange] = useState(5)
-  const toggle = (selFilter)=>{
+
+  const toggle = (selFilter)=> {
     setActiveFilter(selFilter)
   }
   
+  //updates the markers with the new active filter
   useEffect(() => {
     if (gamesArr.length >= 0) { 
-        updateMarkers();
+        updateMarkers(activeFilter);
     }
-  }, [gamesArr,activeFilter]);
+  }, [gamesArr, activeFilter]);
 
   const autocompleteInputRef = useRef();
   const addressRef = useRef('10 Van Ness Ave, San Francisco, CA 94103');
   const latRef = useRef();
   const lngRef = useRef();
   let autocomplete;
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: process.env.GMAPS_API_KEY,
@@ -579,6 +605,13 @@ export default function Map () {
       }
     }
   }, []);
+
+  //mapping new click buttons based on each unique sport. const sportFilters is an array of StyledMapFilter components
+  const sportFilters = uniqueSports.map((sport, index) => (
+    <StyledMapFilter key={index} onClick={() => toggle(sport)}>
+      {sport}
+    </StyledMapFilter>
+  ));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -613,19 +646,14 @@ export default function Map () {
         />
     <StyledSearchBtn onClick={()=>getNearbyGames(range)}>Search Radius: {range} miles</StyledSearchBtn>
     <div>
-      <StyledSearchBtn onClick={()=>dispatch(getAllGames())}>Get Games</StyledSearchBtn>
+      <StyledSearchBtn onClick={resetGamesArr}>Get All Games</StyledSearchBtn>
     </div>
 
-    <div>
-      <StyledMapFilter onClick={()=>toggle('basketball')}>Basketball</StyledMapFilter>
-      <StyledMapFilter onClick={()=>toggle('golf')}>Golf</StyledMapFilter>
-      <StyledMapFilter onClick={()=>toggle('all')}>All</StyledMapFilter>
+    <div className='map-filter-buttons'>
+        {sportFilters}
     </div>
     
-    
-    {/* <button onClick={()=>clearMarkers()}>Delete GAMES FROM MAP</button> */}
-    
-    {/* Get nearby can take a mileage distance */}
+
     
   </Styled>
   )
