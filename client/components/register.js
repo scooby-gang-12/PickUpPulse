@@ -54,12 +54,16 @@ export default function SignUp({toggle}) {
     }
     if (golfRef.current.checked) {formValue.favoriteSports.push('golf')}
     if (basketballRef.current.checked) {formValue.favoriteSports.push('basketball')}
-    console.log(formValue)
+    // console.log(formValue)
       dispatch(registerUser(formValue))
       .then((action) => {
         if (!action.error) {
           navigate('/')
         }
+        const { username } = action.meta.arg;
+        document.getElementById('username-label').textContent = `${username} is not available. Please pick another username`;
+        document.getElementById('username-label').style.color = 'red'; 
+        document.getElementById('username-label').style.textAlign = 'center';
       })
   }
 
@@ -72,8 +76,8 @@ export default function SignUp({toggle}) {
       <StyledForm onSubmit={handleSubmit}>
         {/* <label htmlFor="fullName"><strong>Full Name</strong></label><br></br> */}
         <StyledInput ref={fullNameRef} type='text' placeholder='Full Name'></StyledInput><br></br>
-        {/* <label htmlFor='username'><strong>Username</strong></label><br></br> */}
-        <StyledInput ref={usernameRef} type='text' placeholder='Username'></StyledInput><br></br>
+        <label htmlFor='username' id="username-label"><strong></strong></label><br></br>
+        <StyledInput ref={usernameRef} type='text' placeholder='Username' id="username-input" name="username"></StyledInput><br></br>
         {/* <label htmlFor='password'><strong>Password</strong></label><br></br> */}
         <StyledInput ref={passwordRef} type='password' placeholder='Password'></StyledInput><br></br>
         <label htmlFor="chooseSports"><strong>Select Sports of Interest:</strong></label><br></br>

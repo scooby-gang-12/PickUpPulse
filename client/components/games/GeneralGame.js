@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
+
 import { StyledButton } from '../styles/Dashboard.styled';
-import BBALLIMG from '../../assets/basketball.png'
-import GOLFIMG from '../../assets/golf.png'
-
-
 import {attendGame, unattendGame} from '../../features/auth/authSlice'
 
 export default function GeneralGame ({game}) {
@@ -27,18 +25,24 @@ export default function GeneralGame ({game}) {
     console.log('Unattend', game._id)
   }
 
-  // console.log(game)
   return (
-    <div style={{border: '1px solid black', borderRadius: '10px', marginBottom:'2px'}}>
-      {/* <h5>General Game</h5> */}
+    <div className="general-game" style={{border: '1px solid black', borderRadius: '10px', marginBottom:'2px'}}>
       {flag &&  <div style={{float: 'right', marginRight: '5px', marginTop: '5px'}}>✔️</div>}
       <Link to={`/gameinfo/${game._id}`} style={{color: 'rgb(95,173,238)'}}>{game.gameName}</Link>
       <p style={{color: '#FF6463'}}>{game.address}</p>
       <p>
-      Sport:
-      {game.sport === 'basketball' ? <img src={BBALLIMG} height='24px' width='24px'></img>: <img src={GOLFIMG} height='20px' width='20px'></img>}
+      Sport: {game.sport}
     </p>
       <p><strong>{days[date.getDay()]} @ {`${hour}:${minute}`} </strong></p>
+      <div className="details-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '10px' }}>
+        <div className="skill-level" style={{ border: '2px solid black', borderRadius: '10px', padding: '5px', marginRight: '5px', backgroundColor: '#e5e5e5'}}>
+          Skill Level: {game.skillLevel}
+        </div>
+        <div className="game-type" style={{ border: '2px solid black', borderRadius: '10px', padding: '5px', backgroundColor: '#e5e5e5'
+       }}>
+          Game Type: {game.gameType}
+        </div>
+      </div>
       {!flag &&
       <StyledButton onClick={handleAttend}>
         <span>Attend</span>

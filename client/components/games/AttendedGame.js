@@ -18,8 +18,8 @@ export default function AttendedGame ({game}) {
   }
 
   const flag = userInfo?.hostedGames.some((hostedGame)=>hostedGame._id === game._id)
-  console.log(flag)
-  console.log('Game Name', game.gameName)
+  // console.log(flag)
+  // console.log('Game Name', game.gameName)
   const handleHost =() => {
     console.log('Attend', game._id)
     dispatch(attendGame(game._id))

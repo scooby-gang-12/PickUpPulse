@@ -5,8 +5,8 @@ const gameController = {};
 
 // Create Game Controller
 gameController.createGame = async (req, res, next) => {
-    const { gameName, sport, location, address, partySize, dateTime } = req.body;
-    console.log(req.user)
+    const { gameName, sport, location, address, partySize, dateTime, gameType, skillLevel } = req.body;
+    // console.log("req.user in CreateGame", req.user)
     const newGame = await Game.create({
         
         gameName: gameName,
@@ -14,6 +14,8 @@ gameController.createGame = async (req, res, next) => {
         location: location,
         address: address,
         partySize: partySize,
+        gameType: gameType,
+        skillLevel: skillLevel,
         dateTime: dateTime,
         attending: [req.user.id],
         host: req.user.id
@@ -28,7 +30,6 @@ gameController.createGame = async (req, res, next) => {
         .catch((err) => next(err));
 
     res.locals.gameArr = await Game.find().catch((err) => next(err));
-
 
     return next();
 }
@@ -64,10 +65,12 @@ gameController.deleteGame = async (req, res, next) => {
 
 // Sign up for game and adds it to attending array, Checks to see if user is the host, if so adds it to 'Hosted Games'
 gameController.addCreatedGame = async (req, res, next) => {
+    console.log("res before addCreatedGame", res.locals)
     // ADD Created Game
     req.user.attendingGames.push(res.locals.game.gameId);
     req.user.hostedGames.push(res.locals.game.gameId)
     await req.user.save();
+    // console.log("res.locals after addCreatedGame", res.locals)
 
     return next()
     

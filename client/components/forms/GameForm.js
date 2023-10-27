@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { StyledGameForm } from '../styles/StyledGameForm.styled'
 import { StyledButton } from "../styles/Button.styled"
 import { StyledInput } from '../styles/StyledInput.styled'
+import { StyledDropDown } from '../styles/StyledDropdown.styled.js'
 
 import { addGame } from '../../features/games/gamesSlice'
 import { createGame } from '../../features/games/gamesSlice'
@@ -13,11 +14,20 @@ import {getUser} from '../../features/auth/authSlice'
 // import subtleGrayscale from '../../utils/mapStyles/subtleGrayscale'
 
 export default function GameForm () {
-  const dateTimeRef = useRef(null)
-  const autocompleteInputRef = useRef(null)
-  const addressRef = useRef(null)
-  const basketballRef = useRef(null);
-  const golfRef = useRef(null);
+  
+  //these are what's accessing the DOM input elements
+  const dateTimeRef = useRef(null);
+  const autocompleteInputRef = useRef(null);
+  const addressRef = useRef(null);
+  const sportsRef = useRef(null);
+  const skillLevelRef = useRef(null);
+  const gameTypeRef = useRef(null)
+
+
+  //****commenting these out to use a sportsRef instead****
+  // const basketballRef = useRef(null)
+  // const golfRef = useRef(null)
+
   const latRef = useRef(null)
   const lngRef = useRef(null)
   const partySizeRef = useRef(null);
@@ -29,6 +39,8 @@ export default function GameForm () {
   const navigate = useNavigate();
 
   const [map, setMap] = useState(null);
+  const [skillLevel, setSkillLevel] = useState('Beginner');
+  const [gameType, setGameType] = useState('Casual');
 
   let autocomplete;
 
@@ -101,13 +113,15 @@ export default function GameForm () {
 
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    console.log(sportsRef);
     if (addressRef.current === null) {
       alert('must enter address')
       return
     }
+
     const formValues = {
-      sport: basketballRef.current.checked ? 'basketball' : 'golf',
+      sport: sportsRef.current.value,
       location: {
         type: 'Point',
         coordinates: [lngRef.current, latRef.current]
@@ -115,8 +129,11 @@ export default function GameForm () {
       address: addressRef.current,
       partySize: partySizeRef.current.value,
       dateTime: dateTimeRef.current.value,
-      gameName: gameNameRef.current.value
+      gameName: gameNameRef.current.value,
+      skillLevel: skillLevel,
+      gameType: gameType
     }
+    console.log(formValues)
     // dispatch(addGame(formValues))
     dispatch(createGame(formValues)).then(() => {
       dispatch(getUser())
@@ -140,24 +157,20 @@ export default function GameForm () {
         name='gameName'
         id='gameName'
         ref={gameNameRef}
+        required
       />
       <br />
-      <div><label htmlFor="basketball">Basketball</label>
+      <label htmlFor="sport">What sport do you want to play</label>
+      <div>
       <StyledInput 
-        type="radio" 
+        type="text" 
         name="sport" 
-        id="basketball" 
-        ref={basketballRef} 
+        id="sport" 
+        ref={sportsRef} 
         required
-        // defaultChecked
       />
-      <label htmlFor="golf">Golf</label>
-      <StyledInput 
-        type="radio" 
-        name="sport" 
-        id="golf" 
-        ref={golfRef} 
-      /></div>
+      </div>
+      
       <br />
       <label>Date/Time</label>
       <StyledInput
@@ -177,6 +190,30 @@ export default function GameForm () {
         defaultValue={4}
         />
       <br />
+      <div class="dropdown-group">
+          <label for="skillLevel">Skill Level:</label>
+          <StyledDropDown id="skillLevel"
+          value={skillLevel}
+          onChange={(e) => setSkillLevel(e.target.value)}
+          >
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            {/* ref={skillLevelRef} */}
+          </StyledDropDown>
+
+          <label for="gameType">Game type:</label>
+          <StyledDropDown id="gameType"
+          value={gameType}
+          onChange={(e) => setGameType(e.target.value)}
+          >
+            <option value="Casual">Casual</option>
+            <option value="Competitive">Competitive</option>
+            <option value="League">League</option>
+            {/* ref={gameTypeRef} */}
+          </StyledDropDown>
+      </div>
+      
       <label>Address</label>
       <StyledInput
         type="text" 

@@ -5,35 +5,29 @@ import { Loader } from "@googlemaps/js-api-loader"
 import { useNavigate } from "react-router-dom";
 import {getAllGames, getGamesNearMe} from '../../features/games/gamesSlice'
 
+import { StyledForm } from '../styles/StyledForm.styled';
+import { StyledButton } from '../styles/Button.styled';
+import { StyledInput } from '../styles/StyledInput.styled';
+
 
 import golfImg from '../../assets/golf.png'
 import bBallImg from '../../assets/basketball.png'
+import gameIcon from '../../assets/gameIcon.png'
+
 export default function Map () {
+
+//gamesArr is the master state that will be manipulated through filtering. This gets fetched once Map component is rendered
   const {gamesArr} = useSelector((state)=>state.games)
 
-  const mapLocations = () => {
-    let filteredGames = gamesArr;
-  
-    if (activeFilter === 'basketball') {
-      filteredGames = gamesArr.filter(game => game.sport === 'basketball');
-    } else if (activeFilter === 'golf') {
-      filteredGames = gamesArr.filter(game => game.sport === 'golf');
-    } // 'all' will use the original gamesArr
-  
-    return filteredGames.map(game => ({
-      lat: game.location.coordinates[1],
-      lng: game.location.coordinates[0],
-      gameName: game.gameName,
-      sport: game.sport,
-      id: game._id
-    }));
-  };
+  const uniqueSports = [...new Set(gamesArr.map((game) => game.sport))];
   
   const navigate = useNavigate();
   const allMarkers = useRef([]);
   const mapRef = useRef(null);
   const googleMapRef = useRef(null)
   const dispatch = useDispatch()
+  
+  
   const initializeMap = async (center) => {
     if (window.google) {
       googleMapRef.current = new window.google.maps.Map(mapRef.current, {
@@ -444,9 +438,9 @@ export default function Map () {
     }
     
   }
-
+  const [manualLoc, manuallySetLoc] = useState({ lat: 37.7749, lng: -122.4194 });
   const getCurrentLocation = async () => {
-    const defaultLocation = { lat: 37.7749, lng: -122.4194 };
+    // const defaultLocation = { lat: 37.7749, lng: -122.4194 };
     return new Promise((resolve) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -458,32 +452,65 @@ export default function Map () {
           },
           (error) => {
             console.error('Error retrieving location:', error);
-            resolve(defaultLocation);
+            resolve(manualLoc);
           }
         );
       } else {
-        resolve(defaultLocation);
+        resolve(manualLoc);
       }
     });
   };
   
 
-  const updateMarkers = (markers = mapLocations()) => {
-    clearMarkers()
-    createMarkers(markers)
-  }
+    const updateMarkers = (selectedSport) => {
+        let filteredGames;
+    
+        if (selectedSport === 'all'){
+            let allArr = gamesArr.map(game => ({
+                lat: game.location.coordinates[1],
+                lng: game.location.coordinates[0],
+                gameName: game.gameName,
+                sport: game.sport,
+                id: game._id
+            }))
 
-  const createMarkers = (markers) => {
-    if (window.google && window.google.maps && window.google.maps.Marker) {
-      for (const marker of markers) {
-        const googleMarker = new window.google.maps.Marker({
-          map: googleMapRef.current,
-          position: marker,
-          icon : {
-            url: marker.sport === 'basketball' ? bBallImg : golfImg,
-            scaledSize: new window.google.maps.Size(25, 25)
-          }
-        })
+            clearMarkers();
+            createMarkers(allArr)
+        } else {
+            filteredGames = gamesArr.filter(game => game.sport === selectedSport);
+
+            let filteredArr = filteredGames.map(game => ({
+                lat: game.location.coordinates[1],
+                lng: game.location.coordinates[0],
+                gameName: game.gameName,
+                sport: game.sport,
+                id: game._id
+            }))
+
+      clearMarkers();
+      createMarkers(filteredArr);
+
+        }    
+    }
+
+    const clearMarkers = () => {
+        for (const marker of allMarkers.current) {
+            marker.setMap(null);
+        }
+        allMarkers.current = [];
+        }
+
+    const createMarkers = (markers) => {
+        if (window.google && window.google.maps && window.google.maps.Marker) {
+        for (const marker of markers) {
+            const googleMarker = new window.google.maps.Marker({
+            map: googleMapRef.current,
+            position: marker,
+            icon : {
+                url: gameIcon,
+                scaledSize: new window.google.maps.Size(30, 30)
+            }
+            })
 
         allMarkers.current.push(googleMarker);
         const infoContent = document.createElement('p')
@@ -502,15 +529,6 @@ export default function Map () {
     }
   }
 
-  const clearMarkers = () => {
-    for (const marker of allMarkers.current) {
-      marker.setMap(null);
-    }
-    allMarkers.current = [];
-
-  }
-
-
 
   useEffect (() => {
     const loader = new Loader({
@@ -522,8 +540,17 @@ export default function Map () {
       initializeMap(location)
       dispatch(getAllGames())
     })
-  },[])
+  },[manualLoc])
 
+  const resetGamesArr = async () => {
+
+    dispatch(getAllGames());
+    setActiveFilter('all')
+    updateMarkers(activeFilter);
+
+  }
+
+  //getNearbyGames' dispatch returns a modified gamesArr of games within the search radius
   const getNearbyGames = async (radius = 5) => {
     const location = await getCurrentLocation()
     const locationQuery = {
@@ -531,26 +558,85 @@ export default function Map () {
       lng: location.lng,
       radius
     }
+    setActiveFilter('all');
     dispatch(getGamesNearMe(locationQuery))
   }
 
   const [activeFilter,setActiveFilter] = useState('all');
   const [range, setRange] = useState(5)
-  const toggle = (selFilter)=>{
+
+  const toggle = (selFilter)=> {
     setActiveFilter(selFilter)
   }
   
+  //updates the markers with the new active filter
   useEffect(() => {
     if (gamesArr.length >= 0) { 
-        updateMarkers();
+        updateMarkers(activeFilter);
     }
-}, [gamesArr,activeFilter]);
+  }, [gamesArr, activeFilter]);
 
-  
+  const autocompleteInputRef = useRef();
+  const addressRef = useRef('10 Van Ness Ave, San Francisco, CA 94103');
+  const latRef = useRef();
+  const lngRef = useRef();
+  let autocomplete;
+
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: process.env.GMAPS_API_KEY,
+      version: "weekly"
+    });
+    loader.importLibrary('places')
+      .then(() => {
+        autocomplete = new google.maps.places.Autocomplete(
+          autocompleteInputRef.current,
+          { types: ["address"] }
+        );
+        autocomplete.addListener('place_changed', onPlaceChanged);
+      });
+    const onPlaceChanged = () => {
+      const place = autocomplete.getPlace();
+      if (place.formatted_address) {
+        addressRef.current = place.formatted_address;
+      }
+      if (place.geometry) {
+        latRef.current = place.geometry.location.lat();
+        lngRef.current = place.geometry.location.lng();
+      }
+    }
+  }, []);
+
+  //mapping new click buttons based on each unique sport. const sportFilters is an array of StyledMapFilter components
+  const sportFilters = uniqueSports.map((sport, index) => (
+    <StyledMapFilter key={index} onClick={() => toggle(sport)}>
+      {sport}
+    </StyledMapFilter>
+  ));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!addressRef.current) return alert('Please enter an address');
+    manuallySetLoc({
+      lat: latRef.current,
+      lng: lngRef.current
+    });
+    document.getElementById('manLocForm').reset();
+  }
 
   return (
   <Styled>
-    <div></div>
+    <StyledForm id='manLocForm' onSubmit={handleSubmit}>
+        <label htmlFor='locName'>Where do you want to play?</label>
+        <StyledInput 
+            type='text'
+            name='locName'
+            id='locName'
+            ref={autocompleteInputRef}
+        />
+        <StyledButton type='submit'>Set Location</StyledButton>
+    </StyledForm>
+    <label htmlFor='map' style={{height: '1em', marginBottom: '-1.5em', paddingTop: '1em'}}>{addressRef.current}</label>
     <StyledMap id='map' ref={mapRef} style={{ width: "400px", height: "400px", marginTop: '56px' }}></StyledMap>
     <input
         type="range"
@@ -561,19 +647,14 @@ export default function Map () {
         />
     <StyledSearchBtn onClick={()=>getNearbyGames(range)}>Search Radius: {range} miles</StyledSearchBtn>
     <div>
-      <StyledSearchBtn onClick={()=>dispatch(getAllGames())}>Get Games</StyledSearchBtn>
+      <StyledSearchBtn onClick={resetGamesArr}>Get All Games</StyledSearchBtn>
     </div>
 
-    <div>
-      <StyledMapFilter onClick={()=>toggle('basketball')}>Basketball</StyledMapFilter>
-      <StyledMapFilter onClick={()=>toggle('golf')}>Golf</StyledMapFilter>
-      <StyledMapFilter onClick={()=>toggle('all')}>All</StyledMapFilter>
+    <div className='map-filter-buttons'>
+        {sportFilters}
     </div>
     
-    
-    {/* <button onClick={()=>clearMarkers()}>Delete GAMES FROM MAP</button> */}
-    
-    {/* Get nearby can take a mileage distance */}
+
     
   </Styled>
   )
