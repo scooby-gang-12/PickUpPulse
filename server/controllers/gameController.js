@@ -159,24 +159,50 @@ gameController.removeAttendeeGame = async (req, res, next) => {
 
 
 gameController.unattendGame = async (req, res, next) => {
-  const { gameId } = req.params;
-  const { user } = req;
+    const { gameId } = req.params;
+    const { user } = req;
+  
+    try {
+    // update userModel attending games
+      const foundUser = await User.findById(user._id);
+  
+      foundUser.attendingGames = foundUser.attendingGames.filter(
+        (game) => game.toString() !== gameId
+      );  
+      await foundUser.save();
+  
+      const updatedAttendingGames = await Game.find({
+        _id: { $in: foundUser.attendingGames }
+        });
 
-  try {
-    user.attendingGames = user.attendingGames.filter(game => game.id !== gameId);
-    console.log(user.attendingGames);
-    await user.save();
+    // Send the updated attending games as an array of game objects
+        res.locals.stillAttending = {
+            message: "Game unattended",
+            updatedAttendingGames
+        };
+    //   //OG CODE TO COMPARE
+    //   res.locals.stillAttending = {
+    //       message: "Game unattended", 
+    //       updatedAttendingGames: foundUser.attendingGames
+    //   };
 
-    res.locals.stillAttending = {
-     message: "Game unattended", 
-     updatedAttendingGames: user.attendingGames
-    };
-    return next();
-  } catch (err) {
-    next(err);
-  }
+      //update gameModel attendees
+      const foundGame = await Game.findById(gameId);
+      if (foundGame) {
+        foundGame.attending = foundGame.attending.filter(
+            (userId) => userId.toString() !== user._id.toString()
+        );
 
-};
+        await foundGame.save();
+        }
+
+      return next();
+
+    } catch (err) {
+      return next(err);
+    }
+  };
+  
 
 gameController.attendGame = async (req, res, next) => {
     const { gameId } = req.params;
@@ -185,9 +211,19 @@ gameController.attendGame = async (req, res, next) => {
     user.attendingGames.push(gameId);
     await user.save();
 
+    //update gameModel
+    const foundGame = await Game.findById(gameId);
+    if (foundGame) {
+        foundGame.attending.push(user._id);
+        await foundGame.save();
+    }
+
+    //update userModel
     await User.findById(user._id)
         .then(async (foundUser) => {
+            //I guess the frontend also needs this line to render??? Very whack honestly
             res.locals.newAttendingGames = await foundUser.populate('attendingGames')
+            
             return next();
         })
         .catch((err) => next(err))

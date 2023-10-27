@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -13,36 +13,42 @@ import bBallImg from '../assets/basketball.png'
 // import bounceBall from '../assets/BouncingBasketballGif.gif'
 
 export default function DetailedGameInfo() {
-  const { gameId } = useParams(); // Access the 'gameId' parameter
   
+  const { gameId } = useParams();
 
+  const [attendingPlayers, setAttendingPlayers] = useState([]);
+
+  const { userInfo } = useSelector((state) => state.auth);
   const game = (useSelector((state)=>{
     return state.games.gamesArr.find((g)=>g._id === gameId)
   }))
-  const {userInfo} = useSelector((state)=>state.auth)
+  
+  useEffect(() => {
+    const getIdParser = async () => {
+      try {
+        const response = await axios.get("/api/users/idParser");
+        const idParser = response.data;
+        console.log("game: ", game)
+        console.log("idParser: ", idParser)
+        const players = game.attending.map((attendingId) => {
+          const matchingPlayer = idParser.find((player) => player.id === attendingId);
+          return {
+            id: matchingPlayer.id,
+            username: matchingPlayer.username,
+          };
+        });
+        setAttendingPlayers(players)  
+      } catch (error) {
+        // Handle any errors here
+        console.error("Error fetching ID parser data:", error);
+      }
+    };
+
+    getIdParser();
+  }, []);
+
   const flag = userInfo?.attendingGames.some((attendingGame)=>attendingGame._id === game._id)
-//   const game = {
-//     "location": {
-//         "type": "Point",
-//         "coordinates": [
-//             -118.1435,
-//             34.0217
-//         ]
-//     },
-//     "_id": "6524a6c7eb03453d019f6860",
-//     "gameName": "Basketball at LA Court",
-//     "sport": "basketball",
-//     "address": "456 Basketball St, Los Angeles, CA, USA",
-//     "host": "60d5ec9af682fbd39c2d17b1",
-//     "partySize": 10,
-//     "dateTime": "2023-12-12T16:30:00.000Z",
-//     "attending": [
-//         "60d5ec9af682fbd39c2d17b1",
-//         "60d5ec9af682fbd39c2d17b2",
-//         "60d5ec9af682fbd39c2d17b3"
-//     ],
-//     "__v": 0
-// }
+
 
   const date = new Date(game.dateTime)
   const days = ['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
@@ -55,7 +61,7 @@ export default function DetailedGameInfo() {
   const {sport, address, partySize, gameName} = game
   const [street, city, state, country] = address.split(', ')
   const selIcon = sport === 'basketball' ? bBallImg : golfImg 
-  // console.log(game)
+
   return (
     <div>
     <StyledHeader>
@@ -80,17 +86,14 @@ export default function DetailedGameInfo() {
                 }
                 </div>
             })}
-          {/* <article>
-  
-            <h5>Signups</h5>
-            <h3>{game.attending.length}</h3>
-          </article>
-          <article>
-            <h5>Spots</h5>
-            <h3>{partySize}</h3>
-          </article> */}
           </ProgressSection>
-        </DetailsSection>
+          <p>Players:</p>
+            <ul>
+              {attendingPlayers.map((player) => (
+                <li key={player.id}>{player.username}</li>
+              ))}
+            </ul>        
+          </DetailsSection>
         {!flag ? <StyledButton>Attend</StyledButton> : <h4>You are attending</h4>}
     </Container>
     </div>

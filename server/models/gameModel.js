@@ -19,8 +19,8 @@ const GameSchema = new Schema({
   host: {type: Schema.Types.ObjectId, ref: 'User'},
   partySize: {type: Number, required: true},
   dateTime: Date,
-  gameType: {type: String, required: true},
-  skillLevel: {type: String, required: true},
+  gameType: {type: String},
+  skillLevel: {type: String},
   attending: [{type: Schema.Types.ObjectId, ref: 'User'}],
 });
 
