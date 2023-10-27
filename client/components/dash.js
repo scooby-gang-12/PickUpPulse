@@ -31,7 +31,6 @@ const AllGames = () => {
 const AttendingGames = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const { gamesArr } = useSelector((state) => state.games);
-    console.log("userInfo getting passed in: ", userInfo)
     
     return (
       <StyledAllGames>
@@ -39,7 +38,6 @@ const AttendingGames = () => {
         <StyledRenderedGames>
         {userInfo &&
           userInfo.attendingGames.map((game) => {
-            console.log("game getting passed in: ", game)
             return <AttendedGame game={game} key={game._id} />;
           })}
         </StyledRenderedGames>

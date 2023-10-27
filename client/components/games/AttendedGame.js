@@ -5,28 +5,22 @@ import {attendGame, unattendGame} from '../../features/auth/authSlice'
 import { StyledButton, InverseStyledButton } from '../styles/Dashboard.styled';
 
 export default function AttendedGame ({game}) {
+  
+  const {userInfo} = useSelector(state=>state.auth)
+  const dispatch = useDispatch();
 
   const date = new Date(game.dateTime)
   const days = ['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   const hour = date.getHours();
   const minute = date.getMinutes() === 0 ? '00' : date.getMinutes();
 
-  const dispatch = useDispatch();
-  const {userInfo} = useSelector(state=>state.auth)
-  const flag = userInfo?.hostedGames.some((hostedGame)=>hostedGame._id === game._id)
+  // const flag = userInfo?.hostedGames.some((hostedGame)=>hostedGame._id === game._id)
+
+  const flag = userInfo._id === game.host 
 
 
   const handleUnattend = () => {
     dispatch(unattendGame(game._id))
-      // .then((action) => {
-      //   if (unattendGame.fulfilled.match(action)) {
-      //     const updatedAttendingGames = action.payload;
-      //     console.log('Response from unattendGame:', updatedAttendingGames);
-      //     // Handle the response here
-      //   } else if (unattendGame.rejected.match(action)) {
-      //     console.error('UnattendGame action rejected:', action.error);
-      //   }
-      // });
   }
 
   return (

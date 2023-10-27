@@ -28,8 +28,8 @@ export default function DetailedGameInfo() {
       try {
         const response = await axios.get("/api/users/idParser");
         const idParser = response.data;
-        console.log("game: ", game)
-        console.log("idParser: ", idParser)
+        // console.log("game: ", game)
+        // console.log("idParser: ", idParser)
         const players = game.attending.map((attendingId) => {
           const matchingPlayer = idParser.find((player) => player.id === attendingId);
           return {
