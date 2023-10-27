@@ -438,7 +438,7 @@ export default function Map () {
     }
     
   }
-  const [manualLoc, manuallySetLoc] = useState({ lat: 37.7749, lng: -122.4194 });
+  const [manualLoc, manuallySetLoc] = useState();
   const loader = new Loader({
     apiKey: process.env.GMAPS_API_KEY,
     version: "weekly",
@@ -449,7 +449,7 @@ export default function Map () {
     // const defaultLocation = { lat: 37.7749, lng: -122.4194 };
     return new Promise((resolve) => {
       let geocoder;
-      if (navigator.geolocation) {
+      if (!manualLoc) {
         loader.importLibrary('geocoding')
           .then(async () => {
             geocoder = await new google.maps.Geocoder();
@@ -473,6 +473,7 @@ export default function Map () {
           (error) => {
             console.error('Error retrieving location:', error);
             addressRef.current = '10 Van Ness Ave, San Francisco, CA 94103';
+            manuallySetLoc({ lat: 37.7749, lng: -122.4194 });
             resolve(manualLoc);
           }
         );
