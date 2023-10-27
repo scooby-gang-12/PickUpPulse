@@ -58,7 +58,8 @@ app.use('/api/auth', authRoutes)
 app.use('/api/games', gameRoutes);
 
 //Routes for Users
-app.use('/api/users', protectedRoute, userRoutes);
+// app.use('/api/users', protectedRoute, userRoutes);
+app.use('/api/users', userRoutes);
 
 // Catch All Route
 app.use('*', (req,res) => {

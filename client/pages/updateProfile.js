@@ -1,73 +1,96 @@
 import React, {useState, useEffect} from "react";
 import styled from 'styled-components';
+import axios from "axios";
 
-// import {useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 
 export default function UpdateProfile() {
+    const {userInfo} = useSelector(state=>state.auth) 
+
     const [userData, setUserData] = useState({})
+
     const [userLocation, setUserLocation] = useState('')
     const [userBio, setUserBio] = useState('')
     const [favoriteSport, setFavoriteSport] = useState('')
-    // const {userInfo} = useSelector(state=>state.auth)
-    // console.log(userInfo)
 
 // define button functionality here
     const handleLocationChange = (e) => {
-        console.log("target value", e.target.value)
         setUserLocation((prev) => e.target.value)
         console.log("user location", userLocation);
     }
     const handleBioChange = (e) => {
-        console.log("target value", e.target.value)
+        // console.log("target value", e.target.value)
         setUserBio((prev) => e.target.value)
         console.log("user bio", userBio);
     }
     const handlefavoriteSportChange = (e) => {
-        console.log("target value", e.target.value)
+        // console.log("target value", e.target.value)
         setFavoriteSport((prev) => e.target.value)
         console.log("favoriteSport", favoriteSport);
     }
 
+    const favSportsArr = userInfo.favoriteSports.map(sport => ` ${sport}`)
+    
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+
+    //     axios.patch('/api/users/updateUser', {
+    //         "$set" : { userLocation: userLocation},
+    //         "$set": { userBio: userBio},
+    //         favoriteSports: (input) => favoriteSport.push(input)
+    //     })
+    //         .then(response => {
+    //             console.log(response.data);
+    //         })
+    //         .catch(err => console.error(err));
+    // }
+
+    const userID = userInfo._id;
+    
     
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const form = e.target;
-        const formData = new FormData(form);
-
-        fetch('/', {method: PATCH, body: formData});
-
-        const formJson = Object.fromEntries(formData.entries());
-        console.log(formJson);
+ 
+        console.log("userID", userID);
+        
+        axios.patch('/api/users/updateUser', {
+            "$set" : { userLocation: userLocation},
+            "$set": { userBio: userBio},
+            favoriteSports: (input) => favoriteSport.push(input)
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(err => console.error(err));
     }
 
 
     return (
       
-                        <form method="PATCH" onSubmit={handleSubmit}>
-                            <label>
-                                Location: <input name="userLocation" placeholder="Enter your location" defaultValue={userLocation} onChange={handleLocationChange} />
-                            </label>
-                            <br/>
-                            <label>
-                                Bio:
-                                <textarea
-                                name="bioContent"
-                                placeholder="Enter bio here."
-                                rows={10}
-                                cols={40}
-                                onChange={handleBioChange}
-                                />
-                            </label>
-                            <br/>
-                            <label>
-                                Favorite Sports: <input name="favoriteSports" placeholder="Favorite sports?" 
-                                onChange={handlefavoriteSportChange}
-                                />
-                            </label>
-                            <hr />
-                            <button type="submit">Save changes</button>
-                        </form>
+        <form onSubmit={handleSubmit}>
+            <label>
+                Location: <input name="userLocation" defaultValue={userID} placeholder="Enter your location!!!!" value={userLocation} onChange={handleLocationChange} />
+            </label>
+            <br/>
+            <label>
+                Bio:
+                <textarea
+                    name="bioContent"
+                    placeholder="Enter bio here."
+                    value={userBio}
+                    rows={10}
+                    cols={40}
+                    onChange={handleBioChange}
+                />
+            </label>
+            <br/>
+            <label>
+                Favorite Sports: <input name="favoriteSports" defaultValue={favSportsArr} onChange={handlefavoriteSportChange}
+            />
+            </label>
+            <hr />
+            <button type="submit">Save changes</button>
+        </form>
     )
 }
 
