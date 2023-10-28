@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import  styled  from "styled-components";
 import {StyledButton} from './styles/Dashboard.styled'
 
 
 import { StyledGameInfo } from "./styles/StyledGameInfo.styled";
+import xImg from '../assets/X.png'
 import golfImg from '../assets/golf.png'
 import bBallImg from '../assets/basketball.png'
 
@@ -19,10 +20,21 @@ export default function DetailedGameInfo() {
   const [attendingPlayers, setAttendingPlayers] = useState([]);
 
   const { userInfo } = useSelector((state) => state.auth);
+
   const game = (useSelector((state)=>{
     return state.games.gamesArr.find((g)=>g._id === gameId)
   }))
+
+   const handleUnattend = async () => {
+    try {
+      await dispatch(unattendGame(game._id));
+      // history.goBack();
+    } catch (error) {
+      console.error("Error unattending game:", error);
+    }
+  };
   
+  //because of current dataModel set up, I created a new route that parses a user _id's from game state to their usernames
   useEffect(() => {
     const getIdParser = async () => {
       try {
@@ -60,7 +72,7 @@ export default function DetailedGameInfo() {
   const year = date.getFullYear()
   const {sport, address, partySize, gameName} = game
   const [street, city, state, country] = address.split(', ')
-  const selIcon = sport === 'basketball' ? bBallImg : golfImg 
+  const selIcon = xImg
 
   return (
     <div>
@@ -68,14 +80,12 @@ export default function DetailedGameInfo() {
         <MovingHeader>{gameName}</MovingHeader>
     </StyledHeader>
     <Container>
-        <GameName $text={gameName}>{gameName}<span>
-        <Graphic src={selIcon} alt="" />
-          </span>
+        <GameName $text={gameName}>{gameName}
         </GameName>
         <DetailsSection>
           <AddressSection>
             <h4>{street}, {city}</h4>
-            <h4>{month}, {dayDate}, {year} </h4>
+            <h4>{month} {dayDate}, {year} </h4>
             <h4>{days[date.getDay()]} @ {`${hour}:${minute}`} </h4>
           </AddressSection>
           <ProgressSection $partySize={partySize}>
@@ -90,11 +100,18 @@ export default function DetailedGameInfo() {
           <p>Players:</p>
             <ul>
               {attendingPlayers.map((player) => (
-                <li key={player.id}>{player.username}</li>
+                <li key={player.id}>
+                  <Link>{player.username}</Link>
+                </li>
               ))}
             </ul>        
           </DetailsSection>
-        {!flag ? <StyledButton>Attend</StyledButton> : <h4>You are attending</h4>}
+        {!flag ? <StyledButton>Attend</StyledButton> : (
+        <div>
+          <h4>You are attending</h4>
+          <StyledButton onClick={handleUnattend}>Unattend</StyledButton>
+        </div>
+      )}
     </Container>
     </div>
   )

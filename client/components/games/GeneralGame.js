@@ -16,6 +16,7 @@ export default function GeneralGame ({game}) {
   const {userInfo} = useSelector(state=>state.auth)
 
   const flag = userInfo?.attendingGames.some((attendingGame)=>attendingGame._id === game._id)
+  
   const handleAttend =() => {
     // console.log('Attend', game._id)
     dispatch(attendGame(game._id))

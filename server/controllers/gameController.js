@@ -180,11 +180,6 @@ gameController.unattendGame = async (req, res, next) => {
             message: "Game unattended",
             updatedAttendingGames
         };
-    //   //OG CODE TO COMPARE
-    //   res.locals.stillAttending = {
-    //       message: "Game unattended", 
-    //       updatedAttendingGames: foundUser.attendingGames
-    //   };
 
       //update gameModel attendees
       const foundGame = await Game.findById(gameId);
@@ -218,11 +213,12 @@ gameController.attendGame = async (req, res, next) => {
         await foundGame.save();
     }
 
-    //update userModel
-    await User.findById(user._id)
+        //update userModel, then pass this all back to the reducer to correctly update the state
+        await User.findById(user._id)
         .then(async (foundUser) => {
-            //I guess the frontend also needs this line to render??? Very whack honestly
+                
             res.locals.newAttendingGames = await foundUser.populate('attendingGames')
+            res.locals.newHostedGames = await foundUser.populate('hostedGames')
             
             return next();
         })
