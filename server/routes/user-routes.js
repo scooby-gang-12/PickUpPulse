@@ -9,9 +9,10 @@ router.get('/idParser', userController.idParser, (req, res) => {
 
 
 // Update User information
-// router.patch('/', userController.updateUser, (req, res) => {
-//     return res.status(200).json(res.locals.updatedUser);
-// })
+router.patch('/updateUser', userController.updateUser, (req, res) => {
+    return res.sendStatus(200);
+    // return res.status(200).json(res.locals.updatedUser);
+})
 
 // router.get('/', userController.findUserGames)
 
