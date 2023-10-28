@@ -438,13 +438,33 @@ export default function Map () {
     }
     
   }
-  const [manualLoc, manuallySetLoc] = useState({ lat: 37.7749, lng: -122.4194 });
+  const [manualLoc, manuallySetLoc] = useState();
+  const loader = new Loader({
+    apiKey: process.env.GMAPS_API_KEY,
+    version: "weekly",
+  });
+  const addressRef = useRef();
+
   const getCurrentLocation = async () => {
     // const defaultLocation = { lat: 37.7749, lng: -122.4194 };
     return new Promise((resolve) => {
-      if (navigator.geolocation) {
+      let geocoder;
+      if (!manualLoc) {
+        loader.importLibrary('geocoding')
+          .then(async () => {
+            geocoder = await new google.maps.Geocoder();
+          })
         navigator.geolocation.getCurrentPosition(
           (location) => {
+            geocoder.geocode({'latLng': {
+              lat: location.coords.latitude,
+              lng: location.coords.longitude,
+            }})
+              .then(async (response) => {
+                // console.log('geocoded response: ', response);
+                addressRef.current = await response.results[0].formatted_address;
+                // console.log('new addressRef: ', addressRef.current);
+              });
             resolve({
               lat: location.coords.latitude,
               lng: location.coords.longitude,
@@ -452,6 +472,8 @@ export default function Map () {
           },
           (error) => {
             console.error('Error retrieving location:', error);
+            addressRef.current = '10 Van Ness Ave, San Francisco, CA 94103';
+            manuallySetLoc({ lat: 37.7749, lng: -122.4194 });
             resolve(manualLoc);
           }
         );
@@ -531,10 +553,6 @@ export default function Map () {
 
 
   useEffect (() => {
-    const loader = new Loader({
-      apiKey: process.env.GMAPS_API_KEY,
-      version: "weekly",
-    });
     loader.importLibrary('places').then( async ()=>{
       const location = await getCurrentLocation()
       initializeMap(location)
@@ -577,16 +595,11 @@ export default function Map () {
   }, [gamesArr, activeFilter]);
 
   const autocompleteInputRef = useRef();
-  const addressRef = useRef('10 Van Ness Ave, San Francisco, CA 94103');
   const latRef = useRef();
   const lngRef = useRef();
   let autocomplete;
 
   useEffect(() => {
-    const loader = new Loader({
-      apiKey: process.env.GMAPS_API_KEY,
-      version: "weekly"
-    });
     loader.importLibrary('places')
       .then(() => {
         autocomplete = new google.maps.places.Autocomplete(
