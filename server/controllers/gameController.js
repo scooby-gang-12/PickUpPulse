@@ -180,11 +180,6 @@ gameController.unattendGame = async (req, res, next) => {
             message: "Game unattended",
             updatedAttendingGames
         };
-    //   //OG CODE TO COMPARE
-    //   res.locals.stillAttending = {
-    //       message: "Game unattended", 
-    //       updatedAttendingGames: foundUser.attendingGames
-    //   };
 
       //update gameModel attendees
       const foundGame = await Game.findById(gameId);
