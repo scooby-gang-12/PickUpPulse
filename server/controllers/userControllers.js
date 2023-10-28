@@ -4,20 +4,20 @@ const userController = {};
 
 //update profile fields (ex: usernames, password, ...etc);
 userController.updateUser = async (req, res, next) => {
-  console.log(req.body);
-  const {userBio, userLocation, favoriteSports, _id } = req.body;
+  const {userBio, userLocation, favoriteSport, _id} = req.body;
+  console.log("-----REQUEST BODY---------", req.body);
 
-  console.log("bio", userBio);
+  // console.log("bio", userBio);
 
-  try {const user = await User.findByIdAndUpdate({_id}) 
-  // const user = await User.findOne();
-  if (!user.userBio) user.userBio = userBio;
-  if (!user.userLocation) user.userLocation = userLocation;
-  user.favoriteSports = favoriteSports;
-  console.log('user', user);
-  console.log("**************LOCATION***********", user.userLocation , user.favoriteSports, user.fullName, user.userBio);
-  res.locals.updatedUser = user;  }
-  
+  try {const user = await User.findByIdAndUpdate(_id, {userBio, userLocation, favoriteSport}, {new: true})  
+//   if (!user.userBio) 
+//   // if (!user.userLocation) user.userLocation = userLocation;
+  // user.favoriteSports = user.favoriteSports.push(favoriteSport);
+  // console.log('user', user);
+  // console.log("**************LOCATION***********", user.userLocation , user.favoriteSports, user.fullName, user.userBio);
+  res.locals.updatedUser = user;  
+}
+
   catch(err) {
     console.error(err);
   }

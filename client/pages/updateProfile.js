@@ -25,7 +25,11 @@ export default function UpdateProfile() {
     }
     const handlefavoriteSportChange = (e) => {
         // console.log("target value", e.target.value)
-        setFavoriteSport((prev) => e.target.value)
+        setFavoriteSport((prev) => [e.target.value])
+            // console.log("Event", e);
+            // console.log("value", e.target.value);
+            // console.log("prev", prev);
+        
         console.log("favoriteSport", favoriteSport);
     }
 
@@ -54,6 +58,7 @@ export default function UpdateProfile() {
         console.log("userID", userID);
         
         axios.patch('/api/users/updateUser', {
+            _id: userID,
             "$set" : { userLocation: userLocation},
             "$set": { userBio: userBio},
             favoriteSport: favoriteSport
@@ -69,7 +74,7 @@ export default function UpdateProfile() {
       
         <form onSubmit={handleSubmit}>
             <label>
-                Location: <input name="userLocation" placeholder="Enter your location" value={userInfo.userLocation} onChange={handleLocationChange} />
+                Location: <input name="userLocation" placeholder="Enter your location" defaultValue={userInfo.userLocation} onChange={handleLocationChange} />
             </label>
             <br/>
             <label>
@@ -77,7 +82,7 @@ export default function UpdateProfile() {
                 <textarea
                     name="bioContent"
                     placeholder="Enter bio here."
-                    value={userInfo.userBio}
+                    defaultValue={userInfo.userBio}
                     rows={10}
                     cols={40}
                     onChange={handleBioChange}
