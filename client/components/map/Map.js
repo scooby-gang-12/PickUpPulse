@@ -461,9 +461,9 @@ export default function Map () {
               lng: location.coords.longitude,
             }})
               .then(async (response) => {
-                console.log('geocoded response: ', response);
+                // console.log('geocoded response: ', response);
                 addressRef.current = await response.results[0].formatted_address;
-                console.log('new addressRef: ', addressRef.current);
+                // console.log('new addressRef: ', addressRef.current);
               });
             resolve({
               lat: location.coords.latitude,

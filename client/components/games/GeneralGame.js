@@ -17,12 +17,8 @@ export default function GeneralGame ({game}) {
 
   const flag = userInfo?.attendingGames.some((attendingGame)=>attendingGame._id === game._id)
   const handleAttend =() => {
-    console.log('Attend', game._id)
+    // console.log('Attend', game._id)
     dispatch(attendGame(game._id))
-  }
-
-  const handleUnattend = () => {
-    console.log('Unattend', game._id)
   }
 
   return (

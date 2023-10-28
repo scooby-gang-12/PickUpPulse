@@ -16,4 +16,20 @@ userController.updateUser = async (req, res, next) => {
   return next()  
 };
 
+userController.idParser = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    const idParser = users.map((user) => {
+      const { _id, username } = user;
+      return { id: _id, username };
+    });
+
+    res.locals.idParser = idParser; 
+    next();
+    
+  } catch (err) {
+    next(err); 
+  }
+};
+
 module.exports = userController;
