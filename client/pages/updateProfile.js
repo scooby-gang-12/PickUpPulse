@@ -14,41 +14,25 @@ export default function UpdateProfile() {
     const [favoriteSport, setFavoriteSport] = useState('')
 
 // define button functionality here
+
     const handleLocationChange = (e) => {
         setUserLocation((prev) => e.target.value)
         console.log("user location", userLocation);
     }
+
     const handleBioChange = (e) => {
-        // console.log("target value", e.target.value)
         setUserBio((prev) => e.target.value)
         console.log("user bio", userBio);
     }
+
     const handlefavoriteSportChange = (e) => {
-        // console.log("target value", e.target.value)
-        setFavoriteSport((prev) => [e.target.value])
-            // console.log("Event", e);
-            // console.log("value", e.target.value);
-            // console.log("prev", prev);
-        
+        setFavoriteSport((prev) => e.target.value.split(', '))
         console.log("favoriteSport", favoriteSport);
     }
 
     const favSportsArr = userInfo.favoriteSports.map(sport => ` ${sport}`)
     
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     axios.patch('/api/users/updateUser', {
-    //         "$set" : { userLocation: userLocation},
-    //         "$set": { userBio: userBio},
-    //         favoriteSports: (input) => favoriteSport.push(input)
-    //     })
-    //         .then(response => {
-    //             console.log(response.data);
-    //         })
-    //         .catch(err => console.error(err));
-    // }
-
+    
     const userID = userInfo._id;
     
     
@@ -59,8 +43,8 @@ export default function UpdateProfile() {
         
         axios.patch('/api/users/updateUser', {
             _id: userID,
-            "$set" : { userLocation: userLocation},
-            "$set": { userBio: userBio},
+            userLocation: userLocation,
+            userBio: userBio,
             favoriteSport: favoriteSport
         })
             .then(response => {
@@ -74,11 +58,11 @@ export default function UpdateProfile() {
       
         <form onSubmit={handleSubmit}>
             <label>
-                Location: <input name="userLocation" placeholder="Enter your location" defaultValue={userInfo.userLocation} onChange={handleLocationChange} />
+                <Location>Location:</Location> <input name="userLocation" placeholder="Enter your location" defaultValue={userInfo.userLocation} onChange={handleLocationChange} />
             </label>
             <br/>
             <label>
-                Bio:
+                <Bio>Bio:</Bio>
                 <textarea
                     name="bioContent"
                     placeholder="Enter bio here."
@@ -90,8 +74,17 @@ export default function UpdateProfile() {
             </label>
             <br/>
             <label>
-                Favorite Sports: <input name="favoriteSports" defaultValue={favSportsArr} onChange={handlefavoriteSportChange}
-            />
+                <FavSports>Favorite Sports:</FavSports>
+                <textarea
+                    name="favoriteSport"
+                    placeholder="Enter bio here."
+                    defaultValue={favSportsArr}
+                    rows={3}
+                    cols={40}
+                    onChange={handlefavoriteSportChange}
+                />
+                {/* Favorite Sports: <input name="favoriteSports" defaultValue={favSportsArr} onChange={handlefavoriteSportChange}
+            /> */}
             </label>
             <hr />
             <button type="submit">Save changes</button>
@@ -99,13 +92,33 @@ export default function UpdateProfile() {
     )
 }
 
-// const Container = styled.div`
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     flex-direction: column;
-//     padding: 2rem;
-//     font-family: var(--primary-font);
+const Location = styled.div`
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    // flex-direction: column;
+    // padding: 2rem;
+    font-family: var(--primary-font);
+
+    
+// `
+const Bio = styled.div`
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    // flex-direction: column;
+    // padding: 2rem;
+    font-family: var(--primary-font);
+
+    
+// `
+const FavSports = styled.div`
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    // flex-direction: column;
+    // padding: 2rem;
+    font-family: var(--primary-font);
 
     
 // `
