@@ -9,16 +9,21 @@ userController.updateUser = async (req, res, next) => {
 
   console.log("bio", userBio);
 
-  const user = await User.findByIdAndUpdate({_id}) 
+  try {const user = await User.findByIdAndUpdate({_id}) 
   // const user = await User.findOne();
   if (!user.userBio) user.userBio = userBio;
   if (!user.userLocation) user.userLocation = userLocation;
   user.favoriteSports = favoriteSports;
   console.log('user', user);
   console.log("**************LOCATION***********", user.userLocation , user.favoriteSports, user.fullName, user.userBio);
+  res.locals.updatedUser = user;  }
+  
+  catch(err) {
+    console.error(err);
+  }
 
-  const data = [user.userLocation, user.favoriteSports, user.fullName, user.userBio];
-  res.send(data);
+  // const data = [user.userLocation, user.favoriteSports, user.fullName, user.userBio];
+  // res.send(data);
   //user.bio = bio from req.body******
 //**look up how to add property to mongoose db** what mongoose method to use?
 //put a res back to fetch req, use res.locals to send back to component, send back res.status(200) do not need to send anything back
@@ -36,7 +41,6 @@ userController.updateUser = async (req, res, next) => {
   // }
     
 ``
-  res.locals.updatedUser = await User.save();  
   return next()  
 };
 

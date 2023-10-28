@@ -56,7 +56,7 @@ export default function UpdateProfile() {
         axios.patch('/api/users/updateUser', {
             "$set" : { userLocation: userLocation},
             "$set": { userBio: userBio},
-            favoriteSports: (input) => favoriteSport.push(input)
+            favoriteSport: favoriteSport
         })
             .then(response => {
                 console.log(response.data);
@@ -69,7 +69,7 @@ export default function UpdateProfile() {
       
         <form onSubmit={handleSubmit}>
             <label>
-                Location: <input name="userLocation" defaultValue={userID} placeholder="Enter your location!!!!" value={userLocation} onChange={handleLocationChange} />
+                Location: <input name="userLocation" placeholder="Enter your location" value={userInfo.userLocation} onChange={handleLocationChange} />
             </label>
             <br/>
             <label>
@@ -77,7 +77,7 @@ export default function UpdateProfile() {
                 <textarea
                     name="bioContent"
                     placeholder="Enter bio here."
-                    value={userBio}
+                    value={userInfo.userBio}
                     rows={10}
                     cols={40}
                     onChange={handleBioChange}
