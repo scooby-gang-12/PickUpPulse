@@ -5,8 +5,8 @@ const gameController = {};
 
 // Create Game Controller
 gameController.createGame = async (req, res, next) => {
-    const { gameName, sport, location, address, partySize, dateTime } = req.body;
-    console.log(req.user)
+    const { gameName, sport, location, address, partySize, dateTime, gameType, skillLevel } = req.body;
+    // console.log("req.user in CreateGame", req.user)
     const newGame = await Game.create({
         
         gameName: gameName,
@@ -14,6 +14,8 @@ gameController.createGame = async (req, res, next) => {
         location: location,
         address: address,
         partySize: partySize,
+        gameType: gameType,
+        skillLevel: skillLevel,
         dateTime: dateTime,
         attending: [req.user.id],
         host: req.user.id
@@ -28,7 +30,6 @@ gameController.createGame = async (req, res, next) => {
         .catch((err) => next(err));
 
     res.locals.gameArr = await Game.find().catch((err) => next(err));
-
 
     return next();
 }
@@ -64,10 +65,12 @@ gameController.deleteGame = async (req, res, next) => {
 
 // Sign up for game and adds it to attending array, Checks to see if user is the host, if so adds it to 'Hosted Games'
 gameController.addCreatedGame = async (req, res, next) => {
+    console.log("res before addCreatedGame", res.locals)
     // ADD Created Game
     req.user.attendingGames.push(res.locals.game.gameId);
     req.user.hostedGames.push(res.locals.game.gameId)
     await req.user.save();
+    // console.log("res.locals after addCreatedGame", res.locals)
 
     return next()
     
@@ -156,24 +159,45 @@ gameController.removeAttendeeGame = async (req, res, next) => {
 
 
 gameController.unattendGame = async (req, res, next) => {
-  const { gameId } = req.params;
-  const { user } = req;
+    const { gameId } = req.params;
+    const { user } = req;
+  
+    try {
+    // update userModel attending games
+      const foundUser = await User.findById(user._id);
+  
+      foundUser.attendingGames = foundUser.attendingGames.filter(
+        (game) => game.toString() !== gameId
+      );  
+      await foundUser.save();
+  
+      const updatedAttendingGames = await Game.find({
+        _id: { $in: foundUser.attendingGames }
+        });
 
-  try {
-    user.attendingGames = user.attendingGames.filter(game => game.id !== gameId);
-    console.log(user.attendingGames);
-    await user.save();
+    // Send the updated attending games as an array of game objects
+        res.locals.stillAttending = {
+            message: "Game unattended",
+            updatedAttendingGames
+        };
 
-    res.locals.stillAttending = {
-     message: "Game unattended", 
-     updatedAttendingGames: user.attendingGames
-    };
-    return next();
-  } catch (err) {
-    next(err);
-  }
+      //update gameModel attendees
+      const foundGame = await Game.findById(gameId);
+      if (foundGame) {
+        foundGame.attending = foundGame.attending.filter(
+            (userId) => userId.toString() !== user._id.toString()
+        );
 
-};
+        await foundGame.save();
+        }
+
+      return next();
+
+    } catch (err) {
+      return next(err);
+    }
+  };
+  
 
 gameController.attendGame = async (req, res, next) => {
     const { gameId } = req.params;
@@ -182,9 +206,20 @@ gameController.attendGame = async (req, res, next) => {
     user.attendingGames.push(gameId);
     await user.save();
 
-    await User.findById(user._id)
+    //update gameModel
+    const foundGame = await Game.findById(gameId);
+    if (foundGame) {
+        foundGame.attending.push(user._id);
+        await foundGame.save();
+    }
+
+        //update userModel, then pass this all back to the reducer to correctly update the state
+        await User.findById(user._id)
         .then(async (foundUser) => {
+                
             res.locals.newAttendingGames = await foundUser.populate('attendingGames')
+            res.locals.newHostedGames = await foundUser.populate('hostedGames')
+            
             return next();
         })
         .catch((err) => next(err))

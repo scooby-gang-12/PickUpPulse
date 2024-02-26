@@ -40,6 +40,8 @@ export default function SignUp({toggle}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const lat = locationRef.current ? locationRef.current.lat : 37.7749
+    const lng = locationRef.current ? locationRef.current.lng : -122.4194
     const formValue = {
       fullName: fullNameRef.current.value,
       username: usernameRef.current.value,
@@ -47,17 +49,21 @@ export default function SignUp({toggle}) {
       favoriteSports: [],
       location: {
         type: "Point",
-        coordinates: [locationRef.current.lng, locationRef.current.lat]
+        coordinates: [lng, lat]
     },
     }
     if (golfRef.current.checked) {formValue.favoriteSports.push('golf')}
     if (basketballRef.current.checked) {formValue.favoriteSports.push('basketball')}
-    console.log(formValue)
+    // console.log(formValue)
       dispatch(registerUser(formValue))
       .then((action) => {
         if (!action.error) {
           navigate('/')
         }
+        const { username } = action.meta.arg;
+        document.getElementById('username-label').textContent = `${username} is not available. Please pick another username`;
+        document.getElementById('username-label').style.color = 'red'; 
+        document.getElementById('username-label').style.textAlign = 'center';
       })
   }
 
@@ -70,8 +76,8 @@ export default function SignUp({toggle}) {
       <StyledForm onSubmit={handleSubmit}>
         {/* <label htmlFor="fullName"><strong>Full Name</strong></label><br></br> */}
         <StyledInput ref={fullNameRef} type='text' placeholder='Full Name'></StyledInput><br></br>
-        {/* <label htmlFor='username'><strong>Username</strong></label><br></br> */}
-        <StyledInput ref={usernameRef} type='text' placeholder='Username'></StyledInput><br></br>
+        <label htmlFor='username' id="username-label"><strong></strong></label><br></br>
+        <StyledInput ref={usernameRef} type='text' placeholder='Username' id="username-input" name="username"></StyledInput><br></br>
         {/* <label htmlFor='password'><strong>Password</strong></label><br></br> */}
         <StyledInput ref={passwordRef} type='password' placeholder='Password'></StyledInput><br></br>
         <label htmlFor="chooseSports"><strong>Select Sports of Interest:</strong></label><br></br>
@@ -83,8 +89,8 @@ export default function SignUp({toggle}) {
         <StyledButton type="submit">Sign up</StyledButton>
         
         <div>
-          Already a user?
-          <span onClick={handleNavigate}> Log in here </span>
+          Already a user? Log in  
+          <span onClick={handleNavigate}> <a href="#"> here</a></span>
         </div>
       </ StyledForm>
     </Container>

@@ -16,7 +16,10 @@ authController.createUser = async (req, res, next) => {
             res.locals.user = newUser;
             return next()
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err)
+          return next(err);
+        });
 
 
 }

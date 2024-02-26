@@ -6,7 +6,7 @@ import HostedGame from '../components/games/HostedGame'
 
 export default function HostedGames() {
     const {userInfo} = useSelector(state=>state.auth)
-    console.log(userInfo)
+    console.log("userInfo in hostedGames:", userInfo)
     return (
       <Body>
             <Header>Hosted Games</Header>

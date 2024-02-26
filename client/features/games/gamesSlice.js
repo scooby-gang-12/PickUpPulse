@@ -4,6 +4,7 @@ import  gamesAPI  from './gamesAPI.js'
 export const createGame = createAsyncThunk(
   'games/createGame',
   async (formValues, thunkAPI) => {
+    console.log("Form values in gamesSlice createGame:", formValues);
     const response = await gamesAPI.createGame(formValues)
     return response.data
   }

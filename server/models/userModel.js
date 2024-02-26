@@ -21,6 +21,8 @@ const UserSchema = new Schema({
   },
   attendingGames: [{type: Schema.Types.ObjectId, ref: 'Game'}],
   hostedGames: [{type: Schema.Types.ObjectId, ref: 'Game'}],
+  userBio: {type: String},
+  userLocation: {type: String},
 });
 
 UserSchema.pre('save', async function (next) {

@@ -58,7 +58,7 @@ export default function EditGameForm () {
 
   useEffect(()=>{
     const loader = new Loader({
-      apiKey: "AIzaSyAT5_1vYwxgEWt8wn_LKWDsVo0mOjqfxgs",
+      apiKey: process.env.GMAPS_API_KEY,
       version: "weekly",
     });
 
@@ -128,7 +128,7 @@ export default function EditGameForm () {
     setShowConfirmation(false)
   }
   const handleClose = () => {
-    navigate('/dasboard')
+    navigate('/dashboard')
   }
   
   return (

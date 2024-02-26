@@ -26,6 +26,12 @@ export const StyledGameForm = styled.form`
     margin-bottom: 0px;
   }
 
+  & #dropdown-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
   & #address {
     width: 400px;
     margin-top: 0px;
